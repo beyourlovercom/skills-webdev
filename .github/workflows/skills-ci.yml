@@ -25,3 +25,11 @@ jobs:
           name: rainbird-s0-public-profile-and-skills
           path: /tmp/rainbird-s0-output/skills/
           retention-days: 7
+      - run: node src/site-skill-factory.mjs --domain ybyirrigation.com --project-root . --evidence pilots/ybyirrigation/public-evidence.json --output-root /tmp/yby-s0-output --write
+      - run: node src/site-skill-factory.mjs --domain ybyirrigation.com --project-root . --evidence pilots/ybyirrigation/public-evidence.json --output-root /tmp/yby-s0-output > /tmp/yby-s0-second.json
+      - run: node -e "const x=require('/tmp/yby-s0-second.json');if(x.actions.length!==12 || !x.actions.every(i=>i.action==='UNCHANGED'))process.exit(2)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ybyirrigation-s0-s6-public-safe-skills
+          path: /tmp/yby-s0-output/skills/
+          retention-days: 14
