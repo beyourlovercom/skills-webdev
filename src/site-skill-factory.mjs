@@ -151,6 +151,15 @@ export function siteRules(p) {
   if (/wordpress|woocommerce/.test(cms)) rules.push('WordPress: 核对实际插件/主题、WP-CLI 可用性、noindex、固定链接及 WooCommerce 兼容性，不假设环境已安装工具。');
   if (/shopify/.test(cms)) rules.push('Shopify: 核对主题、商品/variant、Checkout 限制、像素与应用权限；不得将 WordPress WP-CLI 作为必需步骤。');
   if (/adult|娃娃|性|regulated/i.test(product+' '+p.industry_constraints.join(' '))) rules.push('行业约束: 审核目标市场法规、年龄/内容限制及支付商户允许范围；未核验不得声明可售或可支付。');
+  const features=p.existing_features.join(' ').toLowerCase();
+  const commerce=String(f.commerce).toLowerCase();
+  if (f.cms===UNKNOWN) rules.push('技术栈 UNKNOWN: 公网技术指纹或 URL 线索不等于 CMS 源码确认；禁止预设 WordPress/Shopify 或 WP-CLI 部署。');
+  if (f.project_repo===UNKNOWN || /^UNKNOWN\\b/.test(f.project_repo)) rules.push('外部基准站: 无已授权项目 GitHub/AGENTS/Local/Dev；S2 只生成设计和验收清单，不执行站点写入。');
+  if (b.includes('B2B') && b.includes('B2C') && /separate|independent|store\\./.test(commerce)) rules.push('跨站归因: 主站目录、经销商/转介、独立商城拆分目标与追踪；purchase 只能以已授权商城订单证据核验，不能以主站店铺跳转冒充销售；跨域追踪须获准。');
+  if (/distributor|dealer|经销/.test(features)) rules.push('渠道漏斗: 经销商定位的搜索、查看结果、点击联系仅为行为信号；有效渠道线索必须有获授权 CRM 或人工后续证明。');
+  if (/contractor|installer|承包商/.test(features)) rules.push('服务转介: 承包商推荐是独立转化类型；区分定位查询、推荐展示和真实有效转介，不计为线上订单。');
+  if (/agriculture|golf|农业|高尔夫/.test(features)) rules.push('行业分流: 农业、球场、商业景观和家庭用户产品、内容及咨询意图分别建图谱，不混成单一关键词簇。');
+  if (/learning|training|document|catalog|技术资料|培训/.test(features)) rules.push('内容/技术支持: 产品资料、培训、目录下载应分别评价辅助价值；下载/访问不能直接认定为已成交。');
   if (f.relation==='coexist') rules.push('旧新站并行: 不默认 301；核对独立品牌、版权、canonical 与跨站重复内容风险。');
   else if (f.relation==='migration') rules.push('迁移: 建立 URL 对照、301、canonical、GSC 迁移与恢复监控；任何正式跳转须单独审批。');
   else if (f.relation===UNKNOWN) rules.push('站点关系 UNKNOWN: 禁止默认迁移、批量 301 或同时复制开放相同内容。');

@@ -1,0 +1,83 @@
+{
+  "brand": "Rain Bird",
+  "business_model": "B2B+B2C",
+  "product_type": "irrigation equipment: controllers; sprinklers; valves; drip irrigation; agriculture; golf",
+  "conversion_goal": "distinct journeys: distributor lookup; contractor referrals; technical support; US store purchases",
+  "cms": "UNKNOWN",
+  "theme": "UNKNOWN",
+  "commerce": "independent US storefront at store.rainbird.com; commerce platform UNKNOWN",
+  "hosting": "UNKNOWN",
+  "relation": "UNKNOWN",
+  "old_domain": "UNKNOWN",
+  "new_domain": "UNKNOWN",
+  "target_markets": [
+    "United States: online store offering",
+    "International: corporate site and product catalog"
+  ],
+  "languages": [
+    "English confirmed",
+    "Spanish route observed",
+    "zh-hans route observed; translation completeness UNKNOWN"
+  ],
+  "currencies": [
+    "UNKNOWN"
+  ],
+  "industry_constraints": [
+    "Verify regional water-efficiency claims and product suitability; no legal assertions"
+  ],
+  "content_ownership": "Rain Bird corporate copyright; public benchmarking only, no permission to reuse media or source code",
+  "project_repo": "UNKNOWN",
+  "environments": {
+    "local": "UNKNOWN",
+    "dev": "UNKNOWN",
+    "www": "https://www.rainbird.com"
+  },
+  "data_sources": {
+    "ga4": "NOT_CONNECTED",
+    "gsc": "NOT_CONNECTED",
+    "semrush": "NOT_CONNECTED",
+    "ads": "NOT_CONNECTED",
+    "orders": "NOT_CONNECTED",
+    "keywords": "NOT_CONNECTED"
+  },
+  "sources": [
+    "https://www.rainbird.com/ (public homepage/navigation; 2026-10-30)",
+    "https://store.rainbird.com/about-rain-bird-store (official US store; 2026-10-30)",
+    "https://www.rainbird.com/landscape/find-rain-bird-distributor (distributor locator; 2026-10-30)",
+    "https://www.rainbird.com/agriculture (agriculture products and tools; 2026-10-30)",
+    "https://www.rainbird.com/golf (golf products; 2026-10-30)",
+    "https://www.rainbird.com/int/contact-us-international (international support segmentation; 2026-10-30)",
+    "https://www.rainbird.com/zh-hans (locale path only; not proof of complete translation; 2026-10-30)",
+    "https://www.rainbird.com/es/controller-connectivity (Spanish route exists; 2026-10-30)"
+  ],
+  "field_evidence": {
+    "business_model": "Official homepage and store: homeowners, professionals, US direct online store",
+    "product_type": "Official agriculture, golf, homeowners product pages",
+    "conversion_goal": "Official home links to contractor finder and US store; dealer locator page",
+    "commerce": "Official Rain Bird Online Store About page confirms US direct sales",
+    "relation": "No old/new domain ownership or migration plan is known",
+    "cms": "No authenticated repository/source; third-party technology guesses not trusted",
+    "languages": "English home; Spanish and zh-hans routes observed; completeness not audited"
+  },
+  "existing_features": [
+    "Homeowners catalog and contractor referrals",
+    "Professional distributor locator",
+    "Agriculture products and calculators",
+    "Golf products and distributor locator",
+    "Learning and technical document resources",
+    "Separate US store at store.rainbird.com"
+  ],
+  "accepted_uat": [],
+  "approved_media": [],
+  "observed_at": "2026-10-30",
+  "open_items": [
+    "External reference website only: Rain Bird ownership, admin permission and project AGENTS.md absent",
+    "CMS, theme, hosting and storefront platform unverified",
+    "No authenticated access to GA4 GSC Ads Semrush orders or CRM",
+    "No authorized Local or Dev environments; actual deployment forbidden",
+    "Migration vs coexistence of old-new websites not supplied: leave relation UNKNOWN",
+    "No permission to copy Rain Bird copyrighted images, text, design or code",
+    "Cross-domain attribution and true qualified conversions require internal access",
+    "Language coverage and geographic commercial availability unverified"
+  ]
+}

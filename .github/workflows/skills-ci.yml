@@ -17,3 +17,11 @@ jobs:
       - run: node src/site-skill-factory.mjs --domain example.org --project-root . --evidence fixtures/sample-b2b.json --output-root /tmp/site-s0-ci --write
       - run: test -f /tmp/site-s0-ci/skills/site-intelligence/SKILL.md && test -f /tmp/site-s0-ci/skills/site-profile.yaml
       - run: node src/validate-gates.mjs --manifest fixtures/sample-s1-manifest.json
+      - run: node src/site-skill-factory.mjs --domain rainbird.com --project-root . --evidence pilots/rainbird/public-evidence.json --output-root /tmp/rainbird-s0-output --write
+      - run: node src/site-skill-factory.mjs --domain rainbird.com --project-root . --evidence pilots/rainbird/public-evidence.json --output-root /tmp/rainbird-s0-output > /tmp/rainbird-s0-dry-run.json
+      - run: node -e "const x=require('/tmp/rainbird-s0-dry-run.json');if(x.actions.length!==12 || !x.actions.every(i=>i.action==='UNCHANGED'))process.exit(2)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rainbird-s0-public-profile-and-skills
+          path: /tmp/rainbird-s0-output/skills/
+          retention-days: 7
