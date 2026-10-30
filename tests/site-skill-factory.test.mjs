@@ -52,6 +52,13 @@ test('idempotent writing, dry-run, and non-managed files protected',()=>{
   a=applyFiles(root,files,true);
   assert.equal(a.find(x=>x.path.endsWith('site-intelligence/SKILL.md')).action,'UNCHANGED');
   assert.match(fs.readFileSync(skill,'utf8'),/Owner-approved appendix/);
+  const approvals=path.join(root,'skills/approval-gates.md');
+  fs.appendFileSync(approvals,'\nOwner approval note protected.\n');
+  const roadmap=path.join(root,'skills/site-roadmap.md');
+  fs.appendFileSync(roadmap,'\nOwner roadmap note protected.\n');
+  applyFiles(root,files,true);
+  assert.match(fs.readFileSync(approvals,'utf8'),/Owner approval note protected/);
+  assert.match(fs.readFileSync(roadmap,'utf8'),/Owner roadmap note protected/);
   fs.writeFileSync(skill,'Handwritten no markers');
   a=applyFiles(root,files,true);
   assert.equal(a.find(x=>x.path.endsWith('site-intelligence/SKILL.md')).action,'CONFLICT_UNMANAGED');

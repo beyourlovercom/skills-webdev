@@ -202,18 +202,22 @@ export function renderFiles(p) {
   for (const s of STAGES) files['skills/'+s.slug+'/SKILL.md']=renderStage(p,s);
   files['skills/approval-gates.md']=[
     '# '+p.domain+'｜审批门禁（S0 生成，不代表授权）',
+    BEG,
     'Owner 尚未通过此文件批准任何生产写入。', 'S2-A → S2-B: Local 实测 PASS。',
     'S2-B → S2-C: Dev 实测 PASS + 精确 SHA + 可回滚差异 + Owner 单独 pass。',
     'S3–S6: 正常运营在 WWW；涉及代码/插件/主题/模板/数据库结构回到 S2。',
     '首次追踪启用、批量内容/SEO、删除、301、自动排期/发布均须明确审批。',
-    'PUBLIC 仓库不得出现凭据、客户/订单数据或商业私密报表。',''
+    'PUBLIC 仓库不得出现凭据、客户/订单数据或商业私密报表。',
+    END,'','## 人工审批记录（S0 不覆盖）','请仅在真实 Owner 明确批准后记录审批范围、时间及证据链接。',''
   ].join('\n');
   files['skills/site-roadmap.md']=[
     '# '+p.domain+'｜S0→S6 Roadmap',
+    BEG,
     '本报告仅列计划，不宣称已连接 Analytics 或已实际发布。',
     ...STAGES.map(s=>'- [ ] '+s.id+' '+s.title+' | gate: '+s.gate),
     '先完成 S0 画像及来源补齐，再进入 S1；S2 Local/Dev/WWW 逐层；正式 WWW 的 S3–S6 依各阶段审批。',
-    'OPEN: '+(p.open_items.length?p.open_items.join('; '):'逐一核实 UNKNOWN 项与项目授权') ,''
+    'OPEN: '+(p.open_items.length?p.open_items.join('; '):'逐一核实 UNKNOWN 项与项目授权'),
+    END,'','## 人工 Roadmap 备注（S0 不覆盖）','请在此记录已经确认的例外和验收证据。',''
   ].join('\n');
   files['skills/evidence-manifest.json']=JSON.stringify({
     domain:p.domain, observed_at:p.fields.observed_at, sources:p.sources,
@@ -234,7 +238,7 @@ export function applyFiles(root, files, write=false) {
     }
     if (fs.existsSync(dest) && fs.lstatSync(dest).isSymbolicLink()) throw new Error('Symlink file rejected');
     const previous=fs.existsSync(dest)?fs.readFileSync(dest,'utf8'):null;
-    const merged= name.endsWith('/SKILL.md') ? mergeManaged(previous,content) : content;
+    const merged= name.endsWith('.md') ? mergeManaged(previous,content) : content;
     if (merged===null) { actions.push({path:name,action:'CONFLICT_UNMANAGED'}); continue; }
     const state=previous===merged?'UNCHANGED':previous?'UPDATE':'CREATE';
     actions.push({path:name,action:state});
