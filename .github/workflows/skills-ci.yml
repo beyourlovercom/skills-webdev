@@ -1,0 +1,18 @@
+name: Skills CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --test tests/*.test.mjs
+      - run: node src/site-skill-factory.mjs --domain example.org --project-root . --evidence fixtures/sample-b2b.json --output-root /tmp/site-s0-ci --write
+      - run: test -f /tmp/site-s0-ci/skills/site-intelligence/SKILL.md && test -f /tmp/site-s0-ci/skills/site-profile.yaml

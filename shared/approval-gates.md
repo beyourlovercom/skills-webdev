@@ -1,0 +1,11 @@
+# Universal approval and environment gates
+- Authority order: latest Owner explicit instructions > destination project AGENTS.md > actual source/runtime evidence > site-specific Skills > shared Skills. This repository never grants permission.
+- S0: discovery is read-only by default; Skill file generation is a code change, not a website deployment. Keep secrets/analytics exports out of public GitHub.
+- S1: source citations, periods, data integrity and conversion definitions required; unavailable sources remain UNKNOWN.
+- S2-A: China Windows Local via authorized BYL DC, isolated instance. No READY device restart or unrelated Local mutation.
+- S2-B: Local PASS → authorized Dev → real browser UAT, noindex protection, complete rollback before next gate.
+- S2-C: **Dev PASS + exact SHA + Owner separate pass** for PR merge and WWW production delta. Never overwrite live transactions, customers or database wholesale.
+- S3–S6: live WWW is normal operation target, but first production tracking enablement, bulk content, deletion, redirects, scheduling and publishing require explicit scope approval.
+- Any plugin/theme/code/DB/route or risky config from S3–S6 must use S2 Local→Dev→WWW. Emergency workflows require separate explicit direction.
+- For old→new migration evaluate canonical/301 with authorization. For coexist never assume migration/301 or broad duplicate syndication.
+- A document, unit test, screenshot, source marker, remote tool available, or staged release is not a production PASS without its own evidence.
