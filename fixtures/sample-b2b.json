@@ -1,0 +1,41 @@
+{
+  "brand": "Sample Irrigation Company (synthetic)",
+  "business_model": "B2B",
+  "product_type": "irrigation supplies",
+  "conversion_goal": "qualified lead",
+  "cms": "WordPress",
+  "commerce": "none",
+  "relation": "coexist",
+  "old_domain": "old-example.test",
+  "target_markets": [
+    "GH",
+    "ZM"
+  ],
+  "languages": [
+    "en"
+  ],
+  "currencies": [
+    "USD"
+  ],
+  "environments": {
+    "local": "UNKNOWN",
+    "dev": "UNKNOWN",
+    "www": "https://example.org"
+  },
+  "data_sources": {
+    "ga4": "NOT_CONNECTED",
+    "gsc": "UNKNOWN",
+    "semrush": "NO_ACCESS",
+    "ads": "NOT_CONNECTED"
+  },
+  "observed_at": "2026-10-30",
+  "sources": [
+    "synthetic fixture; NOT production evidence"
+  ],
+  "field_evidence": {
+    "business_model": "synthetic fixture"
+  },
+  "open_items": [
+    "confirm actual environment with authorized DC and runtime"
+  ]
+}
