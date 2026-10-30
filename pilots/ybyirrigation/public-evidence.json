@@ -1,0 +1,88 @@
+{
+  "brand": "YBY Irrigation",
+  "business_model": "B2B",
+  "product_type": "Drip irrigation tape, PE/HDPE pipes, filters, sprinklers, irrigation system fittings",
+  "conversion_goal": "verified B2B inquiry with Case ID, excluding internal QA and WhatsApp click-only events",
+  "cms": "WordPress",
+  "theme": "Bricks 2.3.7 plus YBY site-owned child custom element (historical incident, verify current runtime)",
+  "commerce": "B2B request-for-quote; checkout capability UNKNOWN",
+  "hosting": "Hostinger in documented 2026-10-30 incident; current resource/runtime state UNKNOWN",
+  "relation": "coexist",
+  "old_domain": "yby-irrigation.com",
+  "new_domain": "ybyirrigation.com",
+  "target_markets": [
+    "Kenya",
+    "Tanzania",
+    "Germany",
+    "United States"
+  ],
+  "languages": [
+    "English (public website)",
+    "Other language rollout UNKNOWN"
+  ],
+  "currencies": [
+    "Quotation currency UNKNOWN; connected Ads account CNY, not site quote currency"
+  ],
+  "industry_constraints": [
+    "Product suitability, water-efficiency and ROI claims require per-market verification"
+  ],
+  "content_ownership": "YBY site owned by project; old/new URL and media licensing remains a separate review",
+  "project_repo": "beyourlovercom/YBY-Core (shared WordPress plugin, not complete Bricks site source)",
+  "environments": {
+    "local": "https://localdev.ybyirrigation.com",
+    "dev": "https://dev.ybyirrigation.com",
+    "www": "https://ybyirrigation.com"
+  },
+  "data_sources": {
+    "ga4": "NOT_CONNECTED",
+    "gsc": "NOT_CONNECTED",
+    "semrush": "NOT_CONNECTED",
+    "ads": "AUTHORIZED",
+    "orders": "NOT_CONNECTED",
+    "keywords": "NOT_CONNECTED"
+  },
+  "sources": [
+    "https://github.com/beyourlovercom/YBY-Core/blob/d5d54ad162c0834cc6335fffcaabcddbf362d30e/AGENTS.md",
+    "https://github.com/beyourlovercom/YBY-Core/blob/d5d54ad162c0834cc6335fffcaabcddbf362d30e/docs/DEVELOPMENT_ENVIRONMENT.md",
+    "https://github.com/beyourlovercom/YBY-Core/blob/d5d54ad162c0834cc6335fffcaabcddbf362d30e/docs/configuration/YBY_IRRIGATION_RUNTIME_PROFILE.md",
+    "https://github.com/beyourlovercom/YBY-Core/blob/d5d54ad162c0834cc6335fffcaabcddbf362d30e/docs/incidents/2026-10-30-yby-andy-core-v232-p0.md",
+    "https://ybyirrigation.com/ (public read-only check 2026-10-31)",
+    "https://www.yby-irrigation.com/ (legacy site public read-only 2026-10-31)",
+    "Connected Google Ads / Windsor read-only 2026-10-31; actual account ID and metrics omitted from public GitHub"
+  ],
+  "field_evidence": {
+    "brand": "GitHub YBY Irrigation Runtime Profile and website homepage",
+    "business_model": "Website inquiry CTA, quoted goods, WordPress Case ID architecture",
+    "cms": "GitHub AGENTS and release plugin source; website WordPress/Bricks incident",
+    "theme": "2026-10-30 YBY production incident documented Bricks child element owner; current version on live host unverified",
+    "relation": "Both ybyirrigation.com and yby-irrigation.com were publicly reachable during audit; planned migration is not consent to redirect",
+    "conversion_goal": "Core inquiry Case ID canonical in GitHub configuration and tracking contract; qualified lead needs live CRM reconciliation",
+    "environments": "GitHub AGENTS + DEVELOPMENT_ENVIRONMENT and runtime profile",
+    "ads": "Connected Windsor Google Ads API confirmed READ ONLY and returned campaign/date rows on 2026-10-31; do not publish account or spend"
+  },
+  "existing_features": [
+    "WordPress inquiry Case ID and WhatsApp flow",
+    "Multi-country landing pages for US, DE, TZ and wholesale",
+    "Bricks site-owned page-level inquiry popup",
+    "Ads conversion, UTM and attribution contracts",
+    "Drip irrigation and agriculture products",
+    "Legacy and new domain coexist; no automatic 301",
+    "YBY 2.3.3 P0 production incident fix history"
+  ],
+  "accepted_uat": [
+    "Historic Github Bricks v2.3.3 isolated compatibility PASS, does NOT substitute current Production readback",
+    "Historic YBY irrigation page-owned inquiry test evidence, older scope and revisions; revalidate before asserting new runtime PASS"
+  ],
+  "open_items": [
+    "Current Windows Local plugin 1.6.0 versus current main 2.3.3 source; Windows checkout 542 commits behind main at 2026-10-31 read-only check",
+    "Current production plugin exact version 2.3.3 requires authenticated runtime readback; release docs not proof",
+    "GA4 and GSC native authorized property read tools unavailable in this chat; require legitimate connection",
+    "WordPress lead/Case ID live read and qualification reconciliation unavailable via current connection",
+    "Actual Bricks child-theme source code absent from shared plugin repository",
+    "WWW homepage contains inherited drill-bits / Ranking Bit template copy; editorial SEO defect requires separate approved fix",
+    "Dev and Windows Local browser UAT not performed on current exact 2.3.3 compatibility baseline",
+    "GH ZM CI fresh Ads campaign and landing-page state needs separate current authorization and readback",
+    "Do not merge Skills PR or deploy WWW; no new site posts or Ads writes"
+  ],
+  "observed_at": "2026-10-31"
+}

@@ -160,6 +160,12 @@ export function siteRules(p) {
   if (/contractor|installer|承包商/.test(features)) rules.push('服务转介: 承包商推荐是独立转化类型；区分定位查询、推荐展示和真实有效转介，不计为线上订单。');
   if (/agriculture|golf|农业|高尔夫/.test(features)) rules.push('行业分流: 农业、球场、商业景观和家庭用户产品、内容及咨询意图分别建图谱，不混成单一关键词簇。');
   if (/learning|training|document|catalog|技术资料|培训/.test(features)) rules.push('内容/技术支持: 产品资料、培训、目录下载应分别评价辅助价值；下载/访问不能直接认定为已成交。');
+  const theme=String(f.theme).toLowerCase();
+  const goal=String(f.conversion_goal).toLowerCase();
+  if (/bricks/.test(theme)) rules.push('Bricks: 检查父/子主题注册的自定义元素类名和优先级；Core 兼容升级必须测试真实子主题、PHP Fatal、REST、wp-admin 及重复 dbDelta，不以纯 PHP lint 代替。');
+  if (/case id|case_id|caseid/.test(goal+' '+features)) rules.push('询盘 Case ID: 校验唯一 ID、GCLID/UTM 归因、服务端有效 Email/线索去重；内部 UAT/诊断/垃圾数据不计真实有效客户，WhatsApp 点击不等于合格线索。');
+  if (/country landing|national landing|localiz|多国|国家落地页|wholesale/.test(features)) rules.push('多国家落地页: 保留页面级弹窗的字段、图像和 CTA 所有权；每个目标国家独立核对关键词、表单、Case ID、投放 URL，不复用跨页残留设置。');
+  if (/gtm|ga4|ads conversion|attribution|归因/.test(features)) rules.push('追踪归因: 广告账户币种不等于询盘价值币种；按国家/广告活动核对 Ads 主要与次要转化、GA4 事件、GSC 入口及 WordPress Case ID，无法联结的点击与表单事件不得认定销售。');
   if (f.relation==='coexist') rules.push('旧新站并行: 不默认 301；核对独立品牌、版权、canonical 与跨站重复内容风险。');
   else if (f.relation==='migration') rules.push('迁移: 建立 URL 对照、301、canonical、GSC 迁移与恢复监控；任何正式跳转须单独审批。');
   else if (f.relation===UNKNOWN) rules.push('站点关系 UNKNOWN: 禁止默认迁移、批量 301 或同时复制开放相同内容。');

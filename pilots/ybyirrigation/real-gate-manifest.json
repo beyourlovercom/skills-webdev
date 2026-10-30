@@ -1,0 +1,170 @@
+{
+  "site": "ybyirrigation.com",
+  "audit_date": "2026-10-31",
+  "source_repository": "beyourlovercom/YBY-Core",
+  "source_main_sha": "d5d54ad162c0834cc6335fffcaabcddbf362d30e",
+  "local_source_sha": "24e7415558f3ba705d17539e740f92f28acfa063",
+  "ads_source": "Connected Windsor Google Ads read-only; private metrics omitted",
+  "availability": {
+    "ga4": "NOT_CONNECTED",
+    "gsc": "NOT_CONNECTED",
+    "ads": "AUTHORIZED",
+    "wp_leads": "NOT_CONNECTED",
+    "semrush": "NOT_CONNECTED"
+  },
+  "stages": [
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S1",
+      "environment": "Research",
+      "source_references": [
+        "YBY GitHub AGENTS and real connected Ads date-scoped results"
+      ],
+      "tests": [
+        {
+          "id": "source_traceability",
+          "result": "PASS",
+          "evidence": "GitHub sha d5d54ad and authenticated Ads result retrieved 2026-10-31"
+        },
+        {
+          "id": "conversion_quality",
+          "result": "OPEN",
+          "evidence": "Qualified WP Case ID reconciliation not accessible"
+        },
+        {
+          "id": "keyword_url_map",
+          "result": "OPEN",
+          "evidence": "GA4/GSC authenticated property unavailable"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "24e7415558f3ba705d17539e740f92f28acfa063",
+      "approvals": [],
+      "stage": "S2-A",
+      "environment": "Local",
+      "source_references": [
+        "Windows remote read-only workspace and Core header check"
+      ],
+      "tests": [
+        {
+          "id": "isolated_local",
+          "result": "PASS",
+          "evidence": "Irrigation LocalWP has distinct folder, read-only directory check 2026-10-31"
+        },
+        {
+          "id": "local_browser",
+          "result": "OPEN",
+          "evidence": "No exact 2.3.3 runtime browser UAT on matched local checkout"
+        },
+        {
+          "id": "business_flow",
+          "result": "OPEN",
+          "evidence": "Current local plugin 1.6.0 cannot attest 2.3.3 inquiry flow"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S2-B",
+      "environment": "Dev",
+      "source_references": [
+        "YBY Core AGENTS Dev environment contract"
+      ],
+      "tests": []
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S2-C",
+      "environment": "WWW",
+      "source_references": [
+        "YBY Core v2.3.3 release source is not production version readback"
+      ],
+      "tests": []
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S3",
+      "environment": "WWW",
+      "source_references": [
+        "YBY Core Analytics GTM contract; real Ads read-only reporting"
+      ],
+      "tests": [
+        {
+          "id": "deduplication",
+          "result": "OPEN",
+          "evidence": "No live WWW Case ID event join"
+        },
+        {
+          "id": "live_event_readback",
+          "result": "OPEN",
+          "evidence": "GA4/GTM direct authorized browser context unavailable"
+        },
+        {
+          "id": "conversion_reconciliation",
+          "result": "OPEN",
+          "evidence": "No WP lead join"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S4",
+      "environment": "WWW",
+      "source_references": [
+        "Current public homepage contains unrelated drill and reamer copy"
+      ],
+      "tests": [
+        {
+          "id": "keyword_url_map",
+          "result": "OPEN",
+          "evidence": "No GSC keyed URL opportunity map"
+        },
+        {
+          "id": "change_scope",
+          "result": "OPEN",
+          "evidence": "Content changes not approved"
+        },
+        {
+          "id": "rollback_ready",
+          "result": "OPEN",
+          "evidence": "No WWW editorial rollback snapshot"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S5",
+      "environment": "WWW",
+      "source_references": [
+        "Legacy old site and newer site publicly reachable, but migration mapping absent"
+      ],
+      "tests": []
+    },
+    {
+      "checked_at_utc": "2026-10-31T00:00:00Z",
+      "head_sha": "UNKNOWN",
+      "approvals": [],
+      "stage": "S6",
+      "environment": "WWW",
+      "source_references": [
+        "No current editorial publishing authorization"
+      ],
+      "publish_mode": "draft",
+      "tests": []
+    }
+  ]
+}
