@@ -154,8 +154,8 @@ export function siteRules(p) {
   const features=p.existing_features.join(' ').toLowerCase();
   const commerce=String(f.commerce).toLowerCase();
   if (f.cms===UNKNOWN) rules.push('技术栈 UNKNOWN: 公网技术指纹或 URL 线索不等于 CMS 源码确认；禁止预设 WordPress/Shopify 或 WP-CLI 部署。');
-  if (f.project_repo===UNKNOWN || /^UNKNOWN\\b/.test(f.project_repo)) rules.push('外部基准站: 无已授权项目 GitHub/AGENTS/Local/Dev；S2 只生成设计和验收清单，不执行站点写入。');
-  if (b.includes('B2B') && b.includes('B2C') && /separate|independent|store\\./.test(commerce)) rules.push('跨站归因: 主站目录、经销商/转介、独立商城拆分目标与追踪；purchase 只能以已授权商城订单证据核验，不能以主站店铺跳转冒充销售；跨域追踪须获准。');
+  if (f.project_repo===UNKNOWN || /^UNKNOWN\b/.test(f.project_repo)) rules.push('外部基准站: 无已授权项目 GitHub/AGENTS/Local/Dev；S2 只生成设计和验收清单，不执行站点写入。');
+  if (b.includes('B2B') && b.includes('B2C') && /separate|independent|store\./.test(commerce)) rules.push('跨站归因: 主站目录、经销商/转介、独立商城拆分目标与追踪；purchase 只能以已授权商城订单证据核验，不能以主站店铺跳转冒充销售；跨域追踪须获准。');
   if (/distributor|dealer|经销/.test(features)) rules.push('渠道漏斗: 经销商定位的搜索、查看结果、点击联系仅为行为信号；有效渠道线索必须有获授权 CRM 或人工后续证明。');
   if (/contractor|installer|承包商/.test(features)) rules.push('服务转介: 承包商推荐是独立转化类型；区分定位查询、推荐展示和真实有效转介，不计为线上订单。');
   if (/agriculture|golf|农业|高尔夫/.test(features)) rules.push('行业分流: 农业、球场、商业景观和家庭用户产品、内容及咨询意图分别建图谱，不混成单一关键词簇。');

@@ -33,3 +33,11 @@ test('eight independent Skills + profile + gates + roadmap + evidence are genera
   assert.match(out['skills/approval-gates.md'],/Owner 尚未通过此文件批准任何生产写入/);
   assert.match(out['skills/site-profile.yaml'],/https:\/\/www.rainbird.com/);
 });
+
+test('separate store URL and annotated UNKNOWN project remain protected',()=>{
+  const updated={...input,commerce:'store.rainbird.com',project_repo:'UNKNOWN (third-party external)'};
+  const p2=buildProfile('rainbird.com',updated,path.resolve('.'));
+  const rules2=siteRules(p2).join('\\n');
+  assert.match(rules2,/跨站归因/);
+  assert.match(rules2,/外部基准站/);
+});
