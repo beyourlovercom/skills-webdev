@@ -46,6 +46,6 @@ Report: project; host/device; exact commit; changed files and operations; fixtur
 
 This repository is **ordinary GitHub source**, not a native installed Skill. At the beginning of the task, ask ChatGPT:
 
-> Read `beyourlovercom/andy-webdev-skills/skills/rapid-webdev/SKILL.md` from GitHub. Then inspect this project's `AGENTS.md` and latest Draft PR. Use the already-connected BYL DC to work on China Windows Local WordPress, run authorized tests and report exact results. Do not merge or modify Production without separate approval.
+> Read `beyourlovercom/skills-webdev/skills/rapid-webdev/SKILL.md` from GitHub. Then inspect this project's `AGENTS.md` and latest Draft PR. Use the already-connected BYL DC to work on China Windows Local WordPress, run authorized tests and report exact results. Do not merge or modify Production without separate approval.
 
 Keep this file generic. Project-specific domain names, device selections, release gates, and overrides belong in each project's repository.
