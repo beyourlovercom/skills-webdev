@@ -58,6 +58,7 @@ export function normalizeDomain(value) {
 function safeText(v) {
   if (typeof v === 'string') {
     if (PRIVATE_VALUE.test(v)) throw new Error('Suspected credential in evidence value');
+    if (/[\r\n\u0000-\u001F]/.test(v) || /<!--|-->|S0-MANAGED/i.test(v)) throw new Error('Unsafe multi-line or managed-marker evidence');
     return v.slice(0, 500);
   }
   return v;
@@ -75,9 +76,9 @@ export function sanitizeEvidence(input) {
       return safeText(x);
     });
     else if (v && typeof v === 'object' && ['environments','data_sources','field_evidence'].includes(field)) {
-      const clean = {};
+      const clean = Object.create(null);
       for (const [k,x] of Object.entries(v)) {
-        if (PRIVATE_KEY.test(k) || typeof x !== 'string') throw new Error('Invalid map entry: ' + field);
+        if (PRIVATE_KEY.test(k) || !/^[A-Za-z][A-Za-z0-9_.-]*$/.test(k) || typeof x !== 'string') throw new Error('Invalid map entry: ' + field);
         clean[k] = safeText(x);
       }
       out[field] = clean;

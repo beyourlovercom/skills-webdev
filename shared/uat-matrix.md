@@ -14,3 +14,6 @@
 | S6 | draft/fact/source QA | Explicit scheduling/publishing scope and actual readback |
 
 Automation is not self-authorization. Keep FAIL/OPEN evidence visible. Never mark a test PASS unless actually run.
+
+## Offline gate validator (S1–S6)
+`node src/validate-gates.mjs --manifest ./approved-handoff.json` evaluates structured `tests`, evidence, source dates, SHA, environment, and approval references. It produces PASS or BLOCKED and exits nonzero when blocked. Its PASS means **a declared evidence manifest meets static policy**, not independent validation that the evidence is authentic nor permission to act. See `shared/gate-manifest-schema.md`.

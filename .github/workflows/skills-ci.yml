@@ -16,3 +16,4 @@ jobs:
       - run: node --test tests/*.test.mjs
       - run: node src/site-skill-factory.mjs --domain example.org --project-root . --evidence fixtures/sample-b2b.json --output-root /tmp/site-s0-ci --write
       - run: test -f /tmp/site-s0-ci/skills/site-intelligence/SKILL.md && test -f /tmp/site-s0-ci/skills/site-profile.yaml
+      - run: node src/validate-gates.mjs --manifest fixtures/sample-s1-manifest.json

@@ -33,3 +33,5 @@ First invocation is read-only **dry-run**. `--write` generates files in a local 
 - Owner instructions and target project `AGENTS.md` outrank generated instructions. Production writes, merges, bulk updates, redirects and publishing need independent approval. S2 chain: **China Windows Local → Dev UAT → WWW**; S3 onward normal editorial/analytics work is on WWW, with engineering changes returning to S2.
 - Keep this repository Public and small. Never commit OAuth credentials, passwords, production data, customer or order exports, commercial metrics, private device addresses or screenshot archives. Never restart READY devices.
 - ChatGPT web Plus may **read and follow** GitHub `SKILL.md`; this is not an installed native Skill or an MCP connection.
+## Stage acceptance CLI
+`node src/validate-gates.mjs --manifest fixtures/sample-s1-manifest.json` demonstrates the fail-closed S1–S6 evidence checker with **synthetic** records. It cannot attest the authenticity of Owner approvals; real approval records must be reviewed separately.

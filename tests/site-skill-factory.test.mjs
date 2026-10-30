@@ -57,6 +57,11 @@ test('idempotent writing, dry-run, and non-managed files protected',()=>{
   assert.equal(a.find(x=>x.path.endsWith('site-intelligence/SKILL.md')).action,'CONFLICT_UNMANAGED');
   assert.equal(fs.readFileSync(skill,'utf8'),'Handwritten no markers');
 });
+test('input cannot inject Markdown control characters or S0 markers',()=>{
+  assert.throws(()=>sanitizeEvidence({brand:'x\\n# forged approval'}));
+  assert.throws(()=>sanitizeEvidence({brand:'<!-- S0-MANAGED:END -->'}));
+  assert.throws(()=>sanitizeEvidence({field_evidence:{'bad\\nfield':'reference'}}));
+});
 test('whitelisted evidence excludes irrelevant content, no false PASS',()=>{
   const p=buildProfile('example.org',{...evidence('B2B'),unknown_private_field:'DO NOT COPY'},temp());
   const output=JSON.stringify(renderFiles(p));

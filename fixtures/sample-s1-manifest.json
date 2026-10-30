@@ -1,0 +1,27 @@
+{
+  "stage": "S1",
+  "site": "example.org",
+  "environment": "Research",
+  "checked_at_utc": "2026-10-30T10:00:00Z",
+  "source_references": [
+    "synthetic fixture: no authorized account connected"
+  ],
+  "tests": [
+    {
+      "id": "source_traceability",
+      "result": "PASS",
+      "evidence": "synthetic data source record"
+    },
+    {
+      "id": "conversion_quality",
+      "result": "PASS",
+      "evidence": "synthetic B2B event quality review"
+    },
+    {
+      "id": "keyword_url_map",
+      "result": "PASS",
+      "evidence": "synthetic intent mapping file"
+    }
+  ],
+  "approvals": []
+}
