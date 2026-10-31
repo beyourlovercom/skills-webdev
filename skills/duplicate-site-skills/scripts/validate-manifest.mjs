@@ -26,7 +26,13 @@ function urlOrigin(value,where,errors) {
 }
 function routePath(v) {
   if(typeof v!=='string'||!v.startsWith('/')||v.includes('?')||v.includes('#')||v.includes('\\')||
-     v.includes('//')||v.includes('..')||/[<>"']/g.test(v)) return false;
+     v.includes('//')||v.includes('..')||/[<>"'\u0000-\u001f\u007f]/g.test(v)||
+     /%(?:2f|5c|00|0a|0d)/i.test(v)) return false;
+  try {
+    const decoded=decodeURIComponent(v);
+    if(decoded.includes('\\')||decoded.includes('//')||/[\u0000-\u001f\u007f]/.test(decoded)||
+       decoded.split('/').some(segment=>segment==='.'||segment==='..')) return false;
+  } catch { return false; }
   return v==='/' || v.endsWith('/');
 }
 function scanSecrets(v,where,errors) {
@@ -60,12 +66,21 @@ export function validateManifest(doc) {
   if(!Array.isArray(source.authorized_content_types)||source.authorized_content_types.length===0||
      source.authorized_content_types.some(t=>!TYPES.has(t)))
     errors.push('source.authorized_content_types required from structure/text/assets/code');
+  if(typeof source.authorized_publication!=='boolean'||typeof source.authorized_search_index!=='boolean')
+    errors.push('source publication and search-index permission flags must be boolean');
   if(typeof target.platform!=='string'||!target.platform.trim())errors.push('target.platform required');
   if(!['hold','allow-index'].includes(target.indexing))errors.push('target.indexing must be hold or allow-index');
   if(typeof env.local!=='string'||env.local.length<3)errors.push('environments.local required');
   const dev=urlOrigin(env.dev,'environments.dev',errors),www=urlOrigin(env.www,'environments.www',errors);
   if(www&&dst&&www!==dst)errors.push('environments.www must match target.origin');
-  if(dev&&dst&&dev===dst)warnings.push('Dev shares WWW origin; explicit site-profile exception required');
+  if(dst&&new URL(dst).protocol!=='https:')errors.push('target.origin must use HTTPS for public deployment');
+  if(typeof env.dev_is_www_exception_approved!=='boolean')
+    errors.push('environments.dev_is_www_exception_approved must be boolean');
+  const devIsWww=!!(dev&&dst&&dev===dst);
+  if(devIsWww&&!env.dev_is_www_exception_approved)
+    warnings.push('Dev shares WWW origin; explicit site-profile exception required');
+  if(env.dev_is_www_exception_approved&&!devIsWww)
+    warnings.push('Dev=WWW exception flag set although environments are separate');
   if(!Array.isArray(doc.routes)||!doc.routes.length)errors.push('routes must be a non-empty array');
   else{
     const from=new Set(),to=new Set();
@@ -81,23 +96,27 @@ export function validateManifest(doc) {
   }
   if(!EMAIL_RE.test(inq.public_email||''))errors.push('inquiry.public_email invalid');
   if(!EMAIL_RE.test(inq.internal_recipient||''))errors.push('inquiry.internal_recipient invalid');
-  if(typeof release.owner_pass!=='boolean'||typeof release.backup_verified!=='boolean'||typeof release.www_deployed!=='boolean')
-    errors.push('release booleans missing');
+  if(typeof release.owner_pass!=='boolean'||typeof release.seo_owner_pass!=='boolean'||
+     typeof release.backup_verified!=='boolean'||typeof release.www_deployed!=='boolean')
+    errors.push('release booleans missing, including independent SEO approval');
   if(release.approved_sha!==null&&(typeof release.approved_sha!=='string'||!SHA_RE.test(release.approved_sha)))
     errors.push('release.approved_sha must be a full 40-digit SHA or null');
   for(const f of ['local_qa','dev_qa','www_readback','gsc_indexed'])
     if(!STATE.has(evidence[f]))errors.push('evidence.'+f+' must be OPEN/PASS/FAIL/BLOCKED');
   const rightsGate=source.rights_status==='verified' && typeof source.rights_evidence_ref==='string' &&
     source.rights_evidence_ref.trim().length>=5 && doc.demo_only===false ? 'CHECK_EVIDENCE' : 'BLOCKED';
-  const wwwGate=rightsGate==='CHECK_EVIDENCE' && release.owner_pass===true && SHA_RE.test(release.approved_sha||'') &&
+  const wwwGate=rightsGate==='CHECK_EVIDENCE' && source.authorized_publication===true &&
+    (!devIsWww || env.dev_is_www_exception_approved===true) &&
+    release.owner_pass===true && SHA_RE.test(release.approved_sha||'') &&
     release.backup_verified===true && evidence.local_qa==='PASS' && evidence.dev_qa==='PASS' ?
        'READY_FOR_MANUAL_REVIEW' : 'BLOCKED';
-  const indexGate=target.indexing==='allow-index' && wwwGate==='READY_FOR_MANUAL_REVIEW' ?
-       'READY_FOR_SEPARATE_SEO_APPROVAL' : 'HOLD';
+  const indexGate=target.indexing==='allow-index' && wwwGate==='READY_FOR_MANUAL_REVIEW' &&
+    source.authorized_search_index===true && release.seo_owner_pass===true ?
+       'READY_FOR_SEO_EVIDENCE_REVIEW' : 'HOLD';
   if(doc.demo_only===true)warnings.push('demo manifest: never deploy or index');
   if(rightsGate!=='CHECK_EVIDENCE')warnings.push('rights unverified in the schema; execution blocked');
   if(target.indexing==='allow-index'&&indexGate==='HOLD')
-    warnings.push('indexing requested but authorization/release gate not complete');
+    warnings.push('indexing requested but source publication, SEO consent or release gate is not complete');
   return {schema_status:errors.length?'FAIL':'PASS',project_id:doc.project_id,
       rights_gate:rightsGate,www_gate:wwwGate,index_gate:indexGate,
       route_count:Array.isArray(doc.routes)?doc.routes.length:0,errors,warnings};
