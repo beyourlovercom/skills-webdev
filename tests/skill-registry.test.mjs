@@ -9,7 +9,8 @@ const reg=readRegistry(path.join(dir,'registry/skills.json'));
 const readme=fs.readFileSync(path.join(dir,'README.md'),'utf8');
 
 test('registry schema, exact skills and no duplicates',()=>{
- const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,11);
+ const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,12);
+ assert.equal(reg.skills.find(x=>x.id==='duplicate-site-skills')?.pr,7);
 });
 test('every real Skill has meaningful README entry and a real indexed source',()=>{
  for(const s of reg.skills){
