@@ -69,3 +69,11 @@ test('rights verified but wrong full SHA prevents WWW readiness',()=>{
  d.evidence.local_qa='PASS';d.evidence.dev_qa='PASS';
  const r=validateManifest(d);assert.equal(r.schema_status,'FAIL');assert.equal(r.www_gate,'BLOCKED');
 });
+
+test('all internal SKILL.md reference and template links resolve on this branch',()=>{
+ const skillDir=path.resolve(root,'../skills/duplicate-site-skills');
+ const body=fs.readFileSync(path.join(skillDir,'SKILL.md'),'utf8');
+ const refs=[...body.matchAll(/\]\(((?:references|scripts|templates)\/[^)#]+)\)/g)].map(m=>m[1]);
+ assert.equal(refs.length,9);
+ for(const rel of refs)assert.ok(fs.existsSync(path.join(skillDir,rel)),'Missing relative Skill file: '+rel);
+});
