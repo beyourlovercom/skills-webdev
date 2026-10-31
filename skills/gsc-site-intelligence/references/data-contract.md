@@ -24,3 +24,7 @@ The YBY ERP Local historical snapshot exposed mislabeled legacy-domain page URLs
 ## Offline GSC Search Results CSV mode
 
 Existing official Web Search Results CSV can be imported offline without OAuth using `gsc-import.mjs`, an explicit source manifest, and the documented CSV header format. A user-declared property is NOT verified by Google sites.list. Dates/Chart CSV is required as the totals source; Queries/Pages/Countries/Devices are optional but their absence stays OPEN. UI dimensional exports are often restricted to 1,000 representative rows; missing rows do not mean zero. The importer refuses old/new cross-domain page mixing, malformed or non-ISO date rows, unsafe file paths, partial/ambiguous headers and invalid numeric metrics. It does not manufacture Query×Page mappings, YoY history, sitemap, indexing, CWV or business conversions. Read `references/ui-csv-import.md` for required source provenance and limitations.
+
+### Filter-scope provenance gate
+
+When `filters` is nonempty, the CSV chart total describes only the **declared filtered view**, never all-site performance. Evidence includes `totals_scope=FILTERED_VIEW_USER_DECLARED`; no-filter manifest uses `UNFILTERED_VIEW_USER_DECLARED`, still not independently authenticated. Each declared filter value must be a non-empty string and only the known filter keys are permitted. These are user declarations, not proof of actual Google UI filter settings.

@@ -104,6 +104,11 @@ export function importManifest(filename,domain){
  if(!isoDay(date.startDate)||!isoDay(date.endDate)||date.startDate>date.endDate)fail('invalid declared date range');
  if(!m.exported_at||!Number.isFinite(Date.parse(m.exported_at))||!/[Zz]|[+-]\d\d:\d\d$/.test(m.exported_at))fail('exported_at must include time zone');
  exactKeys(m.filters,['query','page','country','device','search_appearance']);
+ // A filtered Search Results export must never be represented as whole-property totals.
+ for(const [key,value] of Object.entries(m.filters)) {
+  if(typeof value!=='string'||value.trim()==='')fail('filter '+key+' requires a non-empty declared string');
+ }
+ const filterScope=Object.keys(m.filters).length?'FILTERED_VIEW_USER_DECLARED':'UNFILTERED_VIEW_USER_DECLARED';
  exactKeys(m.files,Object.keys(DIMS));
  if(!m.files.dates)fail('Dates.csv (chart totals) is required; query totals are not property totals');
  const reports={};const gaps=[];
@@ -122,12 +127,13 @@ export function importManifest(filename,domain){
  return {schema_version:1,source:'GSC_UI_CSV_EXPORT_OFFLINE',domain,
    property:{site_url:prop,verification_status:'USER_DECLARED_NOT_API_VERIFIED'},
    search_type:'web',collected_at:new Date().toISOString(),exported_at:m.exported_at,
-   date_range:date,filters:m.filters,reports,
+   date_range:date,filters:m.filters,totals_scope:filterScope,reports,
    sitemaps:{status:'OPEN_NOT_INCLUDED'},index_coverage:'NOT_VERIFIED',
    query_page_mapping:'NOT_EXPORTED',qualified_leads:'NOT_VERIFIED_BY_GSC',
-   summary:{status:'PARTIAL_OFFLINE_EXPORT_UNVERIFIED',daily_coverage_complete:fullDays,
+   summary:{status:'PARTIAL_OFFLINE_EXPORT_UNVERIFIED',totals_scope:filterScope,daily_coverage_complete:fullDays,
      days_observed:daily.length,days_in_range:dateDays,period_totals,full_year_yoy:null,
-     warnings:['Source property is user-declared; not verified against Google sites.list or OAuth',
+     warnings:['Source property and filtering are user-declared; not verified against Google sites.list or actual GSC UI state',
+       filterScope==='FILTERED_VIEW_USER_DECLARED'?'Chart totals apply only to the declared filtered view, NOT the entire site':'Chart totals are for a user-declared unfiltered view, NOT independently Google-verified full-property totals',
        'GSC UI query/page CSV exports may be truncated to representative top rows; do not sum as site totals',
        'Daily chart totals are used for aggregate clicks/impressions; missing dates are not proven zero',
        'No query x page mapping, sitemap, indexing or business lead attribution from this import',...gaps]}};

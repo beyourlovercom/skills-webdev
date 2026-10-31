@@ -81,6 +81,24 @@ test('manifest CSV path cannot escape export folder or symlink outside',()=>{
  assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/escapes/);
  }finally{fs.rmSync(x.dir,{recursive:true,force:true});}
 });
+test('filtered GSC UI chart totals remain filtered-view totals, not all-site traffic',()=>{
+ const x=setup({manifest:{filters:{country:'India',query:'contains drip'}}});
+ try{const b=importManifest(x.file,'ybyirrigation.com');
+   assert.equal(b.totals_scope,'FILTERED_VIEW_USER_DECLARED');
+   assert.equal(b.summary.totals_scope,'FILTERED_VIEW_USER_DECLARED');
+   assert.equal(b.summary.period_totals.clicks,10);
+   assert.ok(b.summary.warnings.some(s=>/NOT the entire site/.test(s)));
+ }finally{fs.rmSync(x.dir,{recursive:true,force:true});}
+});
+test('invalid or ambiguous filter declarations block CSV import',()=>{
+ const x=setup();
+ try{const m=JSON.parse(fs.readFileSync(x.file,'utf8'));
+  for(const filters of [{query:['drip']},{country:''},{device:0},{unknown:'x'}]){
+   fs.writeFileSync(x.file,JSON.stringify({...m,filters}));
+   assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/BLOCKED/);
+  }
+ }finally{fs.rmSync(x.dir,{recursive:true,force:true});}
+});
 test('date and numeric quality: no silent unknown or inconsistent columns',()=>{
  const x=setup({Dates:'Date,Clicks,Impressions,CTR,Position\n2026-09-03,2,200,1%,5\n'});
  try{assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/outside declared range/);}

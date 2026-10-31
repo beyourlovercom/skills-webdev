@@ -44,3 +44,7 @@ dry-run 本地读取 CSV、验证完整性；不调用 Google API、不改 GSC/E
 ## 5. GPT 网页版启动提示
 
 读取 skills-webdev 的 registry/skills.json，再加载 gsc-site-intelligence/SKILL.md、references/analysis-prompt.txt 和本说明；通过自建 DC 在 Windows Local 使用已有 CSV 的 manifest 进行只读导入，输出证据来源和局限。只根据已导出的数据撰写明确标注的中文中期分析，不将离线导入当作实时 Google API 验收，也不修改网站或 ERP 历史数据。
+
+## 6. 筛选口径保护
+
+manifest `filters` 必须是对象：无额外过滤使用 `{}`；存在过滤时逐项填非空文本，例如 `"country":"India"`、`"query":"contains:drip"`。程序会把 `totals_scope` 标记为 `FILTERED_VIEW_USER_DECLARED`，图表合计**只能代表该筛选视图**，不能解释为整个网站的搜索表现。无筛选时是 `UNFILTERED_VIEW_USER_DECLARED`，仍需来源核实。脚本不能验证 manifest 填写是否与 GSC 当时的真实界面一致。
