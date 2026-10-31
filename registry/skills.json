@@ -69,15 +69,15 @@
       "id": "gsc-site-intelligence",
       "stage": "S1",
       "name_zh": "GSC 搜索表现分析",
-      "summary_zh": "保留既有 GSC 分析提示词，使用只读 GSC API 检查属性、搜索流量、查询词、页面、国家、设备和 Sitemap，识别历史与查询隐私限制。",
+      "summary_zh": "保留原始 GSC 分析规范；支持已授权只读 API 或官方 GSC Web CSV 离线导入、域名归属核对与数据限制审计。",
       "status": "DRAFT_PR",
       "source_ref": "feat/gsc-site-intelligence-20261031",
       "skill_path": "skills/gsc-site-intelligence/SKILL.md",
       "pr": 6,
       "use_when_zh": "需要网站自然搜索趋势、查询词和页面机会、新站关键词-URL规划与搜索技术诊断。",
-      "inputs_zh": "已授权的 GSC Domain 或 URL-prefix 属性，webmasters.readonly 访问或真实 GSC 导出。",
-      "outputs_zh": "受保护的 GSC 证据 JSON；SEO 机会与 URL 映射；正式 Word/Codex 报告由文档生成流程完成。",
-      "requires_authorized_access": "必须核验目标网站真实 GSC 属性权限；Skill 文件与 GSC TXT 不自动提供授权。"
+      "inputs_zh": "GSC 只读 API 授权，或已有官方 Web CSV 导出及声明实际属性、日期、筛选的 manifest。",
+      "outputs_zh": "受保护 GSC 证据 JSON、来源可信度标记和 SEO 分析；正式 Word/Codex 报告需独立产出。",
+      "requires_authorized_access": "API 读取需要目标属性 Google 授权；已有官方 CSV 可离线分析，无需 OAuth，但不能证明 Google 当前账号/属性权限。"
     },
     {
       "id": "site-builder-local",

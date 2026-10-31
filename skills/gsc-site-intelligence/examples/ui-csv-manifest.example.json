@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source": "GSC_UI_CSV_EXPORT",
+  "property": "sc-domain:example.com",
+  "search_type": "web",
+  "exported_at": "2026-10-31T00:00:00Z",
+  "date_range": {
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-30"
+  },
+  "filters": {},
+  "files": {
+    "dates": "Chart.csv",
+    "queries": "Queries.csv",
+    "pages": "Pages.csv",
+    "countries": "Countries.csv",
+    "devices": "Devices.csv"
+  }
+}

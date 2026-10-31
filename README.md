@@ -20,7 +20,7 @@
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
-| S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/gsc-site-intelligence-20261031/skills/gsc-site-intelligence/SKILL.md) | 只读核对 GSC Domain/URL-prefix 属性，分析搜索词、URL、国家/设备、Sitemap 及 SEO 机会，保留原始中文分析规范。 | 📝 [Draft PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6) |
+| S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/gsc-site-intelligence-20261031/skills/gsc-site-intelligence/SKILL.md) | GSC 只读 API 或已有官方 CSV 离线导入；核对域名归属、搜索词/页面/国家/设备及 SEO 机会。 | 📝 [Draft PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6) |
 | S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -31,7 +31,7 @@
 
 ### 还没有开发完成的能力
 
-- **`gsc-site-intelligence`（S1）** 已有真实只读 API 读取代码和离线测试，仍在 Draft PR #6；没有 GSC OAuth/实际属性读回前，不能宣称真实数据 UAT PASS。
+- **`gsc-site-intelligence`（S1）** 已有只读 API、官方 CSV 离线导入和完整测试，仍在 Draft PR #6。导入 CSV 不需要新 OAuth，但来源属性仍待 Google API 独立核验，不能宣称实时 GSC 验收 PASS。
 - Google Ads / Semrush 独立分析器：可由 S1 调度现有合法连接，但**独立 Skills 仍待开发**，不能假装已经安装。
 
 ## 3. 完整工作流程是什么？
@@ -88,7 +88,9 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 加载原始 GSC 中文分析规范和 data-contract，核对 ybyirrigation.com 的
 已授权 Domain Property / URL-prefix Property；使用已有合法连接或
 Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
-若没有授权则 BLOCKED；不得借用其他网站 Token，不把匿名词数据补成完整总量。
+已有 GSC 官方 Web Search Results CSV 时，按 Skill 的 references/ui-csv-import.md
+完成离线导入，无需重新 OAuth；结果明确标为 PARTIAL_OFFLINE_EXPORT_UNVERIFIED。
+不得借用其他网站 Token，不把匿名词数据补成完整总量。
 ```
 
 ## 5. Registry 如何被 GPT 使用？

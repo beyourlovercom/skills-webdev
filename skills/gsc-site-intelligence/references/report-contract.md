@@ -7,3 +7,7 @@ The executing ChatGPT must create a real Chinese **.docx** report titled 《旧�
 For actual rows, supply CSV/XLSX for query→URL, important pages, URL redirects *as proposals only*, and evidence-linked tasks. Do not create a false metric table or invent conversions. Specify query dates, filters and which totals cannot be reconstructed from anonymized/limited GSC query rows. Use GA4/Ads/qualified CRM leads only when independently authorized and linked by defensible aggregation, never pretend GSC query→individual user/order join exists.
 
 `gsc-read.mjs` produces protected JSON evidence. Word/CSV creation is a separate analysis/artifact step. Mark Word `OPEN` rather than marking an unbuilt Word report PASS. No automatic GSC publishing, sitemap submission, 301, indexing request or other write.
+
+## Offline UI CSV scope
+
+Offline GSC CSV permits a clearly labeled **interim/partial** analysis using actual imported rows. Include `GSC_UI_CSV_EXPORT_OFFLINE`, the declared property, `USER_DECLARED_NOT_API_VERIFIED`, date filters, dimension export limits and unmatched data. The date/chart CSV is the totals basis; query/page Top-N cannot be used as site totals. Do not claim a full Google-authenticated UAT, verified Query×Page pairs or complete annual coverage on this evidence alone. Report only substantiated observations and OPEN gates.
