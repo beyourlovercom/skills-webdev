@@ -1,5 +1,8 @@
 # D7–D8 — 搜索收录、表单/邮箱与真实转化
 
+## 双重索引授权
+**目标 Owner 的批准 ≠ 源素材的搜索公开权。** 必须同时确认 `source.authorized_search_index=true` 和 `release.seo_owner_pass=true`。Manifest 仅生成 `READY_FOR_SEO_EVIDENCE_REVIEW`，不能自动替管理员开启 `blog_public=1`，也不能自动改 Cloudflare robots。源站公有网页不代表目标站有权复制并搜索发布。
+
 ## SEO 三种不等价的状态
 1. **INDEX_HOLD**：Dev/未获授权公开发布的镜像默认 `noindex`，如需禁止抓取应遵守项目授权和合法约束。只设置 Sitemap 不能解除 noindex。
 2. **INDEX_ELIGIBLE**：Owner 明确批准 public index；目标站 WordPress 的 `blog_public`、HTTP `X-Robots-Tag`、页面 `robots/googlebot`、Cloudflare `robots.txt`、canonical、Sitemap 全部经过外部实际读回核对。
