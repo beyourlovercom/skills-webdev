@@ -175,6 +175,7 @@ export function renderStage(p, stage) {
     '- 环境: Local='+p.environments.local+'；Dev='+p.environments.dev+'；WWW='+p.environments.www,
     '- 数据权限: '+Object.entries(p.data_sources).map(([k,v])=>k+'='+v).join('; '),'',
     '## 输入契约',stage.inputs,'要求每个关键业务事实附实际来源、采集日期及授权/缺失状态。','',
+    ...(stage.id==='S1' ? ['## GA4 数据子模块','加载共享 skills/ga4-site-intelligence/SKILL.md，保留 Owner 上传 GA4 TXT 为分析规范；仅以已授权的 GA4 属性/数据流核验和真实报告进入 S1。若未连通标注 NOT_CONNECTED/OPEN，不得把 dry-run 当 GA4 PASS。',''] : []),
     '## 执行流程',
     '1. 只读核查项目 AGENTS.md、当前 GitHub SHA、运行状态、既有 PASS 与适用权限。',
     '2. 对照 site-profile.yaml 与 field_evidence；只补差异，不重做已验收工作。',

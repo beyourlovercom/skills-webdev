@@ -8,3 +8,6 @@ node_modules/
 *.sqlite
 *.log
 __pycache__/
+
+# Local authorized analytics exports; never push actual GA4 property reports
+.private-ga4/

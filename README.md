@@ -18,6 +18,14 @@ Public, lightweight workflow toolkit for evidence-based, **site-specific** WordP
 | S5 | [content-migration](skills/content-migration/SKILL.md) | Content audit, rights and rewriting |
 | S6 | [content-automation](skills/content-automation/SKILL.md) | Quality-gated editorial drafts/scheduling |
 
+## S1: GA4 owned-site analytics sub-Skill
+
+[`ga4-site-intelligence`](skills/ga4-site-intelligence/SKILL.md) is the independent GA4 source adapter for S1. It preserves the Owner's uploaded original [`analysis-prompt.txt`](skills/ga4-site-intelligence/references/analysis-prompt.txt) verbatim; verifies the real GA4 property and Web data stream, reads last 12 completed property-local months and preceding YoY with the Admin/Data API in read-only mode, and blocks tenant/domain mismatch, missing authorization or incomplete pages. The built-in Node CLI **does not authenticate on its own** or create a Chinese Word report; an authorized connection and Word authoring step are still necessary. No real GA4 data should enter this public repo. Run:
+
+```bash
+node skills/ga4-site-intelligence/scripts/ga4-read.mjs --property 123456789 --domain example.com --dry-run
+```
+
 ## MVP usage (Node 20+, no external packages)
 ```bash
 node --test tests/*.test.mjs
