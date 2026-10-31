@@ -107,7 +107,7 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 
 ## 8. 开发状态与下一步
 
-**当前公开主分支只有 `rapid-webdev`。** 本 README 和 Registry 在独立的文档 PR 中准备，**未合并前 GitHub 默认首页仍显示旧 README**。建议先完成目录审阅，再由 Owner 单独批准合并。
+**当前 `main` 的已发布 Skill 只有 `rapid-webdev`。** 本公开 README 与 Registry 是使用指南和技能索引，不代表其他 Draft PR 已合并；请使用 `registry/skills.json` 中对应的开发分支读取其他 Skill，并在执行前核对实时 PR 状态。
 
 当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 
