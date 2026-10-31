@@ -1,5 +1,11 @@
 # D6–D7 — Dev → WWW 的独立审批、精确发布和回滚
 
+## D6 工具门禁（Schema ≠ 真实许可）
+- `www_gate=READY_FOR_MANUAL_REVIEW` 需要源内容 `authorized_publication=true`、已确认权利的非敏感证明引用、Local/Dev PASS、生产 Owner pass、准确 40 位 SHA 与已验证备份。任何一项缺失 → BLOCKED。
+- Dev 和 WWW 同域时，额外要求 `dev_is_www_exception_approved=true`，避免把测试环境误写正式网站。
+- SEO 发布另需 `source.authorized_search_index=true`、`release.seo_owner_pass=true`、`target.indexing=allow-index`；满足后也只是 `READY_FOR_SEO_EVIDENCE_REVIEW`，仍要核对法律/品牌/内容和实际外网门禁。
+- `www_deployed` 字段是发布状态的记录，不是批准依据。无实际读回证据不能从 false 改 true。
+
 ## 发布前冻结
 - 获取目标站 Owner 对确切环境、变更内容、SHA、权限和 SEO 开关的**独立明确 pass**。源站许可不等于目标生产发布同意。
 - 固定 `GitHub branch + commit SHA`、部署包 SHA256、数据库/文件影响面、业务链路、备份位置、负责人、预期 Canary 页面与回滚条件。
