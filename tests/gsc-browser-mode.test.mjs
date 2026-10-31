@@ -5,7 +5,7 @@ const base=new URL('../skills/gsc-site-intelligence/',import.meta.url);
 test('browser mode reads an already-running Chrome property and never starts or navigates browser',()=>{
  const s=fs.readFileSync(new URL('scripts/gsc-browser-ui.applescript',base),'utf8');
  assert.match(s,/Google Chrome" is not running/);
- assert.match(s,/tabs in w/);
+ assert.match(s,/tabs of w/);
  assert.match(s,/resource_id=sc-domain%3A/);
  assert.match(s,/u.searchParams.get\('resource_id'\)!==want/);
  assert.match(s,/execute t javascript js/);
@@ -20,7 +20,7 @@ test('browser mode contract distinguishes UI from API and CSV, and limits histor
  assert.match(g,/12 个月/);
  assert.match(g,/Sitemap/);
  assert.match(g,/Owner/);
- const registry=JSON.parse(fs.readFileSync(new URL('../registry/skills.json',base),'utf8'));
+ const registry=JSON.parse(fs.readFileSync(new URL('../../registry/skills.json',base),'utf8'));
  const item=registry.skills.find(s=>s.id==='gsc-site-intelligence');
  assert.match(item.summary_zh,/Chrome/);
  assert.equal(item.status,'DRAFT_PR');
