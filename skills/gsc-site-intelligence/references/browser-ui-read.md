@@ -30,3 +30,11 @@ Owner 已在获授权的中国 Mac 或其他 macOS 设备的 Google Chrome 中�
 ## 回到 ChatGPT 网页版的提示
 
 请读取 `registry/skills.json` 中的 `gsc-site-intelligence` 和 `references/browser-ui-read.md`，通过已授权自建 DC 读取中国 Mac **现有** Chrome 中已登录的目标 GSC 属性，按报表记录浏览器只读 UAT，不重启、不打开重复页面、不要求重新 OAuth 或 CSV。Google/网站任何写操作仍须独立批准。
+
+## 6. 多报表私有证据核验器
+
+保存在同一个私有目录中的已有 Chrome 快照文件可命名为 `performance.json`、`index.json`、`noindex.json`、`404.json`、`redirect.json`、`sitemaps.json`、`https.json`、`cwv.json`（前六项是浏览器 UAT 的最低目标集合）。这些 JSON 的来源应为同一个既有 Chrome 会话，由 `scripts/gsc-browser-ui.applescript` 在指定报告页面只读获取；不是模拟数据。
+
+`node skills/gsc-site-intelligence/scripts/gsc-browser-audit.mjs --input-dir /secure/private-folder --domain example.com --dry-run`
+
+如需生成结构化私有证据，添加 `--output-dir /secure/private-output`（默认不覆盖已有文件）。审核器仅检查已存快照：每份严格匹配 `sc-domain:<domain>`、`search.google.com`、报告种类、时间戳及可见统计数字；无法凭 UI 强行推算完整年度数据。输出区分 `PASS_EXISTING_SESSION_READ` 与 `OPEN_NOT_PROVEN`。不扫描 Cookie/Token、不联网、不提交 Google 或公开 GitHub。对于索引详情，只有可见 URL 属于目标域名及其子域名时才纳入样本；GSC 同域内 Dev URL 需要单独标识为 Dev，不得自动当成主站 SEO 页面。

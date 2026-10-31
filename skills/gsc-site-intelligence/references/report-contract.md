@@ -15,3 +15,7 @@ Offline GSC CSV permits a clearly labeled **interim/partial** analysis using act
 ### Existing Chrome GSC partial UI report
 
 For data actually read from an Owner-approved existing Chrome session, an interim **authenticated UI observation report** is valid when provenance is explicit: `GSC_EXISTING_CHROME_UI_READONLY`, exact property resource_id, captured UI title, visible date range and search type. This is not a Google API export, does not itself prove all report dimensions or complete 12-month coverage, and cannot be promoted into a full annual Word report without all required source evidence. Indexing/Sitemaps/CWV are separate modules with their own update dates and URL limitations. Keep raw report captures out of Public GitHub and never publish user account email, cookies, tokens or private search terms.
+
+### Browser evidence audit output
+
+`gsc-browser-audit.mjs` validates existing authenticated Chrome read snapshots and produces source-scoped JSON with `browser_read_uat=PASS_EXISTING_SESSION_READ` only when required UI views were saved and structurally validated; `complete_annual_analysis=OPEN_NOT_PROVEN` always, until full coverage is separately established. Keep the UI source, real date and property, visibility limitations, and each report's distinct last-update timestamp in a Word/SEO handoff. Never treat an Indexed/Not indexed count or old Sitemap status as a current SEO root cause without per-URL checks.

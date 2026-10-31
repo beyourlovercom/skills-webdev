@@ -6,6 +6,7 @@ on:
       - 'tests/gsc-site-intelligence.test.mjs'
       - 'tests/gsc-import.test.mjs'
       - 'tests/gsc-browser-mode.test.mjs'
+      - 'tests/gsc-browser-audit.test.mjs'
       - 'registry/**'
       - 'README.md'
       - 'tests/skill-registry.test.mjs'
@@ -17,6 +18,7 @@ on:
       - 'tests/gsc-site-intelligence.test.mjs'
       - 'tests/gsc-import.test.mjs'
       - 'tests/gsc-browser-mode.test.mjs'
+      - 'tests/gsc-browser-audit.test.mjs'
       - 'registry/**'
       - 'README.md'
       - 'tests/skill-registry.test.mjs'
@@ -31,7 +33,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/gsc-site-intelligence.test.mjs tests/gsc-import.test.mjs tests/gsc-browser-mode.test.mjs tests/skill-registry.test.mjs
+      - run: node --test tests/gsc-site-intelligence.test.mjs tests/gsc-import.test.mjs tests/gsc-browser-mode.test.mjs tests/gsc-browser-audit.test.mjs tests/skill-registry.test.mjs
       - run: node scripts/skill-registry.mjs --validate
       - run: node scripts/skill-registry.mjs --resolve gsc-site-intelligence
       - run: node skills/gsc-site-intelligence/scripts/gsc-read.mjs --domain example.com --dry-run
