@@ -11,3 +11,7 @@ For actual rows, supply CSV/XLSX for query→URL, important pages, URL redirects
 ## Offline UI CSV scope
 
 Offline GSC CSV permits a clearly labeled **interim/partial** analysis using actual imported rows. Include `GSC_UI_CSV_EXPORT_OFFLINE`, the declared property, `USER_DECLARED_NOT_API_VERIFIED`, date filters, dimension export limits and unmatched data. The date/chart CSV is the totals basis; query/page Top-N cannot be used as site totals. Do not claim a full Google-authenticated UAT, verified Query×Page pairs or complete annual coverage on this evidence alone. Report only substantiated observations and OPEN gates.
+
+### Existing Chrome GSC partial UI report
+
+For data actually read from an Owner-approved existing Chrome session, an interim **authenticated UI observation report** is valid when provenance is explicit: `GSC_EXISTING_CHROME_UI_READONLY`, exact property resource_id, captured UI title, visible date range and search type. This is not a Google API export, does not itself prove all report dimensions or complete 12-month coverage, and cannot be promoted into a full annual Word report without all required source evidence. Indexing/Sitemaps/CWV are separate modules with their own update dates and URL limitations. Keep raw report captures out of Public GitHub and never publish user account email, cookies, tokens or private search terms.
