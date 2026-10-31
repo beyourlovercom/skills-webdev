@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "project_id": "demo-authorized-site",
+  "demo_only": true,
+  "source": {
+    "origin": "https://source.example",
+    "relationship": "owned",
+    "rights_status": "unverified",
+    "rights_evidence_ref": null,
+    "authorized_content_types": [
+      "structure",
+      "text",
+      "assets"
+    ]
+  },
+  "target": {
+    "origin": "https://target.example",
+    "platform": "wordpress",
+    "indexing": "hold"
+  },
+  "environments": {
+    "local": "Windows Local (project-isolated)",
+    "dev": "https://dev.target.example",
+    "www": "https://target.example"
+  },
+  "routes": [
+    {
+      "source_path": "/",
+      "target_path": "/",
+      "status": "planned"
+    },
+    {
+      "source_path": "/contact/",
+      "target_path": "/contact/",
+      "status": "planned"
+    }
+  ],
+  "inquiry": {
+    "public_email": "info@target.example",
+    "internal_recipient": "ops@target.example"
+  },
+  "release": {
+    "owner_pass": false,
+    "approved_sha": null,
+    "backup_verified": false,
+    "www_deployed": false
+  },
+  "evidence": {
+    "local_qa": "OPEN",
+    "dev_qa": "OPEN",
+    "www_readback": "OPEN",
+    "gsc_indexed": "OPEN"
+  }
+}
