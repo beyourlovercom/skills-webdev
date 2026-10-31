@@ -17,6 +17,7 @@
 | 阶段 | Skill（点名称查看原文件） | 可以做什么 | 现在的状态 |
 |---|---|---|---|
 | GENERAL | [rapid-webdev](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/rapid-webdev/SKILL.md) | 核对现有项目进度，只做剩余差异；从 Local 测试到受控 Dev 验收。 | ✅ main |
+| SPECIAL | [duplicate-site-skills](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/SKILL.md) | 把 CentralXI 复刻经验提纯为**仅限已获授权网站**的源站清单、Windows Local、PC/M14、Dev、WWW、SEO/询盘、回滚 D0–D8 流程；配有离线 Manifest 校验、21 项包括既有 Registry 的完整测试。 | 📝 [Draft PR #7](https://github.com/beyourlovercom/skills-webdev/pull/7) |
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
@@ -50,6 +51,19 @@
 ```
 
 **注意**：S3–S6 的正常运营需要对应的生产业务授权；任何代码/主题/插件/数据库修改仍回到网站自己的 Local → Dev → WWW 流程。不同网站可对执行顺序有明确例外。
+
+### 可选专线：duplicate-site-skills（仅在有复制授权时）
+
+`duplicate-site-skills` 是针对**自有或获得许可的站点复制/迁移**的专题 Skill，不是可以任意复制第三方网站的工具。它将 CentralXI 的成功路径与失败教训写成可操作门禁：D0 权利与品牌真实性 → D1–D2 页面/资源/路由清单 → D3–D5 Windows Local/Dev UAT → D6 Owner WWW pass → D7 生产读回 → D8 GSC、GA4 与有效询盘。发布/开放收录都需要目标项目独立授权，且不会把 802 页等某个项目的固定数字写成通用目标。
+
+实际文件包括 [`SKILL.md`](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/SKILL.md)、6 份参考规范、[Manifest 范例](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/templates/site-manifest.example.json)、[UAT 报告模板](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/templates/acceptance-report.md)、离线校验器和测试。在合并前请从 Draft PR #7 分支读取。
+
+本地可运行：
+```bash
+node skills/duplicate-site-skills/scripts/validate-manifest.mjs skills/duplicate-site-skills/templates/site-manifest.example.json
+node --test tests/skill-registry.test.mjs tests/duplicate-site-skills.test.mjs
+node scripts/skill-registry.mjs --resolve duplicate-site-skills
+```
 
 ## 4. 在 ChatGPT 网页版怎么使用？
 
@@ -109,5 +123,5 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 
 **当前 `main` 的已发布 Skill 只有 `rapid-webdev`。** 本公开 README 与 Registry 是使用指南和技能索引，不代表其他 Draft PR 已合并；请使用 `registry/skills.json` 中对应的开发分支读取其他 Skill，并在执行前核对实时 PR 状态；其他 PR 的合并仍需 Owner 单独批准。
 
-当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
+当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)、[Duplicate Site PR #7](https://github.com/beyourlovercom/skills-webdev/pull/7)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 
