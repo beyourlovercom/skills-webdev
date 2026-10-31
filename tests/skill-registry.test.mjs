@@ -9,7 +9,10 @@ const reg=readRegistry(path.join(dir,'registry/skills.json'));
 const readme=fs.readFileSync(path.join(dir,'README.md'),'utf8');
 
 test('registry schema, exact skills and no duplicates',()=>{
- const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,12);
+ const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,13);
+ assert.equal(reg.skills.find(x=>x.id==='duplicate-site-skills')?.pr,null);
+ const duplicate=resolveSkill(reg,'duplicate-site-skills');
+ assert.equal(duplicate.status,'IN_MAIN');assert.equal(duplicate.ref,'main');assert.equal(duplicate.pr_url,null);
 });
 test('every real Skill has meaningful README entry and a real indexed source',()=>{
  for(const s of reg.skills){
@@ -20,8 +23,8 @@ test('every real Skill has meaningful README entry and a real indexed source',()
   assert.match(s.summary_zh,/\S{5}/);
  }
 });
-test('main only claims rapid-webdev; GA4 is not in main',()=>{
- assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev']);
+test('main officially contains rapid-webdev + duplicate-site-skills, but GA4 remains Draft',()=>{
+ assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
  assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/4');
  assert.match(ga4.file_url,/feat\/ga4-site-intelligence-20261031/);

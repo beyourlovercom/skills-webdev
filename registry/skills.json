@@ -24,6 +24,20 @@
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
+      "id": "duplicate-site-skills",
+      "stage": "SPECIAL",
+      "name_zh": "授权网站复刻与迁移（CentralXI 方法提纯）",
+      "summary_zh": "将已授权站点的结构盘点、镜像素材/路由、Windows Local、Dev、WWW、SEO 与询盘 UAT 转为 D0–D8 可审计流程。",
+      "use_when_zh": "有自有/可追溯合法授权的源站，需要重建、迁移、保真测试或维护独立目标站；授权不明则只读研究。",
+      "inputs_zh": "源/目标域名、源素材授权依据、目标项目 AGENTS.md、GitHub HEAD、Windows Local/Dev/WWW 环境与 Owner 审批。",
+      "outputs_zh": "权利门禁、源快照及路由 Manifest、视觉/功能 UAT、SEO/线索证据、可回滚发布台账。",
+      "status": "IN_MAIN",
+      "source_ref": "main",
+      "skill_path": "skills/duplicate-site-skills/SKILL.md",
+      "pr": null,
+      "requires_authorized_access": "独立验证源内容复制/公开展示/索引授权；任何生产、索引和真实客户数据写入必须按项目批准"
+    },
+    {
       "id": "site-skill-factory",
       "stage": "S0",
       "name_zh": "网站专属技能工厂",
