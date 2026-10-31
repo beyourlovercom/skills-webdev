@@ -10,6 +10,9 @@ description: Multi-source research and pre-launch strategy. S1 for evidence-driv
 ## Input
 Permissioned GSC / GA4 / Google Ads / Semrush / order-level aggregates / on-site search / keyword research. Prefer last 12 complete months, compare YoY when both periods exist. Record property, market, range, filters and data freshness. Never invent a connected data source.
 
+## GA4 sub-Skill
+Use [`../ga4-site-intelligence/SKILL.md`](../ga4-site-intelligence/SKILL.md) for GA4 property matching, real read-only Data API ingestion, the exact Owner-uploaded historical analysis standard, and the Chinese Word/Codex handoff. `site-intelligence` orchestrates sources; the GA4 sub-Skill never makes GSC/Ads or CRM access assumptions.
+
 ## Procedure
 1. Audit access and event integrity: GA4 conversion/key event definitions, Consent Mode where applicable, channel attribution, self-referrals, bots, duplicate conversions, Woo completed orders versus add_to_cart and B2B qualified leads versus form clicks.
 2. Compare GSC queries-pages-countries and landing page engagement, Semrush visibility and Ads search terms with business transaction / lead quality evidence. Separate measured fact, proxy, qualitative inference and UNKNOWN.
