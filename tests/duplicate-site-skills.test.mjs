@@ -24,6 +24,7 @@ test('mere owner pass without verified source rights cannot deploy',()=>{
 test('verified rights, passes, backup and full SHA produce review gate, not an auto-release',()=>{
  const d=clone();d.demo_only=false;d.source.rights_status='verified';
  d.source.rights_evidence_ref='PRIVATE_PROJECT/rights-approval.md';
+ d.source.authorized_publication=true;
  d.release.owner_pass=true;d.release.approved_sha='a'.repeat(40);
  d.release.backup_verified=true;d.evidence.local_qa='PASS';d.evidence.dev_qa='PASS';
  const r=validateManifest(d);
@@ -32,7 +33,11 @@ test('verified rights, passes, backup and full SHA produce review gate, not an a
  assert.equal(r.www_gate,'READY_FOR_MANUAL_REVIEW');
  assert.equal(r.index_gate,'HOLD');
  d.target.indexing='allow-index';
- assert.equal(validateManifest(d).index_gate,'READY_FOR_SEPARATE_SEO_APPROVAL');
+ assert.equal(validateManifest(d).index_gate,'HOLD'); // SEO has its own authorization
+ d.source.authorized_search_index=true;
+ assert.equal(validateManifest(d).index_gate,'HOLD'); // Owner SEO pass still missing
+ d.release.seo_owner_pass=true;
+ assert.equal(validateManifest(d).index_gate,'READY_FOR_SEO_EVIDENCE_REVIEW');
 });
 test('route duplicates and arbitrary path traversal are rejected',()=>{
  const d=clone();d.routes.push({source_path:'/',target_path:'/hijack/',status:'planned'});
@@ -58,10 +63,17 @@ test('invalid email addresses and missing/invalid QA status are rejected',()=>{
  assert.ok(r.errors.some(x=>x.includes('internal_recipient')));
  assert.ok(r.errors.some(x=>x.includes('dev_qa')));
 });
-test('Dev same as WWW is warned on, not silently assumed safe',()=>{
- const d=clone();d.environments.dev=d.environments.www;
+test('Dev same as WWW needs a separate, explicit approval before WWW gate',()=>{
+ const d=clone();d.demo_only=false;d.source.rights_status='verified';
+ d.source.rights_evidence_ref='PROJECT_PRIVATE/rights.md';d.source.authorized_publication=true;
+ d.release.owner_pass=true;d.release.approved_sha='a'.repeat(40);d.release.backup_verified=true;
+ d.evidence.local_qa='PASS';d.evidence.dev_qa='PASS';
+ d.environments.dev=d.environments.www;
  const r=validateManifest(d);assert.equal(r.schema_status,'PASS');
  assert.ok(r.warnings.some(x=>x.includes('Dev shares WWW origin')));
+ assert.equal(r.www_gate,'BLOCKED');
+ d.environments.dev_is_www_exception_approved=true;
+ assert.equal(validateManifest(d).www_gate,'READY_FOR_MANUAL_REVIEW');
 });
 test('rights verified but wrong full SHA prevents WWW readiness',()=>{
  const d=clone();d.demo_only=false;d.source.rights_status='verified';d.source.rights_evidence_ref='PROJECT_PRIVATE/rights.md';
@@ -76,4 +88,38 @@ test('all internal SKILL.md reference and template links resolve on this branch'
  const refs=[...body.matchAll(/\]\(((?:references|scripts|templates)\/[^)#]+)\)/g)].map(m=>m[1]);
  assert.equal(refs.length,9);
  for(const rel of refs)assert.ok(fs.existsSync(path.join(skillDir,rel)),'Missing relative Skill file: '+rel);
+});
+
+test('no permission to publicly publish remains blocked despite code and owner pass',()=>{
+ const d=clone();d.demo_only=false;d.source.rights_status='verified';
+ d.source.rights_evidence_ref='PROJECT_PRIVATE/rights.md';
+ d.release.owner_pass=true;d.release.approved_sha='b'.repeat(40);d.release.backup_verified=true;
+ d.evidence.local_qa='PASS';d.evidence.dev_qa='PASS';
+ assert.equal(validateManifest(d).www_gate,'BLOCKED');
+});
+test('public indexing cannot proceed based on technical settings alone',()=>{
+ const d=clone();d.demo_only=false;d.source.rights_status='verified';
+ d.source.rights_evidence_ref='PROJECT_PRIVATE/rights.md';d.source.authorized_publication=true;
+ d.release.owner_pass=true;d.release.approved_sha='a'.repeat(40);d.release.backup_verified=true;
+ d.evidence.local_qa='PASS';d.evidence.dev_qa='PASS';d.target.indexing='allow-index';
+ assert.equal(validateManifest(d).index_gate,'HOLD');
+ d.release.seo_owner_pass=true;
+ assert.equal(validateManifest(d).index_gate,'HOLD');
+ d.source.authorized_search_index=true;
+ assert.equal(validateManifest(d).index_gate,'READY_FOR_SEO_EVIDENCE_REVIEW');
+});
+test('URL-encoded traversal and encoded separators do not pass route normalization',()=>{
+ const bad=['/%2e%2e/private/','/%2E%2E/private/','/%2fsecret/','/hello%5cprivate/','/abc%00/','/%ZZ/'];
+ for(const path of bad){
+  const d=clone();d.routes[1].target_path=path;
+  const result=validateManifest(d);
+  assert.equal(result.schema_status,'FAIL','Expected invalid path: '+path);
+ }
+});
+test('public WWW must use HTTPS',()=>{
+ const d=clone();
+ d.target.origin='http://target.example';d.environments.www='http://target.example';
+ const result=validateManifest(d);
+ assert.equal(result.schema_status,'FAIL');
+ assert.ok(result.errors.some(e=>e.includes('HTTPS')));
 });
