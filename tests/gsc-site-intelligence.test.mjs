@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {domainHost,validateProperty,selectProperty,fullMonthRanges,readReport,collectGsc,summary,parseArgs,main,outputDirectory,saveBundle} from '../skills/gsc-site-intelligence/scripts/gsc-read.mjs';
+import {domainHost,validateProperty,selectProperty,fullMonthRanges,readReport,collectGsc,pageBelongsToProperty,assertPageOwnership,summary,parseArgs,main,outputDirectory,saveBundle} from '../skills/gsc-site-intelligence/scripts/gsc-read.mjs';
 const sites=[{siteUrl:'sc-domain:ybyirrigation.com',permissionLevel:'siteOwner'},
 {siteUrl:'sc-domain:beyourlover.com',permissionLevel:'siteOwner'}];
 const response=(data,status=200)=>({ok:status===200,status,json:async()=>data});
@@ -83,4 +83,24 @@ test('source spec includes Owner requested Word/Codex delivery and privacy cavea
  const base=new URL('../skills/gsc-site-intelligence/',import.meta.url);
  const spec=fs.readFileSync(new URL('references/analysis-prompt.txt',base),'utf8');const skill=fs.readFileSync(new URL('SKILL.md',base),'utf8');
  assert.match(spec,/GSC 搜索表现分析与新站建设指导报告/);assert.match(spec,/Codex/);assert.match(skill,/analysis-prompt.txt/);assert.match(skill,/anonymizes queries/);
+});
+
+test('prevents old-domain URL rows being attributed to ybyirrigation.com', async()=>{
+ assert.equal(pageBelongsToProperty('sc-domain:ybyirrigation.com','https://ybyirrigation.com/'),true);
+ assert.equal(pageBelongsToProperty('sc-domain:ybyirrigation.com','https://www.ybyirrigation.com/drip'),true);
+ assert.equal(pageBelongsToProperty('sc-domain:ybyirrigation.com','https://www.yby-irrigation.com/drip'),false);
+ assert.equal(pageBelongsToProperty('sc-domain:ybyirrigation.com','https://evil-ybyirrigation.com/'),false);
+ assert.equal(pageBelongsToProperty('https://ybyirrigation.com/shop/','https://ybyirrigation.com/shop/drip'),true);
+ assert.equal(pageBelongsToProperty('https://ybyirrigation.com/shop/','https://ybyirrigation.com/blog/'),false);
+ assert.equal(pageBelongsToProperty('https://ybyirrigation.com/shop/','http://ybyirrigation.com/shop/'),false);
+ const reports={pages:{current:{rows:[{page:'https://tr.yby-irrigation.com/legacy'}]},previous:{rows:[]}}};
+ assert.throws(()=>assertPageOwnership('sc-domain:ybyirrigation.com',reports),/BLOCKED.*outside verified property/);
+ const fetchImpl=async(url,opt)=>{
+  if(url.endsWith('/sites'))return response({siteEntry:sites});
+  if(url.endsWith('/sitemaps'))return response({sitemap:[]});
+  const dims=JSON.parse(opt.body).dimensions;
+  const keys=dims.map(x=>x==='page'?'https://www.yby-irrigation.com/legacy':x==='date'?'2026-09-01':'test');
+  return response({rows:[{keys,clicks:1,impressions:10,ctr:.1,position:5}]});
+ };
+ await assert.rejects(()=>collectGsc({domain:'ybyirrigation.com',token:'MOCK',fetchImpl}),/outside verified property/);
 });

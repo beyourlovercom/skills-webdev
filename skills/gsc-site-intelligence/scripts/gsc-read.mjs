@@ -38,6 +38,28 @@ export function selectProperty(entries,domain,requested) {
  if(matches.length!==1)throw Error(`BLOCKED: ${matches.length} matching authorized properties; specify the exact --property (never mix)`);
  return selectProperty(entries,domain,matches[0].siteUrl);
 }
+// Fail closed if returned page URLs belong to a different property/domain.
+// Domain properties include dotted subdomains; URL-prefix requires exact prefix.
+export function pageBelongsToProperty(property, pageUrl) {
+ let p, url;
+ try { p=validateProperty(property); url=new URL(pageUrl); } catch { return false; }
+ if (!['http:','https:'].includes(url.protocol) || url.username || url.password) return false;
+ if (p.startsWith('sc-domain:')) {
+  const host=p.slice('sc-domain:'.length);
+  return url.hostname===host || url.hostname.endsWith('.'+host);
+ }
+ return url.href.startsWith(p);
+}
+export function assertPageOwnership(property, reports) {
+ for (const name of ['pages','query_pages']) for (const period of ['current','previous']) {
+  for (const row of reports?.[name]?.[period]?.rows || []) {
+   if (!pageBelongsToProperty(property,row.page))
+    throw Error(`BLOCKED: GSC ${name}/${period} returned page outside verified property; do not attribute cross-domain SEO data`);
+  }
+ }
+ return true;
+}
+
 export function fullMonthRanges(now=new Date()) {
  // GSC Search Analytics reports are conventionally in America/Los_Angeles time.
  const d=new Date(now);
@@ -112,6 +134,7 @@ export async function collectGsc({domain,requestedProperty,token,now=new Date(),
   b.reports[name]={};
   for(const period of ['current','previous'])b.reports[name][period]=await readReport({fetchImpl,token,siteUrl:property.site_url,period:ranges[period],dims,type,maxRows,rowLimit});
  }
+ assertPageOwnership(property.site_url,b.reports);
  try{
   const base=`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(property.site_url)}/sitemaps`;
   const sm=await jsonRequest(fetchImpl,base,token);
