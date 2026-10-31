@@ -9,13 +9,13 @@
 
 ## 清点方法
 1. 从合法允许的 URL 清单和 sitemap 导出路径；只访问明确许可的公开或凭正式登录授权页面，不绕过访问控制、付费墙、反爬或 robots 限制；限制请求速率和体积。
-2. 路由表以标准化 path 为键，去重：\`source_path → target_path → local_file → allowed_asset_refs → status\`。主页必须存在；记录非 200/301/404 和错误原因。
+2. 路由表以标准化 path 为键，去重：`source_path → target_path → local_file → allowed_asset_refs → status`。主页必须存在；记录非 200/301/404 和错误原因。
 3. 对授权归档素材计算 SHA256，记录源、目标、时间、总文件数、大小、变更摘要。源文件只读，缓存/转换后的 HTML 与原版快照分离。不能用“802 页”作为固定门槛——每个站按自己的清单统计。
 4. 关联资源引用、背景图、CSS 字体、懒加载图与可见媒体；报告外链泄漏和失效图片。不能将第三方登录和支付脚本镜像到目标站。
 5. 建立页类代表性测试集合，覆盖首页、二三级服务、Contact、博客、一个高复杂页面与有错页面。随后按 Manifest 全量静态检查 + 抽样浏览器复核。
 
 ## 证据格式
-\`\`\`text
+```text
 source_site: https://authorized-source.example
 target_site: https://target.example
 route_count_expected: <from approved inventory>
@@ -25,7 +25,7 @@ asset_count: <measured>
 source_hash_manifest: <non-sensitive local project path>
 route_errors: <array of exact paths and status>
 changed_original_files: 0
-\`\`\`
+```
 
 **不得**写“所有 802 页面像素完全一致”，除非真的逐页验证。仅少数真实 HTTP 200 和 4 个 PC/M14 截图只能支撑相应样本 PASS。
 
