@@ -9,7 +9,7 @@ const reg=readRegistry(path.join(dir,'registry/skills.json'));
 const readme=fs.readFileSync(path.join(dir,'README.md'),'utf8');
 
 test('registry schema, exact skills and no duplicates',()=>{
- const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,11);
+ const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,12);
 });
 test('every real Skill has meaningful README entry and a real indexed source',()=>{
  for(const s of reg.skills){
@@ -26,9 +26,10 @@ test('main only claims rapid-webdev; GA4 is not in main',()=>{
  assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/4');
  assert.match(ga4.file_url,/feat\/ga4-site-intelligence-20261031/);
 });
-test('planned GSC is not incorrectly advertised as installed or available',()=>{
- const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'PLANNED');assert.equal(gsc.file_url,undefined);
- assert.match(gsc.message,/尚无可执行/);
+test('GSC adapter is Draft PR only; no claim of merged or live OAuth authorization',()=>{
+ const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'DRAFT_PR');assert.equal(gsc.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/6');
+ assert.match(gsc.file_url,/feat\/gsc-site-intelligence-20261031/);
+ assert.match(readme,/没有 GSC OAuth/);
 });
 test('drafts cannot silently appear as main, and path traversal cannot appear',()=>{
  const a=structuredClone(reg);a.skills[3].status='IN_MAIN';assert.equal(validateRegistry(a).status,'FAIL');

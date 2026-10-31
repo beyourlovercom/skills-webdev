@@ -20,6 +20,7 @@
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
+| S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/gsc-site-intelligence-20261031/skills/gsc-site-intelligence/SKILL.md) | 只读核对 GSC Domain/URL-prefix 属性，分析搜索词、URL、国家/设备、Sitemap 及 SEO 机会，保留原始中文分析规范。 | 📝 [Draft PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6) |
 | S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -30,7 +31,7 @@
 
 ### 还没有开发完成的能力
 
-- **`gsc-site-intelligence`（S1）**：已设计 GSC 分析提示词，但**还不是可执行 Skill**；未出现在上述可用代码列表中。
+- **`gsc-site-intelligence`（S1）** 已有真实只读 API 读取代码和离线测试，仍在 Draft PR #6；没有 GSC OAuth/实际属性读回前，不能宣称真实数据 UAT PASS。
 - Google Ads / Semrush 独立分析器：可由 S1 调度现有合法连接，但**独立 Skills 仍待开发**，不能假装已经安装。
 
 ## 3. 完整工作流程是什么？
@@ -39,7 +40,7 @@
 输入网站域名 + 业务目标
   ↓ S0 site-skill-factory（生成这个站的规则和工作计划）
   ↓ S1 site-intelligence（读取已授权来源，研究 SEO/GA4/广告/业务）
-      ↳ ga4-site-intelligence（GA4 子 Skill；可独立使用）
+      ↳ ga4-site-intelligence / gsc-site-intelligence（独立 GA4 / GSC 子 Skill）
   ↓ S2-A site-builder-local（Windows Local 研发和真实 UAT）
   ↓ S2-B site-dev-uat（托管 Dev 验收）
   ↓ S2-C site-www-release（Owner 独立 pass 才能写 WWW）
@@ -80,6 +81,16 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 未授权就报告 BLOCKED，不编造分析，也不要求我在聊天里粘贴 Token。
 ```
 
+### 只跑 GSC Skill 的例子
+
+```text
+读取 registry/skills.json 中的 gsc-site-intelligence（Draft PR #6），
+加载原始 GSC 中文分析规范和 data-contract，核对 ybyirrigation.com 的
+已授权 Domain Property / URL-prefix Property；使用已有合法连接或
+Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
+若没有授权则 BLOCKED；不得借用其他网站 Token，不把匿名词数据补成完整总量。
+```
+
 ## 5. Registry 如何被 GPT 使用？
 
 - [机器可读目录：registry/skills.json](registry/skills.json) ：存储 `id`、`stage`、`source_ref`、`skill_path`、`status`、`pr`、中文用途和交付。
@@ -109,5 +120,5 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 
 **当前 `main` 的已发布 Skill 只有 `rapid-webdev`。** 本公开 README 与 Registry 是使用指南和技能索引，不代表其他 Draft PR 已合并；请使用 `registry/skills.json` 中对应的开发分支读取其他 Skill，并在执行前核对实时 PR 状态；其他 PR 的合并仍需 Owner 单独批准。
 
-当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
+当前独立开发分支有 [GSC PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6)、[S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 

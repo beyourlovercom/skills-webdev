@@ -66,6 +66,20 @@
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
+      "id": "gsc-site-intelligence",
+      "stage": "S1",
+      "name_zh": "GSC 搜索表现分析",
+      "summary_zh": "保留既有 GSC 分析提示词，使用只读 GSC API 检查属性、搜索流量、查询词、页面、国家、设备和 Sitemap，识别历史与查询隐私限制。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/gsc-site-intelligence-20261031",
+      "skill_path": "skills/gsc-site-intelligence/SKILL.md",
+      "pr": 6,
+      "use_when_zh": "需要网站自然搜索趋势、查询词和页面机会、新站关键词-URL规划与搜索技术诊断。",
+      "inputs_zh": "已授权的 GSC Domain 或 URL-prefix 属性，webmasters.readonly 访问或真实 GSC 导出。",
+      "outputs_zh": "受保护的 GSC 证据 JSON；SEO 机会与 URL 映射；正式 Word/Codex 报告由文档生成流程完成。",
+      "requires_authorized_access": "必须核验目标网站真实 GSC 属性权限；Skill 文件与 GSC TXT 不自动提供授权。"
+    },
+    {
       "id": "site-builder-local",
       "stage": "S2-A",
       "name_zh": "Windows Local 研发",
@@ -164,18 +178,7 @@
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     }
   ],
-  "planned_skills": [
-    {
-      "id": "gsc-site-intelligence",
-      "stage": "S1",
-      "name_zh": "GSC 搜索表现分析",
-      "summary_zh": "使用 GSC 真实搜索词、页面、地区与索引数据研究自然搜索；目前仅有提示词设计，尚未开发可执行 Skill。",
-      "status": "PLANNED",
-      "source_ref": null,
-      "skill_path": null,
-      "pr": null
-    }
-  ],
+  "planned_skills": [],
   "pilots": [
     {
       "name_zh": "Rain Bird 外部公开网站 S0 样本",
