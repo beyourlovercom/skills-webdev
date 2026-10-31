@@ -38,3 +38,7 @@ Owner 已在获授权的中国 Mac 或其他 macOS 设备的 Google Chrome 中�
 `node skills/gsc-site-intelligence/scripts/gsc-browser-audit.mjs --input-dir /secure/private-folder --domain example.com --dry-run`
 
 如需生成结构化私有证据，添加 `--output-dir /secure/private-output`（默认不覆盖已有文件）。审核器仅检查已存快照：每份严格匹配 `sc-domain:<domain>`、`search.google.com`、报告种类、时间戳及可见统计数字；无法凭 UI 强行推算完整年度数据。输出区分 `PASS_EXISTING_SESSION_READ` 与 `OPEN_NOT_PROVEN`。不扫描 Cookie/Token、不联网、不提交 Google 或公开 GitHub。对于索引详情，只有可见 URL 属于目标域名及其子域名时才纳入样本；GSC 同域内 Dev URL 需要单独标识为 Dev，不得自动当成主站 SEO 页面。
+
+### Visible Indexing URL fail-closed rule
+
+If any URL shown under an Indexing reason's `Examples` belongs to another sibling domain (not the exact Domain Property or its dotted subdomain), abort reconciliation with `BLOCKED` instead of silently discarding that URL and declaring browser UAT PASS. Store no raw GSC data in the Public repository. Browser UAT snapshots in tests use fixed past timestamps to avoid CI results depending on current clock.

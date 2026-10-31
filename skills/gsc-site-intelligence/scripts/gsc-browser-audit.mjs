@@ -50,7 +50,7 @@ function extract(s,section){
   data.affected_pages=numberAfter(t,'Affected pages');
   const cut=t.indexOf('Examples');const sample=cut>=0?t.slice(cut):'';
   const matches=[...sample.matchAll(/https?:\/\/[^\s\n]+/g)].map(m=>m[0]);
-  data.example_urls=[...new Set(matches)].filter(u=>{try{const x=new URL(u);return x.hostname===s.property.slice(10)||x.hostname.endsWith('.'+s.property.slice(10));}catch{return false;}});
+  data.example_urls=[...new Set(matches)].map(u=>{let x;try{x=new URL(u);}catch{err('malformed visible GSC index example URL');}const host=s.property.slice(10);if(!['http:','https:'].includes(x.protocol)||x.username||x.password||(x.hostname!==host&&!x.hostname.endsWith('.'+host)))err('visible index page outside expected GSC Domain Property');return u;});
   data.example_rows_visible=matches.length;
   if(!data.affected_pages)err('Indexing drilldown count not visible: '+section);
   if(Number(data.affected_pages)>0&&!matches.length)data.examples_status='OPEN_LOADING_OR_UNAVAILABLE';
