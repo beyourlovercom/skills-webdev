@@ -20,7 +20,7 @@ export function validateSnapshot(s,domain,section){
  if(typeof s.url!=='string'||typeof s.title!=='string'||typeof s.ui_text!=='string'||typeof s.observed_at!=='string')err('incomplete snapshot: '+section);
  let u;try{u=new URL(s.url);}catch{err('invalid snapshot URL');}
  if(u.protocol!=='https:'||u.hostname!=='search.google.com'||u.searchParams.get('resource_id')!==property||!u.pathname.startsWith('/search-console'))err('other property or unexpected origin: '+section);
- if(s.title!==DEFAULT_SECTIONS[section]||s.ui_text.length<100||s.ui_text.length>16000)err('report title/size invalid: '+section);
+ if(s.title!==DEFAULT_SECTIONS[section]||s.ui_text.length<60||s.ui_text.length>16000)err('report title/size invalid: '+section);
  const timestamp=Date.parse(s.observed_at);
  if(!Number.isFinite(timestamp)||timestamp>Date.now()+300000)err('snapshot timestamp invalid');
  if(section==='performance'&&!u.pathname.includes('/performance/search-analytics'))err('wrong Performance path');
@@ -34,12 +34,12 @@ export function validateSnapshot(s,domain,section){
 const numberAfter=(s,label)=>{const m=s.match(new RegExp(label+'\\s*\\n\\s*([\\d,]+(?:\\.\\d+)?%?)','i'));return m?m[1]:null;};
 function extract(s,section){
  const t=s.ui_text;
- const data={title:s.title,url:s.url,observed_at:s.observed_at,loading_visible:/Loading(?:…|\\.\\.\\.)/.test(t)};
+ const data={title:s.title,url:s.url,observed_at:s.observed_at,loading_visible:/Loading(?:…|\.\.\.)/.test(t)};
  if(section==='performance'){
   data.filter_label=(t.match(/(?:12 months|16 months|6 months|3 months|28 days|7 days|24 hours)/)||[])[0]||null;
-  data.search_type=(t.match(/Search type:\\s*(Web|Image|Video|News)/)||[])[1]||null;
+  data.search_type=(t.match(/Search type:\s*(Web|Image|Video|News)/)||[])[1]||null;
   data.metrics={clicks:numberAfter(t,'Total clicks'),impressions:numberAfter(t,'Total impressions'),ctr:numberAfter(t,'Average CTR'),position:numberAfter(t,'Average position')};
-  data.chart_range=(t.match(/Chart, containing counts[^\\n]*?from (.+?) to (.+?)(?:\\n|$)/)||[]).slice(1);
+  data.chart_range=(t.match(/Chart, containing counts[^\n]*?from (.+?) to (.+?)(?:\n|$)/)||[]).slice(1);
   if(Object.values(data.metrics).some(v=>v===null)||!data.search_type)err('Performance metrics or search type not actually visible');
   data.full_12_month_completeness='NOT_PROVEN_BY_UI';
  }else if(section==='index'){
