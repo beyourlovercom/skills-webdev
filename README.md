@@ -17,7 +17,7 @@
 | 阶段 | Skill（点名称查看原文件） | 可以做什么 | 现在的状态 |
 |---|---|---|---|
 | GENERAL | [rapid-webdev](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/rapid-webdev/SKILL.md) | 核对现有项目进度，只做剩余差异；从 Local 测试到受控 Dev 验收。 | ✅ main |
-| SPECIAL | [duplicate-site-skills](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/SKILL.md) | 把 CentralXI 复刻经验提纯为**仅限已获授权网站**的源站清单、Windows Local、PC/M14、Dev、WWW、SEO/询盘、回滚 D0–D8 流程；配有离线 Manifest 校验和 8 项测试。 | 📝 [Draft PR #7](https://github.com/beyourlovercom/skills-webdev/pull/7) |
+| SPECIAL | [duplicate-site-skills](https://github.com/beyourlovercom/skills-webdev/blob/feat/duplicate-site-skills-v1-20261031/skills/duplicate-site-skills/SKILL.md) | 把 CentralXI 复刻经验提纯为**仅限已获授权网站**的源站清单、Windows Local、PC/M14、Dev、WWW、SEO/询盘、回滚 D0–D8 流程；配有离线 Manifest 校验、21 项包括既有 Registry 的完整测试。 | 📝 [Draft PR #7](https://github.com/beyourlovercom/skills-webdev/pull/7) |
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
@@ -61,7 +61,7 @@
 本地可运行：
 ```bash
 node skills/duplicate-site-skills/scripts/validate-manifest.mjs skills/duplicate-site-skills/templates/site-manifest.example.json
-node --test tests/duplicate-site-skills.test.mjs
+node --test tests/skill-registry.test.mjs tests/duplicate-site-skills.test.mjs
 node scripts/skill-registry.mjs --resolve duplicate-site-skills
 ```
 
