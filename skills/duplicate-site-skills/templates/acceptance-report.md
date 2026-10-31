@@ -33,7 +33,7 @@
 - 插件文件在 WWW 已部署 vs PR 已合并 main。
 
 ## 变更与回退
-\`\`\`text
+```text
 Changed files/hash:
 Runtime plugins:
 Backup exact location:
@@ -42,6 +42,6 @@ Database changes:
 Other sites untouched:
 Production pass record:
 Unresolved findings:
-\`\`\`
+```
 
 **最终验收结论**：OPEN（未经实际记录不得写 PASS）。
