@@ -102,7 +102,7 @@ export function cli(argv){
  const dest=o.outputDir||path.join(process.cwd(),'.private-gsc',evidence.domain,'browser-audit');
  return {status:evidence.browser_read_uat,evidence_file:saveBundle(evidence,dest),annual_status:evidence.complete_annual_analysis};
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
+if(process.argv[1]&&fs.existsSync(process.argv[1])&&import.meta.url===pathToFileURL(fs.realpathSync(process.argv[1])).href){
  try{process.stdout.write(JSON.stringify(cli(process.argv.slice(2)),null,2)+'\n');}
  catch(e){console.error(e.message);process.exitCode=2;}
 }
