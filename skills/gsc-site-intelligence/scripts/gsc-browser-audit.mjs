@@ -20,7 +20,7 @@ export function validateSnapshot(s,domain,section){
  if(typeof s.url!=='string'||typeof s.title!=='string'||typeof s.ui_text!=='string'||typeof s.observed_at!=='string')err('incomplete snapshot: '+section);
  let u;try{u=new URL(s.url);}catch{err('invalid snapshot URL');}
  if(u.protocol!=='https:'||u.hostname!=='search.google.com'||u.searchParams.get('resource_id')!==property||!u.pathname.startsWith('/search-console'))err('other property or unexpected origin: '+section);
- if(s.title!==DEFAULT_SECTIONS[section]||s.ui_text.length<60||s.ui_text.length>16000)err('report title/size invalid: '+section);
+ if(s.title!==DEFAULT_SECTIONS[section]||s.ui_text.length<25||s.ui_text.length>16000)err('report title/size invalid: '+section);
  const timestamp=Date.parse(s.observed_at);
  if(!Number.isFinite(timestamp)||timestamp>Date.now()+300000)err('snapshot timestamp invalid');
  if(section==='performance'&&!u.pathname.includes('/performance/search-analytics'))err('wrong Performance path');
