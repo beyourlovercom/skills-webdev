@@ -11,7 +11,9 @@
       "structure",
       "text",
       "assets"
-    ]
+    ],
+    "authorized_publication": false,
+    "authorized_search_index": false
   },
   "target": {
     "origin": "https://target.example",
@@ -21,7 +23,8 @@
   "environments": {
     "local": "Windows Local (project-isolated)",
     "dev": "https://dev.target.example",
-    "www": "https://target.example"
+    "www": "https://target.example",
+    "dev_is_www_exception_approved": false
   },
   "routes": [
     {
@@ -43,7 +46,8 @@
     "owner_pass": false,
     "approved_sha": null,
     "backup_verified": false,
-    "www_deployed": false
+    "www_deployed": false,
+    "seo_owner_pass": false
   },
   "evidence": {
     "local_qa": "OPEN",
