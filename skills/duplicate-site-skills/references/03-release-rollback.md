@@ -2,7 +2,7 @@
 
 ## 发布前冻结
 - 获取目标站 Owner 对确切环境、变更内容、SHA、权限和 SEO 开关的**独立明确 pass**。源站许可不等于目标生产发布同意。
-- 固定 \`GitHub branch + commit SHA\`、部署包 SHA256、数据库/文件影响面、业务链路、备份位置、负责人、预期 Canary 页面与回滚条件。
+- 固定 `GitHub branch + commit SHA`、部署包 SHA256、数据库/文件影响面、业务链路、备份位置、负责人、预期 Canary 页面与回滚条件。
 - 对含源站镜像、主题/插件与渲染适配的改动，必须列出**每个受影响文件/Hook**；不能用“部署所有”替代精准发布范围。
 - 在 Owner 自身管理的目标环境操作；不通过旧云端会话推断设备在线，不反复打开浏览器或重启 READY 设备。
 - 若存在合法风险、主体冒充、丢失可验证备份、目标与预期站不匹配、重要依赖不匹配 → STOP。
@@ -21,13 +21,13 @@
 **一次性永久迁移**：明确 Owner 批准后修改目标站内容/数据库，再做实际备份/回滚演练；迁移完成后是否可删除工具/插件必须以真实读回和源站权利范围证明。**不能**默认“一次启用就永久有效”。
 
 ## 版本合并与正式发布是两回事
-- \`main\` 合并状态与 WWW 已安装状态独立；Draft PR 可以在特定授权下先部署，但这不代表 PR 自动通过，反之亦然。
-- 代码位于特性分支仍需在交付里标注 \`DRAFT\`; 不可因为用户同意上线就强行合并跨项目历史大 PR。
+- `main` 合并状态与 WWW 已安装状态独立；Draft PR 可以在特定授权下先部署，但这不代表 PR 自动通过，反之亦然。
+- 代码位于特性分支仍需在交付里标注 `DRAFT`; 不可因为用户同意上线就强行合并跨项目历史大 PR。
 - 生产发布前如果发现回退资料仅在同账号/同盘，标注**同故障域备份**，不要称为异地备份。
 - 跨网站共享 Core 改动必须先隔离测试，否则只做项目专用小补丁。
 
 ## 生产最终报告
-\`\`\`text
+```text
 Site: <target>
 Source rights: VERIFIED | BLOCKED
 Environment: Windows Local / Dev / WWW (exact hostname)
@@ -41,4 +41,4 @@ Leads: <public address, actual internal recipient, tested notifications?>
 Rollback: <method, commands, observed outcome>
 Status: CODE_READY / DEV_PASS / WWW_PASS / FAIL / BLOCKED
 Open: <explicit gaps, including authorization and email deliverability>
-\`\`\`
+```
