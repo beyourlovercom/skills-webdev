@@ -5,6 +5,14 @@
 
 > 记录授权的批准人、日期、来源、许可对象、域名、可复制类别、公开展示与 SEO 发布是否包含其中，以及撤回和期限。公开仓库只存非敏感指针，不公开合同或凭据。
 
+## 独立授权字段（必须分别记录）
+- `source.authorized_publication`：复制/迁移后的素材是否允许对公众发布。即使拥有本地研发许可，也不能自动启用。
+- `source.authorized_search_index`：源素材许可是否覆盖搜索引擎索引；与网页是否能打开不同。
+- `release.owner_pass`：Owner 对本次目标网站、SHA 和范围的生产发布批准。
+- `release.seo_owner_pass`：Owner 对**公开搜索收录**的独立授权；不等同于生产发布。
+- `environments.dev_is_www_exception_approved`：只有当 Dev 与 WWW 为相同域名，必须经项目单独同意才可继续发布门禁。
+Manifest 只能检查布尔字段和非敏感证据引用是否存在，不能验证许可真实有效；`READY_FOR_MANUAL_REVIEW` 仍需人工核验授权依据。
+
 ## Site profile 字段
 | 属性 | 内容 |
 |---|---|
