@@ -99,6 +99,19 @@ test('invalid or ambiguous filter declarations block CSV import',()=>{
   }
  }finally{fs.rmSync(x.dir,{recursive:true,force:true});}
 });
+test('URL-prefix subdomain import cannot masquerade as the apex domain',()=>{
+ const x=setup();try{const original=JSON.parse(fs.readFileSync(x.file,'utf8'));
+  original.property='https://blog.ybyirrigation.com/';
+  fs.writeFileSync(x.file,JSON.stringify(original));
+  assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/different domain/);
+  original.property='https://www.ybyirrigation.com/';
+  fs.writeFileSync(x.file,JSON.stringify(original));
+  assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/outside declared property/);
+  fs.writeFileSync(path.join(x.dir,'Pages.csv'),'Top pages,Clicks,Impressions,CTR,Position\nhttps://www.ybyirrigation.com/drip/,3,120,2.5%,9\n');
+  const allowed=importManifest(x.file,'ybyirrigation.com');
+  assert.equal(allowed.property.site_url,'https://www.ybyirrigation.com/');
+ }finally{fs.rmSync(x.dir,{recursive:true,force:true});}
+});
 test('date and numeric quality: no silent unknown or inconsistent columns',()=>{
  const x=setup({Dates:'Date,Clicks,Impressions,CTR,Position\n2026-09-03,2,200,1%,5\n'});
  try{assert.throws(()=>importManifest(x.file,'ybyirrigation.com'),/outside declared range/);}

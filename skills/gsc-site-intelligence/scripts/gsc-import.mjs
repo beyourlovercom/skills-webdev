@@ -23,7 +23,7 @@ function exactKeys(o,allowed){if(!o || typeof o!=='object'||Array.isArray(o) || 
 function sameDomain(property,domain){
  if(property.startsWith('sc-domain:'))return property.slice(10)===domain;
  const host=new URL(property).hostname;
- return host===domain || host.endsWith('.'+domain);
+ return host===domain || host==='www.'+domain;
 }
 export function csvRows(input){
  if(typeof input!=='string')fail('CSV is not text');

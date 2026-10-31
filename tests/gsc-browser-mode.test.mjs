@@ -25,3 +25,9 @@ test('browser mode contract distinguishes UI from API and CSV, and limits histor
  assert.match(item.summary_zh,/Chrome/);
  assert.equal(item.status,'DRAFT_PR');
 });
+
+test('browser script accepts mixed-case bare domain and compares canonical lowercase property',()=>{
+ const script=fs.readFileSync(new URL('scripts/gsc-browser-ui.applescript',base),'utf8');
+ assert.match(script,/ABCDEFGHIJKLMNOPQRSTUVWXYZ/);
+ assert.match(script,/\.toLowerCase\(\)/);
+});

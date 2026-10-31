@@ -48,3 +48,7 @@ dry-run 本地读取 CSV、验证完整性；不调用 Google API、不改 GSC/E
 ## 6. 筛选口径保护
 
 manifest `filters` 必须是对象：无额外过滤使用 `{}`；存在过滤时逐项填非空文本，例如 `"country":"India"`、`"query":"contains:drip"`。程序会把 `totals_scope` 标记为 `FILTERED_VIEW_USER_DECLARED`，图表合计**只能代表该筛选视图**，不能解释为整个网站的搜索表现。无筛选时是 `UNFILTERED_VIEW_USER_DECLARED`，仍需来源核实。脚本不能验证 manifest 填写是否与 GSC 当时的真实界面一致。
+
+## URL-prefix 子域属性隔离
+
+以 `--domain ybyirrigation.com` 为目标时，仅允许同一主域或明确的 `www.ybyirrigation.com` URL-prefix 属性；`blog.ybyirrigation.com`、`dev.ybyirrigation.com` 等独立子域的 URL-prefix 不能以新站主域名义导入。若确实分析该子域，应明确使用该子域作为独立 `--domain` 参数并核对对应页面 URL。Domain Property `sc-domain:ybyirrigation.com` 仍然包括其合法子域名页面，但输出必须保留页面实际域名。
