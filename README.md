@@ -31,7 +31,7 @@
 
 ### 还没有开发完成的能力
 
-- **`gsc-site-intelligence`（S1）** 已有只读 API、官方 CSV 离线导入和完整测试，仍在 Draft PR #6。导入 CSV 不需要新 OAuth，但来源属性仍待 Google API 独立核验，不能宣称实时 GSC 验收 PASS。
+- **`gsc-site-intelligence`（S1）** 已有只读 API、官方 CSV 离线导入和完整测试，仍在 Draft PR #6。没有 GSC OAuth 时，已有官方 CSV 仍可开展有限的离线分析；导入 CSV 不需要新 OAuth，但来源属性仍待 Google API 独立核验，不能宣称实时 GSC 验收 PASS。
 - Google Ads / Semrush 独立分析器：可由 S1 调度现有合法连接，但**独立 Skills 仍待开发**，不能假装已经安装。
 
 ## 3. 完整工作流程是什么？
