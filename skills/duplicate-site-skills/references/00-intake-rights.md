@@ -14,18 +14,18 @@
 | environments | Windows Local、托管 Dev、WWW，及精确设备/部署方式 |
 | governance | 项目 AGENTS.md、PR、Owner pass、回滚责任人 |
 | branding | 保留源版设计 vs 独立品牌，禁止不实关系宣称 |
-| SEO | \`hold\` / \`allow-index\` **必须独立授权** |
+| SEO | `hold` / `allow-index` **必须独立授权** |
 | leads | 公开邮箱、表单数据库/收件、真实客户跟进角色 |
 
-若来源与目标属于不同经营主体，必须确认对源素材有授权；即使有展示许可也不自动允许批量搜索发布。没有证明时返回 \`BLOCKED_RIGHTS\`，列出已查证和未查证项，而不是假定获权。
+若来源与目标属于不同经营主体，必须确认对源素材有授权；即使有展示许可也不自动允许批量搜索发布。没有证明时返回 `BLOCKED_RIGHTS`，列出已查证和未查证项，而不是假定获权。
 
 ## 改动边界
 - 源站只读；任何 Source 站写入都需另外授权。
 - 每个项目单独目录、DB、浏览器 UAT profile、GitHub 分支。
 - 真实数据库导出前核对隐私/保留要求，仅在授权范围内最小化处理。
-- 默认 Dev \`noindex\`；WWW 索引必须基于独立 SEO 批准。
+- 默认 Dev `noindex`；WWW 索引必须基于独立 SEO 批准。
 - Public skills-webdev 仓库禁止客户数据、会话、凭据、非公开资产。
 - 项目仓库配置优先，技能范例域名仅是占位符。
 
 ## 最终产出
-\`RIGHTS-SCOPE.md\`（权限清单，非敏感摘要）、\`site-manifest.json\`、阻塞项、现有验收记录的索引、当前准确 commit 和下一步可授权操作。先运行离线 Manifest Validator；它只能检查格式，不能验证权利真实性。
+`RIGHTS-SCOPE.md`（权限清单，非敏感摘要）、`site-manifest.json`、阻塞项、现有验收记录的索引、当前准确 commit 和下一步可授权操作。先运行离线 Manifest Validator；它只能检查格式，不能验证权利真实性。
