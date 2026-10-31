@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "repository": "beyourlovercom/skills-webdev",
+  "default_branch": "main",
+  "snapshot_date": "2026-10-31",
+  "status_definitions": {
+    "IN_MAIN": "已进入 GitHub main；不代表已经连接账户或自动执行。",
+    "DRAFT_PR": "文件存在于公开开发分支，尚未合并 main；合并需 Owner 单独审批。",
+    "PLANNED": "规划中，尚无可执行 SKILL.md。"
+  },
+  "skills": [
+    {
+      "id": "rapid-webdev",
+      "stage": "GENERAL",
+      "name_zh": "现有网站快速研发",
+      "summary_zh": "核对现有项目进度，只做剩余差异；从 Local 测试到受控 Dev 验收。",
+      "use_when_zh": "网站开发、Bug 修复、复用历史 PASS，避免重复劳动。",
+      "inputs_zh": "项目 GitHub、AGENTS.md、已授权 Local/Dev 环境。",
+      "outputs_zh": "最小代码差异、测试证据、Dev UAT、独立发布门禁。",
+      "status": "IN_MAIN",
+      "source_ref": "main",
+      "skill_path": "skills/rapid-webdev/SKILL.md",
+      "pr": null,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "site-skill-factory",
+      "stage": "S0",
+      "name_zh": "网站专属技能工厂",
+      "summary_zh": "依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。",
+      "use_when_zh": "为新网站或已有站建立独立研发/运营流程。",
+      "inputs_zh": "域名、已验证站点事实、现有项目代码与治理规则。",
+      "outputs_zh": "site-profile、阶段 Skills、Roadmap、审批/证据索引。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/site-skill-factory/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "site-intelligence",
+      "stage": "S1",
+      "name_zh": "多来源网站研究",
+      "summary_zh": "研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。",
+      "use_when_zh": "旧站改版、竞品调研、建站前关键词与信息架构规划。",
+      "inputs_zh": "授权 GSC/GA4/Ads/Semrush/业务数据；仅使用实际可得来源。",
+      "outputs_zh": "数据质量清单、关键词-URL 映射、建设优先级、Codex 交接。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/site-intelligence/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "ga4-site-intelligence",
+      "stage": "S1",
+      "name_zh": "GA4 历史数据分析",
+      "summary_zh": "保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。",
+      "use_when_zh": "想知道用户来源、参与、着陆页、事件及新站借鉴方向。",
+      "inputs_zh": "获授权的 GA4 Property/Web Stream 与只读 API 访问或真实导出。",
+      "outputs_zh": "GA4 证据 JSON、分析建议；中文 Word 报告由文档生成环节另行完成。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/ga4-site-intelligence-20261031",
+      "skill_path": "skills/ga4-site-intelligence/SKILL.md",
+      "pr": 4,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "site-builder-local",
+      "stage": "S2-A",
+      "name_zh": "Windows Local 研发",
+      "summary_zh": "在隔离的 Windows Local 环境按项目规则完成代码与功能研发。",
+      "use_when_zh": "已有数据策略，准备在本地开发或改版。",
+      "inputs_zh": "S1 结论、GitHub SHA、项目 AGENTS.md、Local 授权。",
+      "outputs_zh": "本地变更、浏览器/功能 UAT、回滚与 Dev 交接。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/site-builder-local/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "site-dev-uat",
+      "stage": "S2-B",
+      "name_zh": "Dev 站点验收",
+      "summary_zh": "在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。",
+      "use_when_zh": "Local PASS 后，需要在真实托管环境验证。",
+      "inputs_zh": "准确代码 SHA、Local PASS、Dev 环境与回滚方案。",
+      "outputs_zh": "Dev PASS/FAIL/OPEN、日志与正式发布准备清单。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/site-dev-uat/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "site-www-release",
+      "stage": "S2-C",
+      "name_zh": "WWW 受控发布",
+      "summary_zh": "仅在 Owner 独立批准后部署已验收差异并核对生产读回。",
+      "use_when_zh": "Dev PASS 后准备生产发布。",
+      "inputs_zh": "Dev 验收、准确 SHA、备份、差异、Owner 明确 pass。",
+      "outputs_zh": "生产发布记录、关键业务验收、可回滚证据。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/site-www-release/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "analytics-live",
+      "stage": "S3",
+      "name_zh": "正式站分析与转化核验",
+      "summary_zh": "检查正式站数据埋点与去重，把事件同业务记录对照。",
+      "use_when_zh": "站点已上线，要核对 GA4/GTM/Ads 与有效询盘或订单。",
+      "inputs_zh": "获授权的正式数据与真实业务记录，必要审批。",
+      "outputs_zh": "事件字典、转化和去重审计、异常清单。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/analytics-live/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "seo-live",
+      "stage": "S4",
+      "name_zh": "正式站 SEO 优化",
+      "summary_zh": "根据关键词-URL 映射和实时证据优化页面 SEO，记录结果。",
+      "use_when_zh": "上线后需要改善自然搜索表现。",
+      "inputs_zh": "已授权 GSC/GA4、网站 URL、旧站关键词映射与审批。",
+      "outputs_zh": "SEO 优化台账、改动与回滚依据、效果复核。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/seo-live/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "content-migration",
+      "stage": "S5",
+      "name_zh": "旧内容迁移与重写",
+      "summary_zh": "根据版权、URL、搜索价值和新旧站关系决定保留/合并/重写。",
+      "use_when_zh": "改版、迁移或两个品牌并行运营。",
+      "inputs_zh": "旧文章、素材授权、GSC 历史、品牌和迁移策略。",
+      "outputs_zh": "内容决策表、原创重写稿、审核和回撤记录。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/content-migration/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    },
+    {
+      "id": "content-automation",
+      "stage": "S6",
+      "name_zh": "内容生产与排期",
+      "summary_zh": "研究选题、编写并审核草稿；审批后才允许排期或发布。",
+      "use_when_zh": "建立持续文章/专题内容生产流程。",
+      "inputs_zh": "批准的发布政策、可信资料、产品与关键词机会。",
+      "outputs_zh": "选题 Brief、草稿、检查清单、发布追踪。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/s0-site-skill-factory-20261030",
+      "skill_path": "skills/content-automation/SKILL.md",
+      "pr": 1,
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+    }
+  ],
+  "planned_skills": [
+    {
+      "id": "gsc-site-intelligence",
+      "stage": "S1",
+      "name_zh": "GSC 搜索表现分析",
+      "summary_zh": "使用 GSC 真实搜索词、页面、地区与索引数据研究自然搜索；目前仅有提示词设计，尚未开发可执行 Skill。",
+      "status": "PLANNED",
+      "source_ref": null,
+      "skill_path": null,
+      "pr": null
+    }
+  ],
+  "pilots": [
+    {
+      "name_zh": "Rain Bird 外部公开网站 S0 样本",
+      "pr": 2,
+      "ref": "pilot/rainbird-public-s0-20261030",
+      "status": "DRAFT_PR",
+      "report_path": "pilots/rainbird/S0-PILOT-REPORT.md"
+    },
+    {
+      "name_zh": "YBY Irrigation 真实网站 S0–S6 门禁样本",
+      "pr": 3,
+      "ref": "pilot/ybyirrigation-s0-s6-readonly-20261031",
+      "status": "DRAFT_PR",
+      "report_path": "pilots/ybyirrigation/S0-S6-READONLY-UAT.md"
+    }
+  ],
+  "global_rules": [
+    "项目仓库 AGENTS.md 和 Owner 已批准的要求优先。",
+    "Skill 只是执行说明；GitHub、Google API、自建 DC 必须分别获得授权。",
+    "未经明确 Owner pass 不合并 PR、不正式发布、不修改真实付费广告/客户数据。",
+    "不得将 OAuth、客户/订单/询盘、商业原始报表写入此 Public 仓库。"
+  ]
+}

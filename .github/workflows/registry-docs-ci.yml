@@ -1,0 +1,30 @@
+name: Public Skill Registry Check
+on:
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - '.github/workflows/registry-docs-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - '.github/workflows/registry-docs-ci.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/skill-registry.mjs --validate
+      - run: node --test tests/skill-registry.test.mjs
+      - run: node scripts/skill-registry.mjs --resolve ga4-site-intelligence
