@@ -49,7 +49,7 @@ function extract(s,section){
  }else if(['noindex','404','redirect'].includes(section)){
   data.affected_pages=numberAfter(t,'Affected pages');
   const cut=t.indexOf('Examples');const sample=cut>=0?t.slice(cut):'';
-  const matches=[...sample.matchAll(/https?:\\/\\/[^\\s\\n]+/g)].map(m=>m[0]);
+  const matches=[...sample.matchAll(/https?:\/\/[^\s\n]+/g)].map(m=>m[0]);
   data.example_urls=[...new Set(matches)].filter(u=>{try{const x=new URL(u);return x.hostname===s.property.slice(10)||x.hostname.endsWith('.'+s.property.slice(10));}catch{return false;}});
   data.example_rows_visible=matches.length;
   if(!data.affected_pages)err('Indexing drilldown count not visible: '+section);
