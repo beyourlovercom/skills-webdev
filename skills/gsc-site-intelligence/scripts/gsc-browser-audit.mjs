@@ -31,7 +31,7 @@ export function validateSnapshot(s,domain,section){
  if(['noindex','404','redirect'].includes(section)&&!u.pathname.endsWith('/index/drilldown'))err('wrong Index drilldown path');
  return s;
 }
-const numberAfter=(s,label)=>{const m=s.match(new RegExp(label+'\\s*\\n\\s*([\\d,]+(?:\\.\\d+)?%?)','i'));return m?m[1]:null;};
+const numberAfter=(s,label)=>{const m=s.match(new RegExp('(?:^|\\n)'+label+'\\s*\\n\\s*([\\d,]+(?:\\.\\d+)?%?)','i'));return m?m[1]:null;};
 function extract(s,section){
  const t=s.ui_text;
  const data={title:s.title,url:s.url,observed_at:s.observed_at,loading_visible:/Loading(?:…|\.\.\.)/.test(t)};
