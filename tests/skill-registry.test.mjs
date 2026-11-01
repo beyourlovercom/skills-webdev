@@ -58,3 +58,15 @@ test('Ads, Semrush and cross-source released Skills resolve only to main',()=>{
   assert.match(s.file_url,/\/blob\/main\/skills\//);
  }
 });
+
+test('S2-A/B/C are independent Draft PR #12 and preserve Owner website release gates',()=>{
+ for(const id of ['site-builder-local','site-dev-uat','site-www-release']){
+  const s=resolveSkill(reg,id);
+  assert.equal(s.status,'DRAFT_PR');
+  assert.equal(s.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/12');
+  assert.equal(s.ref,'feat/s2-local-dev-www-skills-20261101');
+  assert.ok(readme.includes(s.file_url));
+ }
+ assert.ok(readme.includes('Desktop-only'));
+ assert.ok(readme.includes('具体域名 + SHA + 变更范围'));
+});
