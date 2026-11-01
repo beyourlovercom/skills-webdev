@@ -25,9 +25,9 @@
 | S1 | [google-ads-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/google-ads-site-intelligence/SKILL.md) | 使用已连接 Google Ads 只读读取广告花费、搜索词和转化数据；不触碰投放设置。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
 | S1 | [semrush-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/semrush-site-intelligence/SKILL.md) | 官方 CSV 零费用导入竞品、关键词与外链，不自动消耗 Semrush API units。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
 | S1 | [s1-cross-source](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/s1-cross-source/SKILL.md) | GSC、GA4、Ads、Semrush 证据矩阵，阻断混合口径及无根据 ROI/有效询盘结论。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
-| S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
-| S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
-| S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
+| S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | ✅ main（[PR #12 已合并](https://github.com/beyourlovercom/skills-webdev/pull/12)） |
+| S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | ✅ main（[PR #12 已合并](https://github.com/beyourlovercom/skills-webdev/pull/12)） |
+| S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | ✅ main（[PR #12 已合并](https://github.com/beyourlovercom/skills-webdev/pull/12)） |
 | S3 | [analytics-live](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/analytics-live/SKILL.md) | 检查正式站数据埋点与去重，把事件同业务记录对照。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S4 | [seo-live](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/seo-live/SKILL.md) | 根据关键词-URL 映射和实时证据优化页面 SEO，记录结果。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S5 | [content-migration](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/content-migration/SKILL.md) | 根据版权、URL、搜索价值和新旧站关系决定保留/合并/重写。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -139,7 +139,7 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 
 ## 8. 开发状态与下一步
 
-**当前 `main` 已发布的 Skill 包括 `rapid-webdev`、`duplicate-site-skills`、`gsc-site-intelligence`、`ga4-site-intelligence`、`google-ads-site-intelligence`、`semrush-site-intelligence` 和 `s1-cross-source`。** 其中 S1 最新四项已由 Owner 批准合并 PR #10；历史 PR #6/#7 已批准。其余仍标记 `DRAFT_PR` 的 Skills 只能从 Registry 指定的开发分支读取，必须经 Owner 单独批准合并，不能自行发布。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
+**当前 `main` 已发布的 Skill 包括 `rapid-webdev`、`duplicate-site-skills`、`gsc-site-intelligence`、`ga4-site-intelligence`、`google-ads-site-intelligence`、`semrush-site-intelligence`、`s1-cross-source`，以及 S2 的 `site-builder-local`、`site-dev-uat`、`site-www-release`。** 其中 S1 最新四项已由 Owner 批准合并 PR #10；历史 PR #6/#7 已批准。其余仍标记 `DRAFT_PR` 的 Skills 只能从 Registry 指定的开发分支读取，必须经 Owner 单独批准合并，不能自行发布。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
 
 当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 
@@ -150,9 +150,9 @@ Google Ads 已确认存在合法 Windsor 只读账号和实际广告数据，工
 
 S1-A GA4 已沿用 Owner 通过的功能验收；已合并 PR #10 从 [GA4 clean Draft PR #9](https://github.com/beyourlovercom/skills-webdev/pull/9) 引入独立 S1 源码、原始 Owner TXT 与测试，**没有合并 S0 Draft PR #1**。PR #4/#9 保持原样作为独立历史开发记录，不需要再次合并。Semrush 真实数据和四源完整业务归因仍需独立实测。
 
-### S2 开发技能：Windows Local → Dev → WWW（独立 Draft PR #12）
+### S2 开发技能：Windows Local → Dev → WWW（正式发布 PR #12）
 
-S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从未合并的 S0 PR #1 抽离至独立 [S2 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12)，**尚未合并 `main`**。这三项可分别使用，但必须按项目自身最高级 `AGENTS.md` 和最新真实 GitHub/运行时执行；不是一份文件就取得 DC、Dev 或 WWW 权限。
+S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从未合并的 S0 PR #1 抽离，经过 Owner 批准的 [PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) 正式合并至 `main`。这三项可分别使用，但必须按项目自身最高级 `AGENTS.md` 和最新真实 GitHub/运行时执行；不是一份文件就取得 DC、Dev 或 WWW 权限。
 
 - Windows Local 负责实际开发和浏览器 UAT；Dev 必须独立获授权、保持 noindex/鉴权保护，并隔离真支付、SMTP、OMS、Cron 和广告回调。
 - **Andy 系列插件的后台管理页面 Desktop-only**；顾客可见的首页、商品、表单、Cart 和 Checkout 仍须真实 PC/Mobile 验收，不能用后台豁免。

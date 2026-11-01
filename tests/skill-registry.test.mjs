@@ -23,8 +23,8 @@ test('every real Skill has meaningful README entry and a real indexed source',()
   assert.match(s.summary_zh,/\S{5}/);
  }
 });
-test('main officially contains previous Skills and four Owner-approved S1 Skills',()=>{
- assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','ga4-site-intelligence','gsc-site-intelligence','google-ads-site-intelligence','semrush-site-intelligence','s1-cross-source']);
+test('main officially contains previous Skills and Owner-approved S1/S2 Skills',()=>{
+ assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','ga4-site-intelligence','gsc-site-intelligence','google-ads-site-intelligence','semrush-site-intelligence','s1-cross-source','site-builder-local','site-dev-uat','site-www-release']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
  assert.equal(ga4.status,'IN_MAIN');assert.equal(ga4.ref,'main');assert.equal(ga4.pr_url,null);
  assert.match(ga4.file_url,/\/blob\/main\/skills\/ga4-site-intelligence\/SKILL\.md$/);
@@ -59,12 +59,12 @@ test('Ads, Semrush and cross-source released Skills resolve only to main',()=>{
  }
 });
 
-test('S2-A/B/C are independent Draft PR #12 and preserve Owner website release gates',()=>{
+test('S2-A/B/C are in main while site-specific Owner release gates remain independent',()=>{
  for(const id of ['site-builder-local','site-dev-uat','site-www-release']){
   const s=resolveSkill(reg,id);
-  assert.equal(s.status,'DRAFT_PR');
-  assert.equal(s.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/12');
-  assert.equal(s.ref,'feat/s2-local-dev-www-skills-20261101');
+  assert.equal(s.status,'IN_MAIN');
+  assert.equal(s.pr_url,null);
+  assert.equal(s.ref,'main');
   assert.ok(readme.includes(s.file_url));
  }
  assert.ok(readme.includes('Desktop-only'));
