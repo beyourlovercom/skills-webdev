@@ -4,7 +4,8 @@ import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} fro
 const fail=s=>{throw Error('BLOCKED: '+s)};
 const bare=s=>{if(typeof s!=='string'||!/^(?:[a-z0-9-]+\.)+[a-z]{2,63}$/i.test(s))fail('invalid domain');return s.toLowerCase()};
 export function fuse(m,sources){
- const domain=bare(m.domain);if(!m||!Array.isArray(m.expected_sources)||new Set(m.expected_sources).size!==m.expected_sources.length)fail('source plan missing/duplicate');
+ if(!m||typeof m!=='object')fail('manifest object required');
+ const domain=bare(m.domain);if(!Array.isArray(m.expected_sources)||new Set(m.expected_sources).size!==m.expected_sources.length)fail('source plan missing/duplicate');
  const allowed=new Set(['gsc','ga4','google_ads','semrush']);if(m.expected_sources.some(x=>!allowed.has(x)))fail('unsupported source');
  const seen=new Set(),verified={},open=[],warnings=[];
  for(const [name,src] of Object.entries(sources)){
@@ -19,8 +20,13 @@ export function fuse(m,sources){
   if(bare(src.domain)!==domain)fail(name+' domain mismatch');
   if(name==='semrush'){if(src.source!=='SEMRUSH_UI_CSV_EXPORT_UNVERIFIED')fail('Semrush source mismatch');verified[name]={source:src.source,report_type:src.report_type,top_rows:src.row_count,estimate_only:true};continue;}
   if(name==='gsc'){if(!['GSC_EXISTING_CHROME_UI_READONLY','GOOGLE_SEARCH_CONSOLE_API_READONLY','GSC_UI_CSV_EXPORT_OFFLINE'].includes(src.source))fail('GSC source invalid');
+   const prop=typeof src.property==='string'?src.property:src.property?.site_url;
+   if(typeof prop!=='string')fail('GSC property identity absent');
+   if(prop.startsWith('sc-domain:')){if(prop!=='sc-domain:'+domain)fail('GSC Domain Property mismatch');}
+   else {let p;try{p=new URL(prop);}catch{fail('invalid GSC URL-prefix property');}if(p.protocol!=='https:'&&p.protocol!=='http:')fail('unsupported GSC property');if(p.hostname!==domain&&p.hostname!=='www.'+domain)fail('GSC URL-prefix scope mismatch');}
    verified[name]={source:src.source,property:src.property,scope:src.complete_annual_analysis||src.summary?.status||'OPEN'};continue;}
-  if(name==='ga4'){if(src.source!=='GOOGLE_ANALYTICS_DATA_API_READONLY')fail('GA4 source mismatch');verified[name]={source:src.source,property:src.property?.id,range:src.ranges,current_months_present:src.summary?.current_months_present};}
+  if(name==='ga4'){if(src.source!=='GOOGLE_ANALYTICS_DATA_API_READONLY')fail('GA4 source mismatch');
+   if(!src.property?.id||!Array.isArray(src.stream_verification?.matched_streams)||!src.stream_verification.matched_streams.length||src.stream_verification.matched_streams.some(x=>x.default_host!==domain&&x.default_host!=='www.'+domain))fail('GA4 property web stream unverified');verified[name]={source:src.source,property:src.property?.id,range:src.ranges,current_months_present:src.summary?.current_months_present};}
  }
  for(const name of m.expected_sources)if(!seen.has(name))open.push(name);
  const exactPeriods=verified.google_ads?.period&&verified.ga4?.range?.current&&verified.google_ads.period.from===verified.ga4.range.current.startDate&&verified.google_ads.period.to===verified.ga4.range.current.endDate;
