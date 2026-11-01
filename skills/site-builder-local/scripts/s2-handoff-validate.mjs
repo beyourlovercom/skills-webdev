@@ -11,7 +11,7 @@ const isObject=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const safeRef=x=>typeof x==='string'&&SAFE_REF.test(x)&&!x.includes('..');
 const isSha=x=>typeof x==='string'&&SHA.test(x);
 const iso=x=>typeof x==='string'&&Number.isFinite(Date.parse(x))&&/^\d{4}-\d{2}-\d{2}T/.test(x);
-const host=x=>{try{const u=new URL(x);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password&&!u.search&&!u.hash&&u.pathname==='/'&&u.hostname.includes('.')}catch{return false}};
+const host=x=>{try{const u=new URL(x);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password&&!u.search&&!u.hash&&u.pathname==='/'&&(u.hostname.includes('.')||u.hostname==='localhost')}catch{return false}};
 const arrStrings=x=>Array.isArray(x)&&x.length>0&&x.every(v=>typeof v==='string'&&/^[a-zA-Z0-9_][a-zA-Z0-9_./-]{1,240}$/.test(v)&&!v.includes('..')&&!v.split('/').includes('.')&&!v.endsWith('/'))&&new Set(x).size===x.length;
 export function evaluateS2(m,requestedGate='www'){
  const blockers=[],warnings=[],put=s=>{if(!blockers.includes(s))blockers.push(s)};
@@ -26,6 +26,7 @@ export function evaluateS2(m,requestedGate='www'){
   const urls=STAGES.map(k=>new URL(e[k].url).host.toLowerCase());
   if(new Set(urls).size!==3)put('ENVIRONMENT_TARGETS_NOT_ISOLATED');
   if(new URL(e.www.url).protocol!=='https:')put('WWW_REQUIRES_HTTPS');
+  if(new URL(e.www.url).hostname==='localhost'||/^127\./.test(new URL(e.www.url).hostname))put('WWW_CANNOT_BE_LOCALHOST');
  }
  if(!isObject(policy)||policy.dev_indexing!=='BLOCKED'||policy.dev_external_effects!=='DISABLED_OR_SANDBOX'||policy.production_data!=='PRESERVE'||policy.production_business_tests!=='NON_DESTRUCTIVE')put('ENVIRONMENT_SAFETY_POLICY_NOT_VERIFIED');
  if(!isObject(s)||STAGES.some(k=>!isObject(s[k])||!['PASS','FAIL','OPEN','NOT_RUN'].includes(s[k].status)||!Array.isArray(s[k].checks)))put('INVALID_STAGE_STRUCTURE');
@@ -46,7 +47,7 @@ export function evaluateS2(m,requestedGate='www'){
   const required=(k==='local'?['BROWSER','FUNCTIONAL','SECURITY']:k==='dev'?['BROWSER','FUNCTIONAL','SECURITY','SEO','ROLLBACK']:['HTTP_READBACK']);
   if(p?.customer_facing&&k!=='www')required.push('STOREFRONT_DESKTOP','STOREFRONT_MOBILE');
   if(p?.admin_backend&&k!=='www')required.push('ADMIN_DESKTOP');
-  stageVerified[k]=st.status==='PASS'&&isSha(st.sha)&&required.every(req=>passed.has(req))&&st.checks.every(c=>c.status==='PASS');
+  stageVerified[k]=st.status==='PASS'&&isSha(st.sha)&&required.every(req=>passed.has(req))&&st.checks.every(c=>isObject(c)&&c.status==='PASS');
   if(st.status==='PASS'&&!stageVerified[k])put('STAGE_PASS_UNPROVEN_'+k.toUpperCase());
  }
  if(!isObject(a)||!isObject(a.dev)||!isObject(a.www))put('INVALID_APPROVAL_STRUCTURE');

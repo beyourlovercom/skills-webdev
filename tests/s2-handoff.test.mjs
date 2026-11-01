@@ -113,6 +113,19 @@ test('Dev indexing, outbound side effects and production-preservation are hard g
   assert.ok(evaluateS2(n,'local').blockers.includes('ENVIRONMENT_SAFETY_POLICY_NOT_VERIFIED'));
  }
 });
+test('Windows Local localhost and 127.0.0.1 endpoints are accepted',()=>{
+ for(const url of ['http://localhost/','http://127.0.0.1:8080/']){
+  const m=localPass(make());m.environments.local.url=url;
+  const host=new URL(url).host;
+  for(const c of m.stages.local.checks)c.host=host;
+  assert.equal(evaluateS2(m,'local').status,'READY_FOR_LOCAL_REVIEW');
+ }
+});
+test('null and malformed evidence check rows return BLOCKED rather than throwing',()=>{
+ const m=localPass(make());m.stages.local.checks.push(null);
+ const r=evaluateS2(m,'local');
+ assert.equal(r.status,'BLOCKED');assert.ok(r.blockers.includes('INVALID_CHECK_LOCAL'));
+});
 test('same Local/Dev/WWW host, HTTP WWW, Dev-final exception all fail safely',()=>{
  const m=localPass(make());
  const n=structuredClone(m);n.environments.dev.url=n.environments.www.url;

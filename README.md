@@ -160,4 +160,4 @@ S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从
 - 离线 gate：`node skills/site-builder-local/scripts/s2-handoff-validate.mjs --manifest skills/site-builder-local/templates/s2-handoff.example.json --gate www` 预期返回 BLOCKED；示例数据不能冒充运行时 PASS。
 - 特殊网站若 Dev 就是最终站，必须由站点 `AGENTS.md` 明确特殊发布路径，不能用一般三阶段流程自动跳过 WWW 门禁。
 
-真实网站 Local/Dev/WWW 验收与三项 Skill 源码开发为**两件不同的事**。Skill 测试成功不代表已经为任何站点实际部署。 
+真实网站 Local/Dev/WWW 验收与三项 Skill 源码开发为**两件不同的事**。Skill 测试成功不代表已经为任何站点实际部署。
