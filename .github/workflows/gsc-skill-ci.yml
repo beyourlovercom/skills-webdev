@@ -1,0 +1,39 @@
+name: GSC Site Intelligence CI
+on:
+  pull_request:
+    paths:
+      - 'skills/gsc-site-intelligence/**'
+      - 'tests/gsc-site-intelligence.test.mjs'
+      - 'tests/gsc-import.test.mjs'
+      - 'tests/gsc-browser-mode.test.mjs'
+      - 'tests/gsc-browser-audit.test.mjs'
+      - 'registry/**'
+      - 'README.md'
+      - 'tests/skill-registry.test.mjs'
+      - '.github/workflows/gsc-skill-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/gsc-site-intelligence/**'
+      - 'tests/gsc-site-intelligence.test.mjs'
+      - 'tests/gsc-import.test.mjs'
+      - 'tests/gsc-browser-mode.test.mjs'
+      - 'tests/gsc-browser-audit.test.mjs'
+      - 'registry/**'
+      - 'README.md'
+      - 'tests/skill-registry.test.mjs'
+      - '.github/workflows/gsc-skill-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/gsc-site-intelligence.test.mjs tests/gsc-import.test.mjs tests/gsc-browser-mode.test.mjs tests/gsc-browser-audit.test.mjs tests/skill-registry.test.mjs
+      - run: node scripts/skill-registry.mjs --validate
+      - run: node scripts/skill-registry.mjs --resolve gsc-site-intelligence
+      - run: node skills/gsc-site-intelligence/scripts/gsc-read.mjs --domain example.com --dry-run

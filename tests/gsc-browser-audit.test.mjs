@@ -1,0 +1,27 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+import {validateSnapshot,auditSnapshots,cli} from '../skills/gsc-site-intelligence/scripts/gsc-browser-audit.mjs';
+const prop='sc-domain:ybyirrigation.com',base='https://search.google.com/search-console';
+const make=(section,text,title,url)=>({source:'GSC_EXISTING_CHROME_UI_READONLY',property:prop,title,url,observed_at:'2025-01-01T05:00:00Z',ui_text:text});
+const snapshots={
+ performance:make('performance','Search type: Web\n12 months\nTotal clicks\n2\nTotal impressions\n36\nAverage CTR\n5.6%\nAverage position\n8\nChart, containing counts from July 5, 2026 to October 28, 2026','Performance on Search results',base+'/performance/search-analytics?resource_id='+encodeURIComponent(prop)+'&num_of_months=12'),
+ index:make('index','Page indexing\nNot indexed\n13\n3 reasons\nIndexed\n1\n','Page indexing',base+'/index?resource_id='+encodeURIComponent(prop)),
+ noindex:make('noindex','Page indexing\nExcluded by noindex tag\nAffected pages\n6\nExamples\nhttps://dev.ybyirrigation.com/\n','Page indexing',base+'/index/drilldown?resource_id='+encodeURIComponent(prop)+'&item_key=x'),
+ '404':make('404','Page indexing\nNot found (404)\nAffected pages\n4\nExamples\nhttps://ybyirrigation.com/contact-us/\n','Page indexing',base+'/index/drilldown?resource_id='+encodeURIComponent(prop)+'&item_key=y'),
+ redirect:make('redirect','Page indexing\nPage with redirect\nAffected pages\n3\nExamples\nhttp://www.ybyirrigation.com/\n','Page indexing',base+'/index/drilldown?resource_id='+encodeURIComponent(prop)+'&item_key=z'),
+ sitemaps:make('sitemaps','Sitemaps\nSubmitted sitemaps\nhttps://www.ybyirrigation.com/sitemap.xml\nCouldn\'t fetch\n','Sitemaps',base+'/sitemaps?resource_id='+encodeURIComponent(prop)),
+ https:make('https','HTTPS\nNon-HTTPS URLs\n0\nNo critical issues\nHTTPS URLs\n0\n','HTTPS',base+'/https?resource_id='+encodeURIComponent(prop)),
+ cwv:make('cwv','Core Web Vitals\nNot enough usage data in the last 90 days for this device type.\n','Core Web Vitals',base+'/core-web-vitals?resource_id='+encodeURIComponent(prop))
+};
+function setup(){const root=fs.mkdtempSync(path.join(os.tmpdir(),'gsc-browser-audit-'));for(const[n,obj]of Object.entries(snapshots))fs.writeFileSync(path.join(root,n+'.json'),JSON.stringify(obj));return root;}
+test('exact existing Google property is mandatory; rejects other host and API impersonation',()=>{const s=structuredClone(snapshots.performance);assert.doesNotThrow(()=>validateSnapshot(s,'ybyirrigation.com','performance'));s.property='sc-domain:yby-irrigation.com';assert.throws(()=>validateSnapshot(s,'ybyirrigation.com','performance'),/BLOCKED/);s.property=prop;s.url='https://evil-search.google.com/search-console/performance/search-analytics?resource_id='+encodeURIComponent(prop);assert.throws(()=>validateSnapshot(s,'ybyirrigation.com','performance'),/BLOCKED/);s.url=snapshots.performance.url;s.source='GOOGLE_SEARCH_CONSOLE_API_READONLY';assert.throws(()=>validateSnapshot(s,'ybyirrigation.com','performance'),/BLOCKED/);});
+test('realistic saved browser reports are reconciled without inventing annual analysis',()=>{const dir=setup();try{const s=auditSnapshots(dir,'ybyirrigation.com');assert.equal(s.browser_read_uat,'PASS_EXISTING_SESSION_READ');assert.equal(s.complete_annual_analysis,'OPEN_NOT_PROVEN');assert.deepEqual(s.report_sections.performance.metrics,{clicks:'2',impressions:'36',ctr:'5.6%',position:'8'});assert.equal(s.report_sections.index.indexed,'1');assert.equal(s.report_sections['404'].affected_pages,'4');assert.equal(s.report_sections['404'].example_urls[0],'https://ybyirrigation.com/contact-us/');assert.equal(s.report_sections.sitemaps.legacy_sitemap_couldnt_fetch,true);}finally{fs.rmSync(dir,{recursive:true,force:true});}});
+test('missing UI sections keep the browser gate PARTIAL, not PASS',()=>{const dir=setup();try{fs.rmSync(path.join(dir,'404.json'));let s=auditSnapshots(dir,'ybyirrigation.com');assert.equal(s.browser_read_uat,'PARTIAL_MISSING_REPORTS');assert.ok(s.missing_sections.includes('404'));}finally{fs.rmSync(dir,{recursive:true,force:true});}});
+test('indexing report cannot silently drop old-domain URLs and report PASS',()=>{
+ const dir=setup();try{const fp=path.join(dir,'404.json');const rec=JSON.parse(fs.readFileSync(fp,'utf8'));
+  rec.ui_text+='\nhttps://tr.yby-irrigation.com/legacy-page';
+  fs.writeFileSync(fp,JSON.stringify(rec));
+  assert.throws(()=>auditSnapshots(dir,'ybyirrigation.com'),/outside expected GSC Domain Property/);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('dry run writes no evidence, saved audit refuses to overwrite',()=>{const dir=setup();const out=path.join(dir,'.private-gsc','report');try{const p=cli(['--input-dir',dir,'--domain','ybyirrigation.com','--output-dir',out,'--dry-run']);assert.equal(p.mode,'DRY_RUN_NO_WRITE');assert.equal(fs.existsSync(out),false);const s=cli(['--input-dir',dir,'--domain','ybyirrigation.com','--output-dir',out]);assert.ok(fs.existsSync(s.evidence_file));assert.throws(()=>cli(['--input-dir',dir,'--domain','ybyirrigation.com','--output-dir',out]),/EEXIST/);}finally{fs.rmSync(dir,{recursive:true,force:true});}});

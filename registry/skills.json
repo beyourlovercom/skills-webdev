@@ -80,6 +80,20 @@
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
+      "id": "gsc-site-intelligence",
+      "stage": "S1",
+      "name_zh": "GSC 搜索表现分析",
+      "summary_zh": "支持中国 Mac 已登录 Chrome 的 GSC 浏览器只读验收、授权 API 以及官方 CSV 离线导入；核对搜索、收录、Sitemap 与来源限制。",
+      "status": "DRAFT_PR",
+      "source_ref": "feat/gsc-site-intelligence-20261031",
+      "skill_path": "skills/gsc-site-intelligence/SKILL.md",
+      "pr": 6,
+      "use_when_zh": "需要网站自然搜索趋势、查询词和页面机会、新站关键词-URL规划与搜索技术诊断。",
+      "inputs_zh": "Owner 已打开且获授权的 GSC Chrome 标签页；或目标 GSC 只读 API；或已导出的官方 Web CSV 与 manifest。",
+      "outputs_zh": "有来源类型和真实属性/日期标记的 GSC 只读证据、SEO 问题清单；完整 Word/Codex 报告按覆盖范围单独验收。",
+      "requires_authorized_access": "优先复用 Owner 已登录的合法 GSC 浏览器会话，不要求重新 OAuth；API 路径单独授权；已有 CSV 离线可用但来源未 API 复核。"
+    },
+    {
       "id": "site-builder-local",
       "stage": "S2-A",
       "name_zh": "Windows Local 研发",
@@ -178,18 +192,7 @@
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     }
   ],
-  "planned_skills": [
-    {
-      "id": "gsc-site-intelligence",
-      "stage": "S1",
-      "name_zh": "GSC 搜索表现分析",
-      "summary_zh": "使用 GSC 真实搜索词、页面、地区与索引数据研究自然搜索；目前仅有提示词设计，尚未开发可执行 Skill。",
-      "status": "PLANNED",
-      "source_ref": null,
-      "skill_path": null,
-      "pr": null
-    }
-  ],
+  "planned_skills": [],
   "pilots": [
     {
       "name_zh": "Rain Bird 外部公开网站 S0 样本",
