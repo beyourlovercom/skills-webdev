@@ -23,11 +23,11 @@ test('every real Skill has meaningful README entry and a real indexed source',()
   assert.match(s.summary_zh,/\S{5}/);
  }
 });
-test('main officially contains rapid-webdev, duplicate-site-skills and GSC, but GA4 remains Draft',()=>{
- assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','gsc-site-intelligence']);
+test('main officially contains previous Skills and four Owner-approved S1 Skills',()=>{
+ assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','ga4-site-intelligence','gsc-site-intelligence','google-ads-site-intelligence','semrush-site-intelligence','s1-cross-source']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
- assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/10');
- assert.match(ga4.file_url,/feat\/s1-ads-semrush-fusion-20261101/);
+ assert.equal(ga4.status,'IN_MAIN');assert.equal(ga4.ref,'main');assert.equal(ga4.pr_url,null);
+ assert.match(ga4.file_url,/\/blob\/main\/skills\/ga4-site-intelligence\/SKILL\.md$/);
 });
 test('GSC is officially in main but no claim of live OAuth authorization',()=>{
  const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'IN_MAIN');assert.equal(gsc.pr_url,null);
@@ -44,17 +44,17 @@ test('duplicate ids fail closed',()=>{
 });
 test('offline CLI list and resolve produce valid outputs',()=>{
  let out='';assert.equal(main(['--list'],path.join(dir,'registry/skills.json'),s=>{out+=s}),0);assert.match(out,/S2-C\tsite-www-release/);
- out='';assert.equal(main(['--resolve','ga4-site-intelligence'],path.join(dir,'registry/skills.json'),s=>{out+=s}),0);assert.equal(JSON.parse(out).status,'DRAFT_PR');
+ out='';assert.equal(main(['--resolve','ga4-site-intelligence'],path.join(dir,'registry/skills.json'),s=>{out+=s}),0);assert.equal(JSON.parse(out).status,'IN_MAIN');
 });
 test('all examples and piloted reports remain documented, never represented as live runtime authorization',()=>{
  assert.equal(reg.pilots.length,2);assert.ok(readme.includes('本仓库 Public'));
  assert.ok(readme.includes('单独批准'));assert.match(readme,/不等于.*已经连接 Google 账号/);
 });
 
-test('Ads, Semrush and cross-source V1 draft skills resolve without pretending to be main',()=>{
+test('Ads, Semrush and cross-source released Skills resolve only to main',()=>{
  for(const id of ['google-ads-site-intelligence','semrush-site-intelligence','s1-cross-source']){
-  const s=resolveSkill(reg,id);assert.equal(s.status,'DRAFT_PR');
-  assert.equal(s.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/10');
-  assert.match(s.file_url,/feat\/s1-ads-semrush-fusion-20261101/);
+  const s=resolveSkill(reg,id);assert.equal(s.status,'IN_MAIN');
+  assert.equal(s.pr_url,null);assert.equal(s.ref,'main');
+  assert.match(s.file_url,/\/blob\/main\/skills\//);
  }
 });
