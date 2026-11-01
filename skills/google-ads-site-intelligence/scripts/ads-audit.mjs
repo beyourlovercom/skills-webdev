@@ -2,6 +2,7 @@
 // S1 Google Ads: inspect previously retrieved, read-only connector rows.
 // Zero API/OAuth calls, zero ad edits, never mistake platform conversions for leads.
 import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
+import {writePrivateJson} from '../../s1-cross-source/scripts/private-write.mjs';
 const fail=s=>{throw Error('BLOCKED: '+s)};
 const iso=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(Date.parse(s))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s;
 const num=(v,k,integer=false)=>{if(typeof v!=='number'||!Number.isFinite(v)||v<0||(integer&&!Number.isSafeInteger(v)))fail('invalid '+k);return v;};
@@ -9,7 +10,8 @@ const account=id=>{if(typeof id!=='string'||!/^(\d{3}-\d{3}-\d{4}|\d{10})$/.test
 export function auditAds(x){
  if(!x||x.source!=='WINDSOR_GOOGLE_ADS_READONLY'||!account(x.account_id)||!(typeof x.currency==='string'&&/^[A-Z]{3}$/.test(x.currency)))fail('invalid Ads source/account/currency');
  if(!iso(x.date_from)||!iso(x.date_to)||x.date_from>x.date_to||!Array.isArray(x.rows)||x.rows.length>10000)fail('invalid dates/rows cap');
- if(typeof x.account_time_zone!=='string'||!/^[A-Za-z_]+\/[A-Za-z_]+/.test(x.account_time_zone))fail('account time zone absent');
+ if(typeof x.account_time_zone!=='string'||x.account_time_zone.length>128)fail('account time zone absent');
+ try{new Intl.DateTimeFormat('en-US',{timeZone:x.account_time_zone});}catch{fail('invalid IANA account time zone');}
  const seen=new Set(),campaigns=new Map();let clicks=0,impressions=0,spend=0,conversions=0,conversion_value=0;
  for(const r of x.rows){
   if(!r||account(String(r.account_id||''))!==account(x.account_id)||r.date<x.date_from||r.date>x.date_to||!iso(r.date))fail('mixed account/date row');
@@ -33,7 +35,6 @@ export function main(argv){
  const file=path.resolve(opt.input);if(fs.statSync(file).size>3000000)fail('input exceeds size cap');
  const result=auditAds(JSON.parse(fs.readFileSync(file,'utf8')));
  if(opt.dryRun)return {status:result.status,observed_totals:result.observed_totals,scope:result.completeness,write:false};
- if(!opt.output||!path.resolve(opt.output).split(path.sep).includes('.private-s1'))fail('output must be in .private-s1 folder');
- const dest=path.resolve(opt.output);fs.mkdirSync(path.dirname(dest),{recursive:true,mode:0o700});fs.writeFileSync(dest,JSON.stringify(result,null,2),{flag:'wx',mode:0o600});return {status:result.status,path:dest};
+ const dest=writePrivateJson(opt.output,result);return {status:result.status,path:dest};
 }
 if(process.argv[1]&&fs.existsSync(process.argv[1])&&import.meta.url===pathToFileURL(fs.realpathSync(process.argv[1])).href){try{console.log(JSON.stringify(main(process.argv.slice(2)),null,2))}catch(e){console.error(e.message);process.exitCode=2}}

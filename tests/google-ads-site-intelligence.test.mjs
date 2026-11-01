@@ -13,4 +13,12 @@ test('legitimate ISO currency codes outside former seven-code list are accepted'
  assert.throws(()=>auditAds({...src(),currency:'USDT'}),/BLOCKED/);
 });
 test('empty account is blocked; incomplete observation never advertised as full account',()=>{const r=auditAds(src([]));assert.equal(r.status,'BLOCKED_NO_ROWS');assert.equal(r.completeness,'INPUT_ROWS_ONLY_ACCOUNT_COMPLETENESS_UNVERIFIED');});
-test('CLI dry-run leaves filesystem unchanged, private report requires exclusive create',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'s1-ads-'));try{const f=path.join(dir,'ads.json');fs.writeFileSync(f,JSON.stringify(src()));const out=path.join(dir,'.private-s1','ads.json');assert.equal(main(['--input',f,'--dry-run']).write,false);assert.equal(fs.existsSync(out),false);const r=main(['--input',f,'--output',out]);assert.equal(r.status,'PARTIAL_LIVE_CONNECTOR_ROWS');assert.ok(fs.existsSync(out));assert.throws(()=>main(['--input',f,'--output',out]),/EEXIST/);assert.throws(()=>main(['--input',f,'--output',path.join(dir,'public.json')]),/\.private-s1 folder/);}finally{fs.rmSync(dir,{force:true,recursive:true});}});
+test('CLI dry-run leaves filesystem unchanged, private report requires exclusive create',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'s1-ads-'));try{const f=path.join(dir,'ads.json');fs.writeFileSync(f,JSON.stringify(src()));const out=path.join(dir,'.private-s1','ads.json');assert.equal(main(['--input',f,'--dry-run']).write,false);assert.equal(fs.existsSync(out),false);const r=main(['--input',f,'--output',out]);assert.equal(r.status,'PARTIAL_LIVE_CONNECTOR_ROWS');assert.ok(fs.existsSync(out));assert.throws(()=>main(['--input',f,'--output',out]),/EEXIST/);assert.throws(()=>main(['--input',f,'--output',path.join(dir,'public.json')]),/\.private-s1/);}finally{fs.rmSync(dir,{force:true,recursive:true});}});
+
+test('valid multi-segment IANA account zones are accepted',()=>{
+ for(const zone of ['America/Argentina/Buenos_Aires','America/Indiana/Indianapolis','Etc/GMT+8']){
+  const x=auditAds({...src([row({account_time_zone:zone})]),account_time_zone:zone});
+  assert.equal(x.account_time_zone,zone);
+ }
+ assert.throws(()=>auditAds({...src(),account_time_zone:'Unknown/Fake_Zone'}),/IANA/);
+});

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // S1 cross-source evidence registry: NO summing unrelated measurements.
 import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
+import {writePrivateJson} from './private-write.mjs';
 const fail=s=>{throw Error('BLOCKED: '+s)};
 const bare=s=>{if(typeof s!=='string'||!/^(?:[a-z0-9-]+\.)+[a-z]{2,63}$/i.test(s))fail('invalid domain');return s.toLowerCase()};
 export function fuse(m,sources){
@@ -37,6 +38,6 @@ export function fuse(m,sources){
 export function main(argv){const o={};for(let i=0;i<argv.length;i++){if(argv[i]==='--dry-run'){o.dry=true;continue}if(!['--manifest','--output'].includes(argv[i])||!argv[i+1])fail('bad option');o[argv[i].slice(2)]=argv[++i]}
  if(!o.manifest)fail('manifest required');const m=JSON.parse(fs.readFileSync(o.manifest,'utf8'));const src={};for(const[n,f]of Object.entries(m.files||{})){if(typeof f!=='string'||!fs.existsSync(f)||fs.statSync(f).size>4000000)fail('evidence file invalid');src[n]=JSON.parse(fs.readFileSync(f,'utf8'))}
  const v=fuse(m,src);if(o.dry)return {status:v.status,missing:v.missing_sources,write:false};
- if(!o.output||!path.resolve(o.output).split(path.sep).includes('.private-s1'))fail('private output required');const file=path.resolve(o.output);fs.mkdirSync(path.dirname(file),{recursive:true,mode:0o700});fs.writeFileSync(file,JSON.stringify(v,null,2),{flag:'wx',mode:0o600});return {file,status:v.status};
+ const file=writePrivateJson(o.output,v);return {file,status:v.status};
 }
 if(process.argv[1]&&fs.existsSync(process.argv[1])&&import.meta.url===pathToFileURL(fs.realpathSync(process.argv[1])).href){try{console.log(JSON.stringify(main(process.argv.slice(2)),null,2))}catch(e){console.error(e.message);process.exitCode=2}}
