@@ -12,7 +12,7 @@
 
 ## 2. 目前有哪些 Skills？
 
-> 状态快照：**2026-10-31**。`IN_MAIN` = 已在主分支；`DRAFT_PR` = 已有代码但仍在待审 PR；`PLANNED` = 规划中。PR 状态可能变化，执行前应重新核对 GitHub。
+> 状态快照：**2026-11-01**。`IN_MAIN` = 已在主分支；`DRAFT_PR` = 已有代码但仍在待审 PR；`PLANNED` = 规划中。PR 状态可能变化，执行前应重新核对 GitHub。
 
 | 阶段 | Skill（点名称查看原文件） | 可以做什么 | 现在的状态 |
 |---|---|---|---|
@@ -21,7 +21,7 @@
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
-| S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/gsc-site-intelligence-20261031/skills/gsc-site-intelligence/SKILL.md) | 优先复用 Mac 已登录 Chrome 的 GSC 页面；也支持只读 API 或已有官方 CSV，核对真实搜索与收录证据。 | 📝 [Draft PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6) |
+| S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/gsc-site-intelligence/SKILL.md) | 优先复用 Mac 已登录 Chrome 的 GSC 页面；也支持只读 API 或已有官方 CSV，核对真实搜索与收录证据。 | ✅ main（[PR #6 已合并](https://github.com/beyourlovercom/skills-webdev/pull/6)） |
 | S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -30,9 +30,9 @@
 | S5 | [content-migration](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/content-migration/SKILL.md) | 根据版权、URL、搜索价值和新旧站关系决定保留/合并/重写。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S6 | [content-automation](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/content-automation/SKILL.md) | 研究选题、编写并审核草稿；审批后才允许排期或发布。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 
-### 还没有开发完成的能力
+### 已发布 GSC Skill 与后续能力
 
-- **`gsc-site-intelligence`（S1）** 已支持三种受控来源：① 已登录的现有 Chrome GSC 标签页（优先，真实浏览器读回）；② GSC 只读 API；③ 已有官方 CSV 离线导入。仍在 Draft PR #6。**没有 GSC OAuth** 时不应阻止现有 Chrome 会话的只读验收；CSV 来源未由 API 独立认证，浏览器默认三个月报表也不等于完整年度分析。
+- **`gsc-site-intelligence`（S1）** 已合并至 `main`（PR #6）：优先复用已登录的现有 Chrome GSC 标签页，另外支持已获授权的只读 API、已有官方 CSV 离线导入。**没有 GSC OAuth** 时不应阻止现有 Chrome 会话的只读验收；CSV 来源未由 API 独立认证，浏览器 UI 读取 PASS 也不等于完整年度分析 PASS。
 - Google Ads / Semrush 独立分析器：可由 S1 调度现有合法连接，但**独立 Skills 仍待开发**，不能假装已经安装。
 
 ## 3. 完整工作流程是什么？
@@ -98,7 +98,7 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 ### 只跑 GSC Skill 的例子
 
 ```text
-读取 registry/skills.json 中的 gsc-site-intelligence（Draft PR #6），
+读取 registry/skills.json 中已发布 main 的 gsc-site-intelligence（PR #6 已合并），
 加载原始 GSC 中文分析规范和 data-contract，核对 ybyirrigation.com 的
 已授权 Domain Property / URL-prefix Property；使用已有合法连接或
 Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
@@ -136,7 +136,7 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 
 ## 8. 开发状态与下一步
 
-**当前 `main` 已发布的 Skill 是 `rapid-webdev` 和 `duplicate-site-skills`。** 后者已由 Owner 批准合并 PR #7；其他标记 `DRAFT_PR` 的 Skills 仍须从 Registry 指定的开发分支读取，并需 Owner 单独批准合并。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
+**当前 `main` 已发布的 Skill 是 `rapid-webdev`、`duplicate-site-skills` 和 `gsc-site-intelligence`。** 后两者分别经 Owner 批准合并 PR #7 与 PR #6；其他标记 `DRAFT_PR` 的 Skills 仍须从 Registry 指定的开发分支读取，并需 Owner 单独批准合并。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
 
-当前独立开发分支有 [GSC PR #6](https://github.com/beyourlovercom/skills-webdev/pull/6)、[S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
+当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 
