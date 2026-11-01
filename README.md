@@ -139,7 +139,7 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 
 ## 8. 开发状态与下一步
 
-**当前 `main` 已发布的 Skill 包括 `rapid-webdev`、`duplicate-site-skills`、`gsc-site-intelligence`、`ga4-site-intelligence`、`google-ads-site-intelligence`、`semrush-site-intelligence` 和 `s1-cross-source`。** 其中 S1 最新四项已由 Owner 批准合并 PR #10；历史 PR #6/#7 已批准。其余仍标记 `DRAFT_PR` 的 Skills 只能从 Registry 指定的开发分支读取，不能自行合并。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
+**当前 `main` 已发布的 Skill 包括 `rapid-webdev`、`duplicate-site-skills`、`gsc-site-intelligence`、`ga4-site-intelligence`、`google-ads-site-intelligence`、`semrush-site-intelligence` 和 `s1-cross-source`。** 其中 S1 最新四项已由 Owner 批准合并 PR #10；历史 PR #6/#7 已批准。其余仍标记 `DRAFT_PR` 的 Skills 只能从 Registry 指定的开发分支读取，必须经 Owner 单独批准合并，不能自行发布。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
 
 当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 
