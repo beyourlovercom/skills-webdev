@@ -1,0 +1,19 @@
+{
+  "domain": "example.com",
+  "expected_sources": [
+    "gsc",
+    "ga4",
+    "google_ads",
+    "semrush"
+  ],
+  "ads_account_binding": {
+    "account_id": "123-456-7890",
+    "domain": "example.com"
+  },
+  "files": {
+    "gsc": "/private/example-gsc.json",
+    "ga4": "/private/example-ga4.json",
+    "google_ads": "/private/example-ads.json",
+    "semrush": "/private/example-semrush.json"
+  }
+}
