@@ -143,10 +143,10 @@
       "use_when_zh": "已有数据策略，准备在本地开发或改版。",
       "inputs_zh": "S1 结论、GitHub SHA、项目 AGENTS.md、Local 授权。",
       "outputs_zh": "本地变更、浏览器/功能 UAT、回滚与 Dev 交接。",
-      "status": "DRAFT_PR",
-      "source_ref": "feat/s2-local-dev-www-skills-20261101",
+      "status": "IN_MAIN",
+      "source_ref": "main",
       "skill_path": "skills/site-builder-local/SKILL.md",
-      "pr": 12,
+      "pr": null,
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
@@ -157,10 +157,10 @@
       "use_when_zh": "Local PASS 后，需要在真实托管环境验证。",
       "inputs_zh": "准确代码 SHA、Local PASS、Dev 环境与回滚方案。",
       "outputs_zh": "Dev PASS/FAIL/OPEN、日志与正式发布准备清单。",
-      "status": "DRAFT_PR",
-      "source_ref": "feat/s2-local-dev-www-skills-20261101",
+      "status": "IN_MAIN",
+      "source_ref": "main",
       "skill_path": "skills/site-dev-uat/SKILL.md",
-      "pr": 12,
+      "pr": null,
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
@@ -171,10 +171,10 @@
       "use_when_zh": "Dev PASS 后准备生产发布。",
       "inputs_zh": "Dev 验收、准确 SHA、备份、差异、Owner 明确 pass。",
       "outputs_zh": "生产发布记录、关键业务验收、可回滚证据。",
-      "status": "DRAFT_PR",
-      "source_ref": "feat/s2-local-dev-www-skills-20261101",
+      "status": "IN_MAIN",
+      "source_ref": "main",
       "skill_path": "skills/site-www-release/SKILL.md",
-      "pr": 12,
+      "pr": null,
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {
