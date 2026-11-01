@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "project": {
+    "id": "example-site",
+    "repository": "owner/example-site",
+    "agents_ref": "github://owner/example-site/main/AGENTS.md",
+    "s1_handoff_ref": "private://s1/example-site-summary.md",
+    "customer_facing": true,
+    "admin_backend": true,
+    "deployment_model": "STANDARD"
+  },
+  "environments": {
+    "local": {
+      "url": "http://local.example.test/",
+      "device": "authorized-windows"
+    },
+    "dev": {
+      "url": "https://dev.example.com/",
+      "device": "approved-dev-host"
+    },
+    "www": {
+      "url": "https://www.example.com/",
+      "device": "approved-www-host"
+    }
+  },
+  "policy": {
+    "dev_indexing": "BLOCKED",
+    "dev_external_effects": "DISABLED_OR_SANDBOX",
+    "production_data": "PRESERVE",
+    "production_business_tests": "NON_DESTRUCTIVE"
+  },
+  "stages": {
+    "local": {
+      "status": "OPEN",
+      "sha": null,
+      "checks": []
+    },
+    "dev": {
+      "status": "NOT_RUN",
+      "sha": null,
+      "checks": []
+    },
+    "www": {
+      "status": "NOT_RUN",
+      "sha": null,
+      "checks": []
+    }
+  },
+  "approvals": {
+    "dev": {
+      "decision": "pending",
+      "sha": null,
+      "target": null,
+      "scope_ref": null,
+      "owner_message_ref": null,
+      "approved_at": null
+    },
+    "www": {
+      "decision": "pending",
+      "sha": null,
+      "target": null,
+      "scope_ref": null,
+      "owner_message_ref": null,
+      "approved_at": null
+    }
+  },
+  "release": {
+    "candidate_sha": null,
+    "changed_paths": [
+      "wp-content/plugins/example-feature"
+    ],
+    "diff_ref": null,
+    "rollback_ref": null,
+    "backup_ref": null,
+    "production_before_ref": null,
+    "production_rollback_test_ref": null,
+    "data_policy": "PRESERVE_LIVE_DATA"
+  }
+}
