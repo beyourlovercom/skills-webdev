@@ -25,9 +25,9 @@
 | S1 | [google-ads-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/google-ads-site-intelligence/SKILL.md) | 使用已连接 Google Ads 只读读取广告花费、搜索词和转化数据；不触碰投放设置。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
 | S1 | [semrush-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/semrush-site-intelligence/SKILL.md) | 官方 CSV 零费用导入竞品、关键词与外链，不自动消耗 Semrush API units。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
 | S1 | [s1-cross-source](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/s1-cross-source/SKILL.md) | GSC、GA4、Ads、Semrush 证据矩阵，阻断混合口径及无根据 ROI/有效询盘结论。 | ✅ main（[PR #10 已合并](https://github.com/beyourlovercom/skills-webdev/pull/10)） |
-| S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
-| S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
-| S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
+| S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
+| S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
+| S2-C | [site-www-release](https://github.com/beyourlovercom/skills-webdev/blob/feat/s2-local-dev-www-skills-20261101/skills/site-www-release/SKILL.md) | 仅在 Owner 独立批准后部署已验收差异并核对生产读回。 | 📝 [独立 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12) |
 | S3 | [analytics-live](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/analytics-live/SKILL.md) | 检查正式站数据埋点与去重，把事件同业务记录对照。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S4 | [seo-live](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/seo-live/SKILL.md) | 根据关键词-URL 映射和实时证据优化页面 SEO，记录结果。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S5 | [content-migration](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/content-migration/SKILL.md) | 根据版权、URL、搜索价值和新旧站关系决定保留/合并/重写。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -149,3 +149,15 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 Google Ads 已确认存在合法 Windsor 只读账号和实际广告数据，工程会先用此连接；Semrush 默认使用既有官方 CSV 导出而非收费 API。各个来源必须分开保存，**Google Ads 点击、GSC 自然点击、GA4 会话、Semrush 估算流量不能相加或直接当作有效客户数量**。
 
 S1-A GA4 已沿用 Owner 通过的功能验收；已合并 PR #10 从 [GA4 clean Draft PR #9](https://github.com/beyourlovercom/skills-webdev/pull/9) 引入独立 S1 源码、原始 Owner TXT 与测试，**没有合并 S0 Draft PR #1**。PR #4/#9 保持原样作为独立历史开发记录，不需要再次合并。Semrush 真实数据和四源完整业务归因仍需独立实测。
+
+### S2 开发技能：Windows Local → Dev → WWW（独立 Draft PR #12）
+
+S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从未合并的 S0 PR #1 抽离至独立 [S2 Draft PR #12](https://github.com/beyourlovercom/skills-webdev/pull/12)，**尚未合并 `main`**。这三项可分别使用，但必须按项目自身最高级 `AGENTS.md` 和最新真实 GitHub/运行时执行；不是一份文件就取得 DC、Dev 或 WWW 权限。
+
+- Windows Local 负责实际开发和浏览器 UAT；Dev 必须独立获授权、保持 noindex/鉴权保护，并隔离真支付、SMTP、OMS、Cron 和广告回调。
+- **Andy 系列插件的后台管理页面 Desktop-only**；顾客可见的首页、商品、表单、Cart 和 Checkout 仍须真实 PC/Mobile 验收，不能用后台豁免。
+- WWW 正式发布必须有 Owner 对**具体域名 + SHA + 变更范围**的独立 `pass`，还要有生产快照、备份、回滚和读回。PR 合并授权不代表任何网站生产授权。
+- 离线 gate：`node skills/site-builder-local/scripts/s2-handoff-validate.mjs --manifest skills/site-builder-local/templates/s2-handoff.example.json --gate www` 预期返回 BLOCKED；示例数据不能冒充运行时 PASS。
+- 特殊网站若 Dev 就是最终站，必须由站点 `AGENTS.md` 明确特殊发布路径，不能用一般三阶段流程自动跳过 WWW 门禁。
+
+真实网站 Local/Dev/WWW 验收与三项 Skill 源码开发为**两件不同的事**。Skill 测试成功不代表已经为任何站点实际部署。 
