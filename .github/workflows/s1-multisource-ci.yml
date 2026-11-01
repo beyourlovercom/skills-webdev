@@ -8,6 +8,10 @@ on:
       - 'tests/google-ads-site-intelligence.test.mjs'
       - 'tests/semrush-site-intelligence.test.mjs'
       - 'tests/s1-cross-source.test.mjs'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'README.md'
       - '.github/workflows/s1-multisource-ci.yml'
   push:
     branches: [main]
@@ -18,6 +22,10 @@ on:
       - 'tests/google-ads-site-intelligence.test.mjs'
       - 'tests/semrush-site-intelligence.test.mjs'
       - 'tests/s1-cross-source.test.mjs'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'README.md'
       - '.github/workflows/s1-multisource-ci.yml'
 permissions:
   contents: read
