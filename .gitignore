@@ -5,3 +5,6 @@
 *.pem
 *.key
 node_modules/
+
+.private-s1/
+**/.private-s1/
