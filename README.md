@@ -20,7 +20,7 @@
 | SPECIAL | [duplicate-site-skills](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/duplicate-site-skills/SKILL.md) | 把 CentralXI 复刻经验提纯为**仅限已获授权网站**的源站清单、Windows Local、PC/M14、Dev、WWW、SEO/询盘、回滚 D0–D8 流程；配有离线 Manifest 校验、21 项包括既有 Registry 的完整测试。 | ✅ main（[PR #7 已合并](https://github.com/beyourlovercom/skills-webdev/pull/7)） |
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
-| S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
+| S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s1-ga4-clean-20261101/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #9 · S1 clean](https://github.com/beyourlovercom/skills-webdev/pull/9) |
 | S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/gsc-site-intelligence/SKILL.md) | 优先复用 Mac 已登录 Chrome 的 GSC 页面；也支持只读 API 或已有官方 CSV，核对真实搜索与收录证据。 | ✅ main（[PR #6 已合并](https://github.com/beyourlovercom/skills-webdev/pull/6)） |
 | S2-A | [site-builder-local](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-builder-local/SKILL.md) | 在隔离的 Windows Local 环境按项目规则完成代码与功能研发。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S2-B | [site-dev-uat](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-dev-uat/SKILL.md) | 在获授权的 Dev 环境复核浏览器、表单、插件、SEO 与回滚。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
@@ -89,7 +89,7 @@ GA4/GSC/Ads 数据源必须独立验证，不得以 Skill 文件代替授权。
 ### 只跑 GA4 Skill 的例子
 
 ```text
-读取 registry/skills.json 中的 ga4-site-intelligence（注意它在 Draft PR #4），
+读取 registry/skills.json 中的 ga4-site-intelligence（独立 Draft PR #9，原始 PR #4 保留归档），
 加载原始 GA4 TXT 和数据契约，检查 ybyirrigation.com 的合法 GA4 属性访问；
 若已授权，通过 Windows 自建 DC 只读获取数据，按规范生成中文报告及 Codex 交接。
 未授权就报告 BLOCKED，不编造分析，也不要求我在聊天里粘贴 Token。
@@ -138,5 +138,5 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 
 **当前 `main` 已发布的 Skill 是 `rapid-webdev`、`duplicate-site-skills` 和 `gsc-site-intelligence`。** 后两者分别经 Owner 批准合并 PR #7 与 PR #6；其他标记 `DRAFT_PR` 的 Skills 仍须从 Registry 指定的开发分支读取，并需 Owner 单独批准合并。公开 README 与 Registry 是使用指南和技能索引，不代表已连接网站、Google 账号或拥有生产权限。
 
-当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
+当前独立开发分支有 [S0–S6 PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1)、[Rain Bird PR #2](https://github.com/beyourlovercom/skills-webdev/pull/2)、[YBY Pilot PR #3](https://github.com/beyourlovercom/skills-webdev/pull/3)、[GA4 clean PR #9](https://github.com/beyourlovercom/skills-webdev/pull/9)。此处的“已开发”仅代表代码及对应测试状态，并不表示第三方数据已授权连接。
 

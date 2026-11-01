@@ -5,3 +5,6 @@
 *.pem
 *.key
 node_modules/
+
+.private-ga4/
+**/.private-ga4/
