@@ -74,9 +74,9 @@
       "inputs_zh": "获授权的 GA4 Property/Web Stream 与只读 API 访问或真实导出。",
       "outputs_zh": "GA4 证据 JSON、分析建议；中文 Word 报告由文档生成环节另行完成。",
       "status": "DRAFT_PR",
-      "source_ref": "feat/ga4-site-intelligence-20261031",
+      "source_ref": "feat/s1-ads-semrush-fusion-20261101",
       "skill_path": "skills/ga4-site-intelligence/SKILL.md",
-      "pr": 4,
+      "pr": 10,
       "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
     },
     {

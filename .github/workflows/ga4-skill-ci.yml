@@ -1,0 +1,25 @@
+name: GA4 Site Intelligence CI
+on:
+  pull_request:
+    paths:
+      - 'skills/ga4-site-intelligence/**'
+      - 'tests/ga4-site-intelligence.test.mjs'
+      - '.github/workflows/ga4-skill-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/ga4-site-intelligence/**'
+      - 'tests/ga4-site-intelligence.test.mjs'
+      - '.github/workflows/ga4-skill-ci.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/ga4-site-intelligence.test.mjs
+      - run: node skills/ga4-site-intelligence/scripts/ga4-read.mjs --property 123456789 --domain example.com --dry-run

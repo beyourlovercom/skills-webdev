@@ -20,7 +20,7 @@
 | SPECIAL | [duplicate-site-skills](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/duplicate-site-skills/SKILL.md) | 把 CentralXI 复刻经验提纯为**仅限已获授权网站**的源站清单、Windows Local、PC/M14、Dev、WWW、SEO/询盘、回滚 D0–D8 流程；配有离线 Manifest 校验、21 项包括既有 Registry 的完整测试。 | ✅ main（[PR #7 已合并](https://github.com/beyourlovercom/skills-webdev/pull/7)） |
 | S0 | [site-skill-factory](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-skill-factory/SKILL.md) | 依据受核查的网站画像生成各阶段网站专属 Skill 和审批门禁。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
 | S1 | [site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s0-site-skill-factory-20261030/skills/site-intelligence/SKILL.md) | 研究站点、市场、关键词、渠道、真实业务转化，为新站提出建设路线。 | 📝 [Draft PR #1](https://github.com/beyourlovercom/skills-webdev/pull/1) |
-| S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/ga4-site-intelligence-20261031/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [Draft PR #4](https://github.com/beyourlovercom/skills-webdev/pull/4) |
+| S1 | [ga4-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s1-ads-semrush-fusion-20261101/skills/ga4-site-intelligence/SKILL.md) | 保留上传的 GA4 TXT 分析规范，读取已授权的 GA4 属性并输出有证据的分析。 | 📝 [S1 integrated Draft PR #10](https://github.com/beyourlovercom/skills-webdev/pull/10) |
 | S1 | [gsc-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/main/skills/gsc-site-intelligence/SKILL.md) | 优先复用 Mac 已登录 Chrome 的 GSC 页面；也支持只读 API 或已有官方 CSV，核对真实搜索与收录证据。 | ✅ main（[PR #6 已合并](https://github.com/beyourlovercom/skills-webdev/pull/6)） |
 | S1 | [google-ads-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s1-ads-semrush-fusion-20261101/skills/google-ads-site-intelligence/SKILL.md) | 使用已连接 Google Ads 只读读取广告花费、搜索词和转化数据；不触碰投放设置。 | 📝 [Draft PR #10](https://github.com/beyourlovercom/skills-webdev/pull/10) |
 | S1 | [semrush-site-intelligence](https://github.com/beyourlovercom/skills-webdev/blob/feat/s1-ads-semrush-fusion-20261101/skills/semrush-site-intelligence/SKILL.md) | 官方 CSV 零费用导入竞品、关键词与外链，不自动消耗 Semrush API units。 | 📝 [Draft PR #10](https://github.com/beyourlovercom/skills-webdev/pull/10) |
@@ -148,4 +148,4 @@ Windows 自建 DC 的受保护只读 OAuth 环境读取实际 GSC 数据。
 
 Google Ads 已确认存在合法 Windsor 只读账号和实际广告数据，工程会先用此连接；Semrush 默认使用既有官方 CSV 导出而非收费 API。各个来源必须分开保存，**Google Ads 点击、GSC 自然点击、GA4 会话、Semrush 估算流量不能相加或直接当作有效客户数量**。
 
-S1-A GA4 已由 Owner 完成功能测试；为了避免把 S0 Draft PR #1 未审批代码一起带入，独立保留 [GA4 clean Draft PR #9](https://github.com/beyourlovercom/skills-webdev/pull/9)。PR #4 是历史研发基线，不应误合并。
+S1-A GA4 已由 Owner 完成功能测试；本集成 PR #10 只引用 [GA4 clean Draft PR #9](https://github.com/beyourlovercom/skills-webdev/pull/9) 的独立 S1 源码、原始 Owner TXT 与测试，避免夹带 S0 Draft PR #1；PR #4 和 #9 均不需要另外合并，最终以本 S1 PR #10 为唯一审批候选。

@@ -26,8 +26,8 @@ test('every real Skill has meaningful README entry and a real indexed source',()
 test('main officially contains rapid-webdev, duplicate-site-skills and GSC, but GA4 remains Draft',()=>{
  assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','gsc-site-intelligence']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
- assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/4');
- assert.match(ga4.file_url,/feat\/ga4-site-intelligence-20261031/);
+ assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/10');
+ assert.match(ga4.file_url,/feat\/s1-ads-semrush-fusion-20261101/);
 });
 test('GSC is officially in main but no claim of live OAuth authorization',()=>{
  const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'IN_MAIN');assert.equal(gsc.pr_url,null);
