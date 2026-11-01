@@ -7,7 +7,7 @@ const iso=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(D
 const num=(v,k,integer=false)=>{if(typeof v!=='number'||!Number.isFinite(v)||v<0||(integer&&!Number.isSafeInteger(v)))fail('invalid '+k);return v;};
 const account=id=>{if(typeof id!=='string'||!/^(\d{3}-\d{3}-\d{4}|\d{10})$/.test(id))fail('invalid Google Ads account');return id.replaceAll('-','')};
 export function auditAds(x){
- if(!x||x.source!=='WINDSOR_GOOGLE_ADS_READONLY'||!account(x.account_id)||!['CNY','USD','EUR','GBP','JPY','CAD','AUD'].includes(x.currency))fail('invalid Ads source/account/currency');
+ if(!x||x.source!=='WINDSOR_GOOGLE_ADS_READONLY'||!account(x.account_id)||!(typeof x.currency==='string'&&/^[A-Z]{3}$/.test(x.currency)))fail('invalid Ads source/account/currency');
  if(!iso(x.date_from)||!iso(x.date_to)||x.date_from>x.date_to||!Array.isArray(x.rows)||x.rows.length>10000)fail('invalid dates/rows cap');
  if(typeof x.account_time_zone!=='string'||!/^[A-Za-z_]+\/[A-Za-z_]+/.test(x.account_time_zone))fail('account time zone absent');
  const seen=new Set(),campaigns=new Map();let clicks=0,impressions=0,spend=0,conversions=0,conversion_value=0;
