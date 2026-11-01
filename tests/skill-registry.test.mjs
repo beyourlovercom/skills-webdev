@@ -23,15 +23,15 @@ test('every real Skill has meaningful README entry and a real indexed source',()
   assert.match(s.summary_zh,/\S{5}/);
  }
 });
-test('main officially contains rapid-webdev + duplicate-site-skills, but GA4 remains Draft',()=>{
- assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills']);
+test('main officially contains rapid-webdev, duplicate-site-skills and GSC, but GA4 remains Draft',()=>{
+ assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','gsc-site-intelligence']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
  assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/4');
  assert.match(ga4.file_url,/feat\/ga4-site-intelligence-20261031/);
 });
-test('GSC adapter is Draft PR only; no claim of merged or live OAuth authorization',()=>{
- const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'DRAFT_PR');assert.equal(gsc.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/6');
- assert.match(gsc.file_url,/feat\/gsc-site-intelligence-20261031/);
+test('GSC is officially in main but no claim of live OAuth authorization',()=>{
+ const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'IN_MAIN');assert.equal(gsc.pr_url,null);
+ assert.equal(gsc.ref,'main');assert.match(gsc.file_url,/\/blob\/main\/skills\/gsc-site-intelligence\/SKILL\.md$/);
  assert.match(readme,/没有 GSC OAuth/);
 });
 test('drafts cannot silently appear as main, and path traversal cannot appear',()=>{

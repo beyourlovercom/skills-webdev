@@ -23,7 +23,9 @@ test('browser mode contract distinguishes UI from API and CSV, and limits histor
  const registry=JSON.parse(fs.readFileSync(new URL('../../registry/skills.json',base),'utf8'));
  const item=registry.skills.find(s=>s.id==='gsc-site-intelligence');
  assert.match(item.summary_zh,/Chrome/);
- assert.equal(item.status,'DRAFT_PR');
+ assert.equal(item.status,'IN_MAIN');
+ assert.equal(item.source_ref,'main');
+ assert.equal(item.pr,null);
 });
 
 test('browser script accepts mixed-case bare domain and compares canonical lowercase property',()=>{
