@@ -1,0 +1,24 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+import {auditAds,main} from '../skills/google-ads-site-intelligence/scripts/ads-audit.mjs';
+const row=(n={})=>({date:'2026-10-29',account_id:'502-024-8458',account_currency_code:'CNY',account_time_zone:'Asia/Shanghai',campaign:'YBY Tanzania',campaign_id:'24023703280',impressions:62,clicks:13,spend:106.7609,conversions:0,conversions_value:0,...n});
+const src=(rows=[row()])=>({source:'WINDSOR_GOOGLE_ADS_READONLY',account_id:'502-024-8458',currency:'CNY',account_time_zone:'Asia/Shanghai',date_from:'2026-10-29',date_to:'2026-10-30',rows});
+test('genuine connector schema audits platform metrics without claiming qualified leads',()=>{const out=auditAds(src([row(),row({date:'2026-10-30',impressions:167,clicks:33,spend:131.437})]));assert.equal(out.observed_totals.clicks,46);assert.equal(out.observed_totals.impressions,229);assert.equal(out.observed_totals.currency,'CNY');assert.equal(out.qualified_leads,'NOT_VERIFIED_BY_GOOGLE_ADS');assert.equal(out.status,'PARTIAL_LIVE_CONNECTOR_ROWS');assert.equal(out.record_count,2);});
+test('mixed account, currency, time zone, dates, duplication, unsafe metrics fail closed',()=>{for(const v of [row({account_id:'111-111-1111'}),row({account_currency_code:'USD'}),row({account_time_zone:'Asia/Taipei'}),row({date:'2026-10-31'}),row({clicks:70}),row({spend:-1}),row({conversions:Infinity})])assert.throws(()=>auditAds(src([v])),/BLOCKED/);assert.throws(()=>auditAds(src([row(),row()])),/duplicate/);});
+test('legitimate ISO currency codes outside former seven-code list are accepted',()=>{
+ for(const currency of ['INR','BRL','HKD','CHF']){
+  const r=auditAds({...src([row({account_currency_code:currency})]),currency});
+  assert.equal(r.observed_totals.currency,currency);
+ }
+ assert.throws(()=>auditAds({...src(),currency:'USDT'}),/BLOCKED/);
+});
+test('empty account is blocked; incomplete observation never advertised as full account',()=>{const r=auditAds(src([]));assert.equal(r.status,'BLOCKED_NO_ROWS');assert.equal(r.completeness,'INPUT_ROWS_ONLY_ACCOUNT_COMPLETENESS_UNVERIFIED');});
+test('CLI dry-run leaves filesystem unchanged, private report requires exclusive create',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'s1-ads-'));try{const f=path.join(dir,'ads.json');fs.writeFileSync(f,JSON.stringify(src()));const out=path.join(dir,'.private-s1','ads.json');assert.equal(main(['--input',f,'--dry-run']).write,false);assert.equal(fs.existsSync(out),false);const r=main(['--input',f,'--output',out]);assert.equal(r.status,'PARTIAL_LIVE_CONNECTOR_ROWS');assert.ok(fs.existsSync(out));assert.throws(()=>main(['--input',f,'--output',out]),/EEXIST/);assert.throws(()=>main(['--input',f,'--output',path.join(dir,'public.json')]),/\.private-s1/);}finally{fs.rmSync(dir,{force:true,recursive:true});}});
+
+test('valid multi-segment IANA account zones are accepted',()=>{
+ for(const zone of ['America/Argentina/Buenos_Aires','America/Indiana/Indianapolis','Etc/GMT+8']){
+  const x=auditAds({...src([row({account_time_zone:zone})]),account_time_zone:zone});
+  assert.equal(x.account_time_zone,zone);
+ }
+ assert.throws(()=>auditAds({...src(),account_time_zone:'Unknown/Fake_Zone'}),/IANA/);
+});

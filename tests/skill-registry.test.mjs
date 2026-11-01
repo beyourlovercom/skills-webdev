@@ -9,7 +9,7 @@ const reg=readRegistry(path.join(dir,'registry/skills.json'));
 const readme=fs.readFileSync(path.join(dir,'README.md'),'utf8');
 
 test('registry schema, exact skills and no duplicates',()=>{
- const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,13);
+ const v=validateRegistry(reg);assert.deepEqual(v.errors,[]);assert.equal(v.status,'PASS');assert.equal(reg.skills.length,16);
  assert.equal(reg.skills.find(x=>x.id==='duplicate-site-skills')?.pr,null);
  const duplicate=resolveSkill(reg,'duplicate-site-skills');
  assert.equal(duplicate.status,'IN_MAIN');assert.equal(duplicate.ref,'main');assert.equal(duplicate.pr_url,null);
@@ -26,8 +26,8 @@ test('every real Skill has meaningful README entry and a real indexed source',()
 test('main officially contains rapid-webdev, duplicate-site-skills and GSC, but GA4 remains Draft',()=>{
  assert.deepEqual(reg.skills.filter(x=>x.status==='IN_MAIN').map(x=>x.id),['rapid-webdev','duplicate-site-skills','gsc-site-intelligence']);
  const ga4=resolveSkill(reg,'ga4-site-intelligence');
- assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/4');
- assert.match(ga4.file_url,/feat\/ga4-site-intelligence-20261031/);
+ assert.equal(ga4.status,'DRAFT_PR');assert.equal(ga4.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/10');
+ assert.match(ga4.file_url,/feat\/s1-ads-semrush-fusion-20261101/);
 });
 test('GSC is officially in main but no claim of live OAuth authorization',()=>{
  const gsc=resolveSkill(reg,'gsc-site-intelligence');assert.equal(gsc.status,'IN_MAIN');assert.equal(gsc.pr_url,null);
@@ -49,4 +49,12 @@ test('offline CLI list and resolve produce valid outputs',()=>{
 test('all examples and piloted reports remain documented, never represented as live runtime authorization',()=>{
  assert.equal(reg.pilots.length,2);assert.ok(readme.includes('本仓库 Public'));
  assert.ok(readme.includes('单独批准'));assert.match(readme,/不等于.*已经连接 Google 账号/);
+});
+
+test('Ads, Semrush and cross-source V1 draft skills resolve without pretending to be main',()=>{
+ for(const id of ['google-ads-site-intelligence','semrush-site-intelligence','s1-cross-source']){
+  const s=resolveSkill(reg,id);assert.equal(s.status,'DRAFT_PR');
+  assert.equal(s.pr_url,'https://github.com/beyourlovercom/skills-webdev/pull/10');
+  assert.match(s.file_url,/feat\/s1-ads-semrush-fusion-20261101/);
+ }
 });

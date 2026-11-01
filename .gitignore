@@ -5,3 +5,9 @@
 *.pem
 *.key
 node_modules/
+
+.private-s1/
+**/.private-s1/
+
+.private-ga4/
+**/.private-ga4/

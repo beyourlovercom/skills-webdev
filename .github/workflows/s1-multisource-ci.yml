@@ -1,0 +1,43 @@
+name: S1 Multi-Source Intelligence CI
+on:
+  pull_request:
+    paths:
+      - 'skills/google-ads-site-intelligence/**'
+      - 'skills/semrush-site-intelligence/**'
+      - 'skills/s1-cross-source/**'
+      - 'tests/google-ads-site-intelligence.test.mjs'
+      - 'tests/semrush-site-intelligence.test.mjs'
+      - 'tests/s1-cross-source.test.mjs'
+      - 'tests/s1-private-write.test.mjs'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'README.md'
+      - '.github/workflows/s1-multisource-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/google-ads-site-intelligence/**'
+      - 'skills/semrush-site-intelligence/**'
+      - 'skills/s1-cross-source/**'
+      - 'tests/google-ads-site-intelligence.test.mjs'
+      - 'tests/semrush-site-intelligence.test.mjs'
+      - 'tests/s1-cross-source.test.mjs'
+      - 'tests/s1-private-write.test.mjs'
+      - 'registry/**'
+      - 'scripts/skill-registry.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'README.md'
+      - '.github/workflows/s1-multisource-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/*.test.mjs
+      - run: node scripts/skill-registry.mjs --validate
