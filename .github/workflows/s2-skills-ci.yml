@@ -1,0 +1,36 @@
+name: S2 Local Dev WWW Skills CI
+on:
+  pull_request:
+    paths:
+      - 'skills/site-builder-local/**'
+      - 'skills/site-dev-uat/**'
+      - 'skills/site-www-release/**'
+      - 'tests/s2-handoff.test.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'registry/**'
+      - 'README.md'
+      - '.github/workflows/s2-skills-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/site-builder-local/**'
+      - 'skills/site-dev-uat/**'
+      - 'skills/site-www-release/**'
+      - 'tests/s2-handoff.test.mjs'
+      - 'tests/skill-registry.test.mjs'
+      - 'registry/**'
+      - 'README.md'
+      - '.github/workflows/s2-skills-ci.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/*.test.mjs
+      - run: node scripts/skill-registry.mjs --validate
+      - run: node skills/site-builder-local/scripts/s2-handoff-validate.mjs --manifest skills/site-builder-local/templates/s2-handoff.example.json --gate www > /dev/null; exit_code=$?; test "$exit_code" -eq 2
