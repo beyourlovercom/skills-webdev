@@ -11,7 +11,7 @@ const safeRef=x=>typeof x==='string'&&SAFE_REF.test(x)&&!x.includes('..');
 const isSha=x=>typeof x==='string'&&SHA.test(x);
 const iso=x=>typeof x==='string'&&Number.isFinite(Date.parse(x))&&/^\d{4}-\d{2}-\d{2}T/.test(x);
 const host=x=>{try{const u=new URL(x);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password&&!u.search&&!u.hash&&u.pathname==='/'&&u.hostname.includes('.')}catch{return false}};
-const arrStrings=x=>Array.isArray(x)&&x.length>0&&x.every(v=>typeof v==='string'&&NAME.test(v))&&new Set(x).size===x.length;
+const arrStrings=x=>Array.isArray(x)&&x.length>0&&x.every(v=>typeof v==='string'&&/^[a-zA-Z0-9_][a-zA-Z0-9_./-]{1,240}$/.test(v)&&!v.includes('..')&&!v.split('/').includes('.')&&!v.endsWith('/'))&&new Set(x).size===x.length;
 export function evaluateS2(m,requestedGate='www'){
  const blockers=[],warnings=[],put=s=>{if(!blockers.includes(s))blockers.push(s)};
  if(!STAGES.includes(requestedGate))return{status:'BLOCKED',gate:requestedGate,blockers:['UNKNOWN_GATE'],warnings,attestation:'DECLARED_EVIDENCE_ONLY_NOT_AUTHORIZATION'};
