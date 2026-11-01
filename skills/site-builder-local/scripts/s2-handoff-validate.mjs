@@ -4,6 +4,7 @@ import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} fro
 const SHA=/^[a-f0-9]{40}$/;
 const NAME=/^[a-z0-9][a-z0-9._-]{1,80}$/;
 const STAGES=['local','dev','www'];
+const GATES=['local','dev','www','www-post'];
 const KINDS=new Set(['BROWSER','FUNCTIONAL','SECURITY','SEO','ROLLBACK','ADMIN_DESKTOP','STOREFRONT_DESKTOP','STOREFRONT_MOBILE','PAYMENT_TEST','FORM_TEST','INVENTORY_TEST','PERFORMANCE','HTTP_READBACK']);
 const SAFE_REF=/^(?:private|github):\/\/[a-zA-Z0-9_./:@#-]{3,500}$/;
 const isObject=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -14,7 +15,7 @@ const host=x=>{try{const u=new URL(x);return ['http:','https:'].includes(u.proto
 const arrStrings=x=>Array.isArray(x)&&x.length>0&&x.every(v=>typeof v==='string'&&/^[a-zA-Z0-9_][a-zA-Z0-9_./-]{1,240}$/.test(v)&&!v.includes('..')&&!v.split('/').includes('.')&&!v.endsWith('/'))&&new Set(x).size===x.length;
 export function evaluateS2(m,requestedGate='www'){
  const blockers=[],warnings=[],put=s=>{if(!blockers.includes(s))blockers.push(s)};
- if(!STAGES.includes(requestedGate))return{status:'BLOCKED',gate:requestedGate,blockers:['UNKNOWN_GATE'],warnings,attestation:'DECLARED_EVIDENCE_ONLY_NOT_AUTHORIZATION'};
+ if(!GATES.includes(requestedGate))return{status:'BLOCKED',gate:requestedGate,blockers:['UNKNOWN_GATE'],warnings,attestation:'DECLARED_EVIDENCE_ONLY_NOT_AUTHORIZATION'};
  if(!isObject(m)||m.schema_version!==1){put('INVALID_SCHEMA');return{status:'BLOCKED',gate:requestedGate,blockers,warnings,attestation:'DECLARED_EVIDENCE_ONLY_NOT_AUTHORIZATION'};}
  const p=m.project,e=m.environments,s=m.stages,a=m.approvals,r=m.release,policy=m.policy;
  if(!isObject(p)||typeof p.id!=='string'||!NAME.test(p.id)||typeof p.repository!=='string'||!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(p.repository)||!safeRef(p.agents_ref)||!safeRef(p.s1_handoff_ref))put('INVALID_PROJECT_CONTEXT');
@@ -56,22 +57,28 @@ export function evaluateS2(m,requestedGate='www'){
   const q=a?.[k];return isObject(q)&&q.decision==='pass'&&q.sha===sha&&q.target===env&&safeRef(q.owner_message_ref)&&iso(q.approved_at)&&q.scope_ref===r?.diff_ref;
  }
  if(!stageVerified.local)put('LOCAL_BROWSER_UAT_NOT_PASS');
- if(requestedGate==='dev'||requestedGate==='www'){
+ if(requestedGate==='dev'||requestedGate==='www'||requestedGate==='www-post'){
   if(!approvalOk('dev',r?.candidate_sha,e?.dev?.url))put('DEV_DEPLOY_APPROVAL_REQUIRED');
  }
- if(requestedGate==='www'){
+ if(requestedGate==='www'||requestedGate==='www-post'){
   if(stageVerified.dev!==true)put('DEV_FULL_UAT_NOT_PASS');
   if(!approvalOk('www',r?.candidate_sha,e?.www?.url))put('OWNER_WWW_PASS_REQUIRED');
   if(!isObject(r)||!safeRef(r.production_before_ref)||!safeRef(r.production_rollback_test_ref))put('PRODUCTION_SNAPSHOT_OR_ROLLBACK_MISSING');
  }
+ if(requestedGate==='www-post'){
+  if(stageVerified.www!==true)put('WWW_REAL_READBACK_NOT_PASS');
+  if(isObject(s?.www)&&isObject(r)&&isSha(s.www.sha)&&isSha(r.candidate_sha)&&s.www.sha!==r.candidate_sha)put('WWW_SHA_READBACK_MISMATCH');
+ }
  if(requestedGate==='local'&&s?.local?.status==='PASS')warnings.push('Local evidence is user-declared; independently verify browser and runtime before any write.');
- if(requestedGate==='www')warnings.push('READY_FOR_WWW_REVIEW is NOT a write token; re-verify Owner pass, target, exact SHA and runtime immediately before deployment.');
- return {schema_version:1,status:blockers.length?'BLOCKED':'READY_FOR_'+requestedGate.toUpperCase()+'_REVIEW',gate:requestedGate,blockers,warnings,
+ if(requestedGate==='www')warnings.push('PREDEPLOY ONLY: Owner-scoped requirements present; this is NOT WWW_PASS or a deployment token. Live WWW readback must be verified later under --gate www-post.');
+ if(requestedGate==='www-post')warnings.push('POSTDEPLOY EVIDENCE ONLY: independently confirm live HTTP, business behavior and actual Owner approval; declared artifacts are not verified by this script.');
+ const statuses={local:'READY_FOR_LOCAL_REVIEW',dev:'READY_FOR_DEV_REVIEW',www:'READY_FOR_WWW_DEPLOYMENT_REVIEW','www-post':'READY_FOR_WWW_POSTDEPLOY_REVIEW'};
+ return {schema_version:1,status:blockers.length?'BLOCKED':statuses[requestedGate],gate:requestedGate,blockers,warnings,
   current:{local:stageVerified.local||false,dev:stageVerified.dev||false,www:stageVerified.www||false},attestation:'DECLARED_EVIDENCE_ONLY_NOT_AUTHORIZATION',
   requires_real_runtime_readback:true,automatic_deployment:false};
 }
 export function cli(argv){
- let manifest,gate='www';for(let i=0;i<argv.length;i++){const a=argv[i];if(a==='--manifest'&&argv[i+1]){manifest=argv[++i];continue;}if(a==='--gate'&&argv[i+1]){gate=argv[++i];continue;}throw Error('Usage: --manifest <JSON> --gate local|dev|www');}
+ let manifest,gate='www';for(let i=0;i<argv.length;i++){const a=argv[i];if(a==='--manifest'&&argv[i+1]){manifest=argv[++i];continue;}if(a==='--gate'&&argv[i+1]){gate=argv[++i];continue;}throw Error('Usage: --manifest <JSON> --gate local|dev|www|www-post');}
  if(!manifest)throw Error('manifest required');
  const file=path.resolve(manifest),st=fs.lstatSync(file);
  if(!st.isFile()||st.isSymbolicLink()||st.size>300000)throw Error('BLOCKED_INVALID_MANIFEST_FILE');

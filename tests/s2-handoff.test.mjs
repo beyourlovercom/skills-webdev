@@ -75,8 +75,23 @@ test('WWW blocks even after Local and Dev PASS without owner WWW pass and backup
  assert.ok(r.blockers.includes('PRODUCTION_SNAPSHOT_OR_ROLLBACK_MISSING'));
  assert.equal(r.status,'BLOCKED');
  wwwApproval(m);const ok=evaluateS2(m,'www');
- assert.equal(ok.status,'READY_FOR_WWW_REVIEW');
+ assert.equal(ok.status,'READY_FOR_WWW_DEPLOYMENT_REVIEW');
+ assert.ok(evaluateS2(m,'www-post').blockers.includes('WWW_REAL_READBACK_NOT_PASS'));
  assert.equal(ok.automatic_deployment,false);
+});
+test('post-deploy gate is distinct: WWW real readback and exact SHA required',()=>{
+ const m=wwwApproval(devPass(devApproval(localPass(make()))));
+ assert.equal(evaluateS2(m,'www').status,'READY_FOR_WWW_DEPLOYMENT_REVIEW');
+ assert.ok(evaluateS2(m,'www-post').blockers.includes('WWW_REAL_READBACK_NOT_PASS'));
+ m.stages.www.sha=SHA;
+ m.stages.www.status='PASS';
+ m.stages.www.checks=[check('HTTP_READBACK',new URL(m.environments.www.url).host)];
+ const post=evaluateS2(m,'www-post');
+ assert.equal(post.status,'READY_FOR_WWW_POSTDEPLOY_REVIEW');
+ assert.equal(post.automatic_deployment,false);
+ m.stages.www.sha='b'.repeat(40);
+ const bad=evaluateS2(m,'www-post');
+ assert.ok(bad.blockers.includes('WWW_SHA_READBACK_MISMATCH'));
 });
 test('Owner pass binds exact SHA, target and change-scope ref',()=>{
  const m=wwwApproval(devPass(devApproval(localPass(make()))));

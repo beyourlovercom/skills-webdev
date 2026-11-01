@@ -35,3 +35,9 @@ S1 已发布并有与目标项目对应的数据分析；可以缺少 Semrush �
 
 ## 5. S2 报告最小结构
 `项目 & Git HEAD → Local 变更/测试 → Dev 发布/回归 → WWW 候选差异 → Owner pass → WWW 实际读回 → 回滚状态`。每个状态必须注明精确 SHA、host、时间、证据来源、PASS/FAIL/OPEN。任何未实测项均是 OPEN。一个站的项目专属 Skills 应根据这个站的 PHP/WP/Shopify 技术栈、真实支付、表单、GSC、SEO、访问权限独立生成，不可硬编码别的站点账号。
+
+## 6. 严格区分 WWW 发布前与发布后
+
+- `--gate www` 是**发布前** Owner 许可、Dev PASS、备份、回滚与精确 SHA 的静态预检，仅返回 `READY_FOR_WWW_DEPLOYMENT_REVIEW`。**不得标记 WWW PASS**，因为真实生产读回此时不可能存在。
+- `--gate www-post` 是实际获批发布后的**独立生产读回**门禁。必须有 `stages.www.status=PASS`、同候选 SHA 的 `HTTP_READBACK` 实际证据与 Owner WWW pass，才可返回 `READY_FOR_WWW_POSTDEPLOY_REVIEW`。
+- 两种 READY 都仅表示所提交证据的**静态结构检查**，不是本工具验证了审批消息或运行时本身，更不是部署命令。

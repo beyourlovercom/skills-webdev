@@ -33,3 +33,7 @@ Owner 的精确授权引用、release manifest、已发布文件列表、前后 
 先做只读 preflight；只有明确 Owner WWW pass 且范围相符才执行最小发布。
 之后检查真实 WWW，并按 PASS/FAIL/OPEN 记录；不得自动修改 Ads/ERP/支付等超范围系统。
 ```
+
+## WWW 后置读回与独立验收
+
+`--gate www` 只能产生 `READY_FOR_WWW_DEPLOYMENT_REVIEW`，**不代表发布完成**；实际生产部署完成后，另运行 `--gate www-post`，保留 WWW 同 SHA 的真实 HTTP/浏览器与非破坏性业务读回，才能产生 `READY_FOR_WWW_POSTDEPLOY_REVIEW`。两者不能相互替代，离线工具本身不会部署、调用 WWW 或核实 Owner 身份。
