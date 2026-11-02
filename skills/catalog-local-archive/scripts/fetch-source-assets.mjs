@@ -17,7 +17,11 @@ const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
 const records=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css',item_sku:null}))];
 const allowHosts=['www.basworld.com','static.basworld.com'];
 const format={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.css':'text/css'};
-const selected=records.slice(0,max),seen=new Set();
+const role=arg('role')||'all';
+if(!['all','logo','vehicle_gallery','css'].includes(role))throw Error('Invalid --role');
+const start=Number(arg('start')||0);
+if(!Number.isInteger(start)||start<0||start>100000)throw Error('Invalid --start');
+const selected=records.filter(x=>role==='all'||x.role===role).slice(start,start+max),seen=new Set();
 const reports=[];
 fs.mkdirSync(out,{recursive:true});
 for(const entry of selected){
@@ -28,6 +32,15 @@ for(const entry of selected){
  const rel=path.join('assets',entry.role,id+ext),dest=path.join(out,rel);
  fs.mkdirSync(path.dirname(dest),{recursive:true});
  const maxSize=8000000;
+ if(fs.existsSync(dest)&&fs.statSync(dest).size>0){
+  const bytes=fs.statSync(dest).size;
+  reports.push({role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
+   status:'SAVED',http:200,bytes,local_path:rel.replaceAll('\\','/'),
+   sha256:crypto.createHash('sha256').update(fs.readFileSync(dest)).digest('hex'),
+   content_type:format[ext],error:null,previously_saved:true});
+  console.log(JSON.stringify({role:entry.role,status:'ALREADY_SAVED',bytes,url:entry.url.slice(0,120)}));
+  continue;
+ }
  const hdr=dest+'.headers';
  const proc=spawnSync(process.platform==='win32'?'curl.exe':'curl',[
   '--silent','--show-error','--location','--max-redirs','1','--connect-timeout','8','--max-time','20','--retry','0',
@@ -50,9 +63,9 @@ for(const entry of selected){
  await new Promise(r=>setTimeout(r,450));
 }
 const summary={status:reports.every(x=>x.status==='SAVED')?'ASSET_SAMPLE_PASS':'ASSET_PARTIAL',
- source_origin:manifest.origin,snapshot_at:new Date().toISOString(),requested:reports.length,saved:reports.filter(x=>x.status==='SAVED').length,
+ source_origin:manifest.origin,snapshot_at:new Date().toISOString(),role,start,limit:max,requested:reports.length,saved:reports.filter(x=>x.status==='SAVED').length,
  downloaded_bytes:reports.reduce((n,x)=>n+x.bytes,0),source_media_count:manifest.media_assets.length,source_css_count:manifest.css_dependencies.length,
  assets:reports};
-const report=path.join(out,'asset-report.json');fs.writeFileSync(report,JSON.stringify(summary,null,2)+'\n');
+const report=path.join(out,'asset-report-'+role+'-'+start+'-'+max+'.json');fs.writeFileSync(report,JSON.stringify(summary,null,2)+'\n');
 console.log('SUMMARY '+JSON.stringify({status:summary.status,saved:summary.saved,requested:summary.requested,bytes:summary.downloaded_bytes,report}));
 process.exit(summary.status==='ASSET_SAMPLE_PASS'?0:3);
