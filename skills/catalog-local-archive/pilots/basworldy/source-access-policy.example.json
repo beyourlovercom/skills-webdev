@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source_url": "https://www.basworld.com/",
+  "allowed_exact_urls": [
+    "https://www.basworld.com/"
+  ],
+  "allowed_hosts": [
+    "www.basworld.com"
+  ],
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "expected_title_fragment": "BAS World",
+  "output_directory": "D:\\ai\\basworldy-source-archive\\preflight",
+  "max_bytes": 2000000,
+  "max_pages_per_run": 1
+}
