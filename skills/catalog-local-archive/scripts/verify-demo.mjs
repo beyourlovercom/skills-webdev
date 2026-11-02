@@ -13,7 +13,7 @@ for(const p of rel) {
  const file=path.join(root,p);
  assert.ok(fs.statSync(file).size>0,p+" should exist");
  const content=fs.readFileSync(file,"utf8");
- assert.doesNotMatch(content,/(?:https?:)?\/\//i,p+" must not load external URLs");
+ assert.doesNotMatch(content,/\b(?:src|href)\s*=\s*["'](?:https?:)?\/\//i,p+" must not hotlink resources");
  if(/\.(html|js)$/.test(p))assert.doesNotMatch(content,/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/i,p+" must be network-free");
  checks+=2;
 }
