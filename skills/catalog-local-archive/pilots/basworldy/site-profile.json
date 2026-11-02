@@ -3,7 +3,7 @@
   "project_id": "basworldy",
   "project_name": "BASWORLDY catalog-local-archive pilot",
   "source": {
-    "origin": "https://www.basworld.com",
+    "origin": "https://basworld.com",
     "relationship": "third-party",
     "rights_status": "unverified",
     "copy_html": false,
