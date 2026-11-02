@@ -2,10 +2,14 @@
 /** Build a bounded, source-backed media-download manifest from real captured product details.
  * No network. Reuses fetch-source-assets.mjs resume+SHA integrity layer.
  */
+import { enforceVisualFirst } from './visual-first-gate.mjs';
 import fs from 'node:fs';import path from 'node:path';
 const a=n=>{const i=process.argv.indexOf('--'+n);return i<0?null:process.argv[i+1];};
 if(!a('index')||!a('out'))throw Error('--index and --out required');
 const db=JSON.parse(fs.readFileSync(a('index'),'utf8'));
+if(a('stage')!=='EXPANSION_AFTER_OWNER_PASS')
+  throw Error('OWNER_VISUAL_GATE_BLOCKED: bulk gallery queue is only enabled after Owner visual PASS; use single representative detail manifest in the pilot');
+enforceVisualFirst({phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:a('visual-approval'),mode:'media',from:2,limit:2});
 if(db.source_origin!=='https://www.basworld.com')throw Error('Unexpected source origin');
 const dedup=new Set(),entries=[],skipped=[],stats=[];
 for(const p of db.product_details){
