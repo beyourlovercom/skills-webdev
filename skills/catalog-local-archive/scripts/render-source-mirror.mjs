@@ -65,7 +65,8 @@ for(const [rel,raw] of Object.entries(htmlSources)){
  for(const [src,dst] of sourceRoutes){
   html=html.split('href="'+src+'"').join('href="'+dst+'"').split("href='"+src+"'").join("href='"+dst+"'");
  }
- html=html.replace(/<\/head>/i,csp+meta+'</head>');
+ html=html.replace(/<link\b[^>]*rel=["'](?:preload|preconnect|dns-prefetch)["'][^>]*href=["']https?:\/\/[^"']+["'][^>]*>/gi,'');
+ html=html.replace(/<head>/i,'<head>'+csp+meta);
  const dest=path.join(out,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,html,'utf8');
  fileReports.push({path:rel,bytes:Buffer.byteLength(html),authentic_html_sha256:crypto.createHash('sha256').update(raw).digest('hex')});
 }
