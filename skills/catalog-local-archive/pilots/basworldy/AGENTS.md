@@ -5,7 +5,7 @@ Scope: this file governs the BASWORLDY pilot within `skills-webdev` only. It doe
 ## Frozen domain map (Owner, 2026-11-02)
 | Role | Domain | Gate |
 |---|---|---|
-| Third-party research source | `https://www.basworld.com` | Read-only structural research; no licensed asset copy established |
+| Third-party research source | `https://basworld.com` | Read-only structural research; no licensed asset copy established |
 | Windows Local | `localdev.basworldy.com` | Desired hostname; confirm local routing before declaring host UAT |
 | Online Dev / UAT | `https://dev.basworldy.com` | No deployment until separate project-scoped authorization |
 | Future main website | `https://basworldy.com` | Reserved public domain; do not infer that it is deployed or approved for indexing |
