@@ -3,7 +3,7 @@ name: catalog-local-archive
 description: Source-exact, owner-authorized offline website backup into isolated Windows Local. Preserve original logo, all source products, product galleries, images and URL paths; ingest owner's offline archive first instead of rebuilding mock templates.
 ---
 
-# catalog-local-archive V0.4 — 原站离线备份恢复
+# catalog-local-archive V0.5 — 原站离线备份恢复
 
 ## 最高优先级：BACKUP，不是重新设计
 Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容为准，达到尽可能 100% 的网站一致性。**不能**把四条模拟产品、原创 SVG、重做的 Logo 或原创主题当作原站备份、商品同步或视觉一致性 PASS。之前的 `basworldy-local` V0.2.1 仅是测试用本地主题，状态 `FIXTURE_ONLY`。
@@ -113,3 +113,25 @@ Cloudflare Browser Integrity Check 等安全服务可能检查 UA 和其他请�
 - 真实 Chrome 检查同时报告 `external_attempts` 和 `external_success_responses`，两项不能混淆。本轮已取得 `1061` 次外域尝试、`0` 个外域实际响应；**离线完整门禁仍未通过**。
 - 支持第二页列表与第二种产品尺寸，URL 去重后只有前两页的 **70** 条真实商品链接；源站页面继续指向 `?page=3`，说明必须继续分页清点，不能把 70 当全站总数。
 - 原站测试与本地视觉截图只在私有 Windows 中保存；第二 Windows `007windows` HTTP 5/5 PASS，不等于该设备 Chrome 视觉 PASS。
+
+## V0.5 — Verified real-source R1 through R6 gates (2026-11-02)
+
+**Important: R6 has been executed but its result is `R6_AUDITED_FULL_SITE_FAIL`, not site completion.**
+
+New real code modules under scripts/:
+- `capture-real-catalog.mjs`: bounded/resumable source inventory and product detail HTML capture, exact URLs, SHA256 and original SKU/price/gallery; 403/429 stop.
+- `capture-category-pages.mjs`: allowed-category pagination, per-category persisted index; a confirmed last page is required per category.
+- `build-product-media-queue.mjs`: per-SKU real image URLs, dimensions and hash-keyed media work queue. No fake images or products.
+- `render-catalog-archive.mjs`: read-only original-HTML Local mirror, supports Truck / All / Tractorhead pagination; unavailable products get explicit missing-page states, not synthetic listings. Added searchable local index is an auxiliary archive UI, NOT source-native functionality.
+- `verify-r5-r6-browser.mjs`: isolated real Chrome, default system proxy, waits for actual target URL, tests index filter and local source image/CSS display, counts external request attempts versus actual external responses.
+- `audit-real-site-r6.mjs`: real category URL union, local detail files, per-SKU photo hash coverage, zero-price/zero-gallery issues, actual Chrome evidence and fail-closed R6 review dashboard.
+
+Key evidence: Truck 28 pages / 988 URLs; All 28 pages / 929 URLs; Tractorhead 20 pages / 698 URLs. Their de-duplicated union is 2,115 URLs, not an authoritative all-site product total. Never substitute /stock/all for category union: All and Truck overlapped on only 332 URLs. Remaining menu categories include construction_equipment, semi-trailer, light_commercial_vehicle, trailer, combination and various.
+
+Captured 195 authentic product details. 123 reported zero price and zero gallery in the captured HTML: do not invent either. Captured details referenced 5,506 photo variant URLs; 220 were physically saved at the final audit. Volvo SKU 70320127: 82/82 variants saved; Renault SKU 70323007: 88/88 variants saved. Original captured logo 2/2 and CSS 12/12.
+
+Local source-mirror-r2 currently contains 272 authentic HTML page snapshots plus separate review/utility pages. Chrome index search PASS, 901 external resource attempts blocked, 0 external responses; full offline interaction, all page media and 1:1 visual parity remain OPEN. R6 audit: 15 blockers, NO FULL ARCHIVE PASS.
+
+Private Windows source archive: D:\ai\basworldy-source-archive. Local view: http://localdev.basworldy.com/source-mirror-r2/ ; searchable captured inventory: /source-mirror-r2/inventory.html ; R6 review: /source-mirror-r2/R6-review.html.
+
+Do not merge main, change root LocalWP page, publish Dev/WWW, transmit private source HTML/photos to Public GitHub, or enable live order/payment/forms without separate Owner approval.
