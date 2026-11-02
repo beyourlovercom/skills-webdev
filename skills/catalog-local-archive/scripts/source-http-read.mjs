@@ -32,8 +32,8 @@ if (policy.max_pages_per_run !== 1) fail('Only one URL per run is permitted');
 const prePage=u.searchParams.get('page') || u.searchParams.get('paged') || '1';
 const offset=u.searchParams.get('offset')||'0';
 const hasCursor=[...u.searchParams.keys()].some(x=>/cursor|after|nexttoken|continuation/i.test(x));
-const pathPage=/(?:\/page\/)(\d+)\/?$/.exec(u.pathname);
-const isAdvancedPage=Number(prePage)>1 || Number(offset)>0 || hasCursor || (pathPage && Number(pathPage[1])>1);
+const pathPage=/(?:\/page\/|\/page-)(\d+)\/?$/.exec(u.pathname);
+const isAdvancedPage=Number(prePage)>1 || Number(offset)>0 || hasCursor || (pathPage && Number(pathPage[1])>1) || [...u.searchParams.keys()].some(k=>/^(start|skip|from)$/i.test(k)&&Number(u.searchParams.get(k))>0);
 const stage=policy.stage||'PILOT_FIRST_PAGE';
 try {
  if(stage==='PILOT_FIRST_PAGE') {
