@@ -70,7 +70,8 @@
       }
     },
     "source_mirror_origin": "http://localdev.basworldy.com/source-mirror/",
-    "source_mirror_runtime_status": "PARTIAL_STATIC_REPLAY_5_PAGES"
+    "source_mirror_runtime_status": "PARTIAL_STATIC_REPLAY_5_PAGES",
+    "source_mirror_007windows_http_status": "PASS_5_OF_5"
   },
   "scope": {
     "mode": "REAL_HTML_ARCHIVE_IN_PROGRESS",
@@ -201,7 +202,7 @@
     },
     "source_mirror_copied_asset_files": 170,
     "chrome_source_mirror_pages_tested": 6,
-    "chrome_source_mirror_external_attempts": 1073,
+    "chrome_source_mirror_external_attempts": 1061,
     "actual_source_uat": "pilots/basworldy/REAL-SOURCE-ARCHIVE-PILOT-UAT-2026-11-02.md",
     "script_syntax_checks": {
       "pass": 7,
@@ -210,7 +211,16 @@
     "reader_safety_unit_tests": {
       "pass": 5,
       "total": 5
-    }
+    },
+    "chrome_source_mirror_actual_external_responses": 0,
+    "chrome_source_mirror_loaded_images_by_route": {
+      "/source-mirror/": 14,
+      "/source-mirror/stock/truck/": 44,
+      "/source-mirror/stock/truck/page-2/": 50,
+      "/source-mirror/vehicles/used/truck-volvo-fm-2012-euro5-70320127/": 14,
+      "/source-mirror/vehicles/new/truck-renault-c-2026-euro6-70323007/": 14
+    },
+    "last_source_archive_qa_at": "2026-11-02"
   },
   "governance": {
     "no_automatic_deploy": true,
