@@ -3,7 +3,10 @@ name: site-builder-local
 description: S2-A — 在已授权 Windows Local 进行网站最小差异研发、独立浏览器 UAT 和精准 Dev 交接；不代表任何 Dev/WWW 发布授权。
 ---
 
-# S2-A · Windows Local 研发 Skill V1
+# S2-A · Windows Local 研发 Skill V1.1
+
+## 🔒 高保真复制专线：视觉审批优先
+当任务涉及原站复刻/本地备份/模板复制时，第一轮**只**取首页、各模板列表的第 1 页、来源于第 1 页的代表性商品详情和基础 Pages；所有带分页的地方不允许访问第 2 页以上、cursor、下一屏或批量采集。先保存这些页面真实使用的全部 Logo、Banner、字体、CSS、原图及完整样本图库，在 Windows Local 达到尽可能 100% 的视觉保真，并由 Owner 审核。**没有明确 Owner 视觉 `pass`，不进行全站产品清点、后续分页或批量图库下载**。普通“继续”、测试 PASS、HTML 200 均不能解锁。以 [Visual-first gate](../duplicate-site-skills/references/06-first-page-visual-gate.md) 为标准；独立发布权限不受视觉签字代替。
 
 **目标：** 把已经发布的 S1 分析结果转为经过真实 Local 浏览器验证、可单独发布且可回滚的代码/页面变更。公开仓库提供共享流程；目标项目最新 GitHub、运行时和最高级 `AGENTS.md` 优先。
 
