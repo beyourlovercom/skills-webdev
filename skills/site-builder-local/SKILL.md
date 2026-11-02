@@ -34,3 +34,6 @@ description: S2-A — 在已授权 Windows Local 进行网站最小差异研发�
 先完成代码差异和真实 Local UAT；只交付可复核的 Dev 发布候选，
 绝不把本地测试 PASS 当成 Dev/WWW 的独立 pass。
 ```
+
+## V1.1 第一轮页面复刻专用门禁（优先于常规全站建站流程）
+当任务是已授权网站的 Local 高保真复刻/备份，必须先调用 `duplicate-site-skills` 和 `catalog-local-archive` 的 **FIRST_PAGE_ONLY → OWNER_VISUAL_PASS → EXPANSION** 规则。先仅取页面类型与实际第一页（首页、商品列表第 1 页、样本详情、基础页、博客第 1 页），连同第一轮页面需要的完整原始素材，交付原站对照截图供 Owner 审美/视觉通过后，才读取任何列表第 2 页及之后和全量商品/库存/图库。**禁止**仅因 Local CSS/PHP UAT PASS 自动启动全站采集。视觉 PASS 与 Dev/WWW 部署授权互不替代。
