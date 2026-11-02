@@ -48,3 +48,8 @@ Do not misinterpret `dev.basworldy.com` as the public root or automatically redi
 **Current gates:** `DESIGN_READY=PASS`, `FIXTURE_UNIT_PASS=37`, `OFFLINE_BROWSER_PASS=17`, `LOCALWP_HOST=PASS`, `HTTP_HOST=PASS`, `HOST_BROWSER_PASS=18`, `SOURCE_ARCHIVE=BLOCKED_RIGHTS`, `DEV=UNVERIFIED/NO_DEPLOY`, `WWW=BLOCKED`.
 
 **Next**: Obtain a verifiable license and exact minimal URL/photo allowlist before actual BAS World capture. Separately establish the target Dev runtime and authorize a controlled Dev-only release; never infer authorization from the hostname.
+
+
+### Additional completion: hostname root navigation
+
+The BASWORLDY-local-only MU file `D:\ai\basworldy-local\app\public\wp-content\mu-plugins\basworldy-local-home.php` sends root `/` to `/catalog-pilot/index.html` (HTTP 302 → 200). PHP lint PASS. This adds no WordPress product records or external API integrations. Local admin credential is ACL-restricted and never added to public GitHub. As of the read-only Windows lookup, the online Dev hostname `dev.basworldy.com` did not resolve; further Dev work remains separately gated.
