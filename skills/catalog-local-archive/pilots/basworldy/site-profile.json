@@ -143,8 +143,8 @@
     "offline_remote_dependencies": "FAIL_901_EXTERNAL_ATTEMPTS_0_RESPONSES",
     "visual_first_phase": "PILOT_FIRST_PAGE",
     "after_visual_pass_full_scrape": "BLOCKED",
-    "first_page_media_complete": "OPEN",
-    "first_page_pixel_parity": "OPEN"
+    "first_page_media_complete": "FAIL_98_OF_337_PLUS_UNCATALOGUED_ASSETS",
+    "first_page_pixel_parity": "OPEN_OWNER_NOT_REVIEWED"
   },
   "evidence": {
     "unit_checks": 37,
@@ -272,11 +272,43 @@
     "historical_195_real_product_details_stage": "FROZEN_NOT_VISUAL_PASS",
     "historical_272_source_html_pages_stage": "FROZEN_NOT_VISUAL_PASS",
     "visual_first_guard_tests": {
-      "pass": 16,
-      "total": 16,
+      "pass": 20,
+      "total": 20,
       "run_environment": "Windows Local"
     },
-    "first_round_focus": "Finish exact visuals and assets on HOME + PAGE1 CATALOG + ONE REPRESENTATIVE DETAIL; Owner review before subsequent pagination"
+    "first_round_focus": "Finish exact visuals and assets on HOME + PAGE1 CATALOG + ONE REPRESENTATIVE DETAIL; Owner review before subsequent pagination",
+    "first_page_pilot_assets": {
+      "logos": {
+        "saved": 2,
+        "expected": 2
+      },
+      "css": {
+        "saved": 12,
+        "expected": 12
+      },
+      "volvo_gallery_large": {
+        "saved": 41,
+        "expected": 41
+      },
+      "volvo_gallery_thumbnails": {
+        "saved": 41,
+        "expected": 41
+      },
+      "page_media": {
+        "saved": 98,
+        "expected": 337
+      },
+      "uncatalogued_external_resources": "OPEN",
+      "first_page_only_html_snapshots": 3
+    },
+    "first_page_chrome_qa": {
+      "views": 4,
+      "first_page_only": true,
+      "external_attempts": 739,
+      "external_responses": 0,
+      "owner_visual_pass": false
+    },
+    "first_page_visual_report": "pilots/basworldy/FIRST-PAGE-VISUAL-GATE-2026-11-02.md"
   },
   "governance": {
     "no_automatic_deploy": true,
