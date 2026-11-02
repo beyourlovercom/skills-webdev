@@ -21,7 +21,9 @@ if(manifest2){canonical2=new URL(manifest2.source_detail_products[0].canonical_u
  htmlSources[canonical2+'/index.html']=fs.readFileSync(arg('detail2'),'utf8');
 }
 const extra=arg('resources')?JSON.parse(fs.readFileSync(arg('resources'),'utf8')).media_assets:[];
-const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,...manifest.css_dependencies.map(url=>({url,role:'css'}))];
+const firstPageGraph=arg('first-page-resources')?JSON.parse(fs.readFileSync(arg('first-page-resources'),'utf8')):null;
+if(firstPageGraph&&(firstPageGraph.pilot_scope!=='FIRST_PAGE'||firstPageGraph.source_page_numbers?.some(x=>x!==1)))throw Error('First page asset graph must be scoped to page 1');
+const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,...(firstPageGraph?.media_assets||[]),...manifest.css_dependencies.map(url=>({url,role:'css'}))];
 const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
@@ -33,9 +35,25 @@ for(const a of all){
  const src=path.join(assetsPath,rel),dst=path.join(out,rel);
  if(!fs.existsSync(src)){unavailable.push(a.url);continue;}
  fs.mkdirSync(path.dirname(dst),{recursive:true});
- if(!fs.existsSync(dst)||fs.statSync(dst).size!==fs.statSync(src).size)fs.copyFileSync(src,dst);
+ if(a.role==='css'||!fs.existsSync(dst)||fs.statSync(dst).size!==fs.statSync(src).size)fs.copyFileSync(src,dst);
  mapped.set(a.url,'/source-mirror/'+rel);
 }
+
+// CSS font and background URLs must also be localized; HTML-only replacements miss them.
+const cssDir=path.join(out,'assets','css');
+if(fs.existsSync(cssDir))for(const file of fs.readdirSync(cssDir)){
+ if(!file.endsWith('.css'))continue;
+ const dest=path.join(cssDir,file);
+ const css=fs.readFileSync(dest,'utf8');
+ const fixed=css.replace(/url\(\s*(["']?)([^)"']+)\1\s*\)/g,(whole,q,raw)=>{
+  if(raw.startsWith('data:')||raw.startsWith('#'))return whole;
+  let url;try{url=new URL(raw,'https://www.basworld.com').href}catch{return whole;}
+  const target=mapped.get(url);
+  return target?'url("'+target+'")':whole;
+ });
+ if(fixed!==css)fs.writeFileSync(dest,fixed,'utf8');
+}
+
 const canonicalPath='/'+detailCanonical;
 const shortUrl=manifest.listed_vehicle_urls.find(u=>u.includes(String(manifest.source_detail_products[0].sku)));
 const sourceRoutes=[
