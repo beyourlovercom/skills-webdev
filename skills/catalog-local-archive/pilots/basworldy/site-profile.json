@@ -23,13 +23,15 @@
     "windows_device": "windows",
     "local_origin": "http://localdev.basworldy.com",
     "local_role": "Windows Local",
-    "local_runtime_status": "HOSTNAME_NOT_CONFIGURED",
+    "local_runtime_status": "LOCALWP_RUNNING_HTTP_VERIFIED",
     "online_dev_origin": "https://dev.basworldy.com",
     "online_dev_role": "Online Dev/UAT",
     "online_dev_runtime_status": "UNVERIFIED",
     "future_www_origin": "https://basworldy.com",
     "future_www_role": "Future Production",
-    "future_www_runtime_status": "UNVERIFIED"
+    "future_www_runtime_status": "UNVERIFIED",
+    "local_wp_path": "D:\\ai\\basworldy-local",
+    "local_catalog_url": "http://localdev.basworldy.com/catalog-pilot/index.html"
   },
   "scope": {
     "mode": "fixture-only",
@@ -44,10 +46,12 @@
     "local_fixture": "PASS",
     "browser_fixture": "PASS",
     "licensed_source_backup": "BLOCKED_RIGHTS",
-    "live_local_hostname": "OPEN",
+    "live_local_hostname": "PASS",
     "online_dev": "BLOCKED_OWNER_PASS",
     "www": "BLOCKED_OWNER_PASS",
-    "seo": "HOLD"
+    "seo": "HOLD",
+    "local_catalog_http": "PASS",
+    "local_host_browser": "PASS"
   },
   "evidence": {
     "unit_checks": 37,
@@ -57,7 +61,21 @@
     "detail_pass": true,
     "remote_requests": 0,
     "mode": "synthetic",
-    "local_test_path": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102"
+    "local_test_path": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102",
+    "host_browser_checks": 18,
+    "local_site_count_after_creation": 7,
+    "localwp_site_id": "BgNoFMOb5",
+    "local_host_http_status": 200,
+    "catalog_http_status": 200,
+    "host_screenshots": [
+      "list-desktop.png",
+      "filtered-list-desktop.png",
+      "detail-desktop.png",
+      "list-mobile.png"
+    ],
+    "host_screenshot_location": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102\\browser-evidence-host",
+    "host_nonlocal_requests": 0,
+    "host_qa_at": "2026-11-02"
   },
   "governance": {
     "no_automatic_deploy": true,
