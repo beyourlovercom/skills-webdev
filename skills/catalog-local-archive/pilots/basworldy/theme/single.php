@@ -1,0 +1,6 @@
+<?php get_header();while(have_posts()):the_post(); ?>
+<div class="shell article-detail"><div class="bread"><a href="<?php echo esc_url(home_url('/')); ?>">Home</a> / <a href="<?php echo esc_url(home_url('/insights/')); ?>">Insights</a> / <?php the_title(); ?></div>
+<div class="article-title-block"><span class="overline">EDITORIAL / GUIDES & RESOURCES</span><h1><?php the_title(); ?></h1><p><?php echo esc_html(get_the_date('F j, Y')); ?> &nbsp; · &nbsp; Local sample editorial</p></div>
+<div class="article-detail-art"><span>INSIGHTS / BASWORLDY</span><strong>THE ROAD<br>AHEAD.</strong></div>
+<div class="article-detail-grid"><aside><span>IN THIS ARTICLE</span><a href="#overview">Overview</a><a href="#important">Key considerations</a><a href="#related">Related resources</a></aside><article class="prose article-prose"><h2 id="overview">Overview</h2><?php the_content(); ?><h2 id="important">Key considerations</h2><p>All examples are provided as sample editorial content. Confirm technical, legal and commercial details with the original manufacturer and relevant providers.</p><h2 id="related">Keep learning</h2><p>Explore other articles and listings in the local BASWORLDY design prototype.</p><a class="btn btn-dark" href="<?php echo esc_url(home_url('/insights/')); ?>">← Back to insights</a></article></div></div>
+<?php endwhile;get_footer(); ?>
