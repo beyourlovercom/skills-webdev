@@ -9,9 +9,12 @@
     "copy_html": "PENDING_VERIFIED_INPUT",
     "copy_photos": "PENDING_VERIFIED_INPUT",
     "copy_text": "PENDING_VERIFIED_INPUT",
-    "source_capture_status": "AWAIT_OWNER_OFFLINE_ARCHIVE",
+    "source_capture_status": "BLOCKED_CLOUDFLARE_403_PENDING_OWNER_EXPORT",
     "allowlist": [],
-    "offline_archive_input_windows": "D:\\ai\\basworldy-source-archive"
+    "offline_archive_input_windows": "D:\\ai\\basworldy-source-archive",
+    "direct_windows_http_status": 403,
+    "direct_windows_response_title": "Attention Required! | Cloudflare",
+    "direct_windows_last_ray": "a541546c9e30fba9-AMS"
   },
   "target": {
     "brand": "BASWORLDY",
@@ -85,8 +88,10 @@
     "logo_exact": "OPEN",
     "products_exact": "OPEN",
     "images_exact": "OPEN",
-    "full_archive_pass": "OPEN",
-    "original_theme_fixture": "NOT_BACKUP"
+    "full_archive_pass": "BLOCKED_SOURCE_403",
+    "original_theme_fixture": "NOT_BACKUP",
+    "source_acquisition": "BLOCKED_403",
+    "next_recovery": "OWNER_HOSTING_OR_ADMIN_EXPORT;OR_AUTHORIZED_TARGETED_CLOUDFLARE_WAF_EXCEPTION"
   },
   "evidence": {
     "unit_checks": 37,
