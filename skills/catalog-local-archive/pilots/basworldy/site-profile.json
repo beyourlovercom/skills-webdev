@@ -26,12 +26,13 @@
     "local_runtime_status": "LOCALWP_RUNNING_HTTP_VERIFIED",
     "online_dev_origin": "https://dev.basworldy.com",
     "online_dev_role": "Online Dev/UAT",
-    "online_dev_runtime_status": "UNVERIFIED",
+    "online_dev_runtime_status": "DNS_UNRESOLVED_FROM_WINDOWS_2026-11-02",
     "future_www_origin": "https://basworldy.com",
     "future_www_role": "Future Production",
     "future_www_runtime_status": "UNVERIFIED",
     "local_wp_path": "D:\\ai\\basworldy-local",
-    "local_catalog_url": "http://localdev.basworldy.com/catalog-pilot/index.html"
+    "local_catalog_url": "http://localdev.basworldy.com/catalog-pilot/index.html",
+    "local_home_redirect_url": "http://localdev.basworldy.com/catalog-pilot/index.html"
   },
   "scope": {
     "mode": "fixture-only",
@@ -51,7 +52,8 @@
     "www": "BLOCKED_OWNER_PASS",
     "seo": "HOLD",
     "local_catalog_http": "PASS",
-    "local_host_browser": "PASS"
+    "local_host_browser": "PASS",
+    "local_home_redirect": "PASS"
   },
   "evidence": {
     "unit_checks": 37,
@@ -75,7 +77,12 @@
     ],
     "host_screenshot_location": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102\\browser-evidence-host",
     "host_nonlocal_requests": 0,
-    "host_qa_at": "2026-11-02"
+    "host_qa_at": "2026-11-02",
+    "local_home_http_status": 302,
+    "local_home_final_http_status": 200,
+    "local_home_redirect_adapter": "wp-content/mu-plugins/basworldy-local-home.php",
+    "local_wp_secret_acl": "Administrator, SYSTEM, Administrators only",
+    "online_dev_dns_probe": "UNRESOLVED_FROM_WINDOWS"
   },
   "governance": {
     "no_automatic_deploy": true,
