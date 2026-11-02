@@ -8,6 +8,8 @@ const index=a('index'),media=a('media'),mirror=a('mirror'),seed=a('seed'),resour
 if(!index||!media||!mirror||!seed||!resources)throw Error('--index --media --mirror --seed --resources required');
 const db=JSON.parse(fs.readFileSync(index,'utf8')),s=JSON.parse(fs.readFileSync(seed,'utf8')),r=JSON.parse(fs.readFileSync(resources,'utf8'));
 if(db.source_origin!=='https://www.basworld.com')throw Error('Wrong source');
+const globalIndex=a('all-index')&&fs.existsSync(a('all-index'))?JSON.parse(fs.readFileSync(a('all-index'),'utf8')):null;
+if(globalIndex&&globalIndex.catalog_scope_category!=='all')throw Error('Global catalog index must have category all');
 const localDir=path.resolve(mirror),mediaDir=path.resolve(media);
 const hash=val=>crypto.createHash('sha256').update(val).digest('hex');
 const fileFor=(url,role)=>{const u=new URL(url);let ext=path.extname(u.pathname).toLowerCase();
@@ -40,7 +42,8 @@ const replay=fs.existsSync(replayPath)?JSON.parse(fs.readFileSync(replayPath,'ut
 const browserPath=a('browser');const browser=browserPath&&fs.existsSync(browserPath)?JSON.parse(fs.readFileSync(browserPath,'utf8')):null;
 const productCoverage=listed.size?details.length/listed.size:null;
 const blockers=[];
-if(!db.pages.length||db.pages.at(-1)?.has_next!==false)blockers.push('R1_LISTING_PAGINATION_NOT_EXHAUSTED');
+if(!db.pages.length||db.pages.at(-1)?.has_next!==false)blockers.push('R1_TRUCK_PAGINATION_NOT_EXHAUSTED');
+if(!globalIndex||globalIndex.pages.at(-1)?.has_next!==false)blockers.push('R1_GLOBAL_ALL_PAGINATION_NOT_EXHAUSTED');
 if(listed.size!==details.length)blockers.push('R2_PRODUCT_DETAIL_URLS_MISSING');
 if(duplicateSkus.length)blockers.push('DUPLICATE_SKUS_NEED_RECONCILIATION');
 if(details.some(x=>!x.local_html_present))blockers.push('R4_DETAIL_HTML_NOT_LOCAL');
@@ -57,7 +60,10 @@ blockers.push('LIVE_SOURCE_VS_LOCAL_PIXEL_PARITY_NOT_MEASURED');
 blockers.push('DYNAMIC_NATIVE_FILTERS_AND_PRODUCT_GALLERIES_NOT_EQUIVALENT');
 const report={
  status:'R6_AUDITED_FULL_SITE_FAIL',generated_at:new Date().toISOString(),source:'https://www.basworld.com',
- scope:'CAPTURED_TRUCK_SNAPSHOT_ONLY',full_site_source_inventory_total:null,
+ scope:'TRUCK_AND_GLOBAL_ALL_SOURCE_SCOPE_IN_PROGRESS',full_site_source_inventory_total:null,
+ global_category_pages_captured:globalIndex?.pages.length??0,global_category_last_page:globalIndex?.pages.at(-1)?.page??null,
+ global_category_page_has_next:globalIndex?.pages.at(-1)?.has_next??null,global_category_unique_urls:globalIndex?.listing_urls.length??null,
+ global_listing_url_union_with_truck:globalIndex?new Set([...globalIndex.listing_urls,...db.listing_urls]).size:null,
  listing_pages_captured:catalogCaptured,listing_last_captured_page:db.pages.at(-1)?.page||2,
  last_captured_page_has_next:db.pages.at(-1)?.has_next??true,
  listing_unique_product_urls:listed.size,product_details_captured:details.length,
@@ -78,7 +84,7 @@ fs.writeFileSync(path.join(localDir,'R6-completeness.json'),JSON.stringify(repor
 const esc=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const pct=x=>x===null?'unknown':(100*x).toFixed(1)+'%';
 const cssText='body{font-family:system-ui,Arial,sans-serif;margin:0;background:#f3f6f8;color:#183549}header{background:#14334c;color:white;padding:32px}main{max-width:1180px;margin:auto;padding:25px}table{border-collapse:collapse;width:100%;background:white}th,td{padding:12px;border-bottom:1px solid #e1e8eb;text-align:left}th{background:#e8eff3}.block{padding:14px;background:#fff3dc;margin:7px 0;border-left:4px solid #ba841e}.num{font-size:30px;font-weight:800}.gr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{background:white;padding:18px;border:1px solid #d9e3e8;border-radius:7px}a{color:#205779}';
-const rows=[['Catalog pages captured',catalogCaptured,'Entire source pagination unknown'],['Unique discovered URLs',listed.size,'Only scanned truck category pages'],['Real product detail pages',details.length,pct(productCoverage)+' of current subset'],['Captured SKU gallery variant files',saved_gallery,total_gallery+' expected in captured details'],['Original logo files',logos.saved,logos.expected+' expected'],['CSS files',css.saved,css.expected+' expected'],['Page media files',pageAssets.saved,pageAssets.expected+' expected in first three pages']];
+const rows=[['Truck catalog pages captured',catalogCaptured,'Truck category pagination checked'],['Global all pages captured',globalIndex?.pages.length??0,'Source full-site inventory total still unknown'],['Unique discovered URLs',listed.size,'Only scanned truck category pages'],['Real product detail pages',details.length,pct(productCoverage)+' of current subset'],['Captured SKU gallery variant files',saved_gallery,total_gallery+' expected in captured details'],['Original logo files',logos.saved,logos.expected+' expected'],['CSS files',css.saved,css.expected+' expected'],['Page media files',pageAssets.saved,pageAssets.expected+' expected in first three pages']];
 const html='<html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>R6 — Real Source Completeness Audit</title><style>'+cssText+'</style></head><body><header><h1>R6 / Actual Source Archive Audit</h1><p>FULL-SITE PASS: NOT READY. No synthetic products counted. '+esc(report.generated_at)+'</p></header><main><div class="gr"><div class="tile">Discovered products<div class="num">'+listed.size+'</div></div><div class="tile">Details captured<div class="num">'+details.length+'</div></div><div class="tile">Gallery variants saved<div class="num">'+saved_gallery+'</div></div></div><h2>Coverage</h2><table><thead><tr><th>Metric</th><th>Captured</th><th>Limit</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td></tr>').join('')+'</tbody></table><h2>Hard blockers ('+blockers.length+')</h2>'+blockers.map(x=>'<div class="block">'+esc(x)+'</div>').join('')+'<p><a href="/source-mirror-r2/inventory.html">Captured inventory</a> | <a href="/source-mirror-r2/">Original homepage snapshot</a></p><p>Details / file hashes: <code>R6-completeness.json</code>. Original HTML/media stay in private Windows.</p></main></body></html>';
 fs.writeFileSync(path.join(localDir,'R6-review.html'),html);
 console.log(JSON.stringify({status:report.status,listed:listed.size,products:details.length,gallery_saved:saved_gallery,gallery_expected:total_gallery,
