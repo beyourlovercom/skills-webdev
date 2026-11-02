@@ -53,3 +53,8 @@ Do not misinterpret `dev.basworldy.com` as the public root or automatically redi
 ### Additional completion: hostname root navigation
 
 The BASWORLDY-local-only MU file `D:\ai\basworldy-local\app\public\wp-content\mu-plugins\basworldy-local-home.php` sends root `/` to `/catalog-pilot/index.html` (HTTP 302 → 200). PHP lint PASS. This adds no WordPress product records or external API integrations. Local admin credential is ACL-restricted and never added to public GitHub. As of the read-only Windows lookup, the online Dev hostname `dev.basworldy.com` did not resolve; further Dev work remains separately gated.
+
+
+### Latest superseding state — BASWORLDY native local site
+
+The earlier LocalWP homepage 302 adapter was deliberately archived after deploying the independent WordPress theme. Homepage `/` is now served natively as HTTP 200 and belongs to WordPress `front-page.php`. Site `basworldy-local` has an isolated custom theme `basworldy-local` v0.2.1, with native vehicle CPT, Pages, Posts, local sample data and noindex. Tests: 11 PHP template lint PASS, 51 Chrome desktop/mobile checks PASS, 11 screenshot proofs, zero external origins / JS exceptions. Open local-only review center: `http://localdev.basworldy.com/review-local/`. The earlier `/catalog-pilot/` fixture remains for regression tests but is not the homepage. Owner visual signoff is OPEN; source copies remain rights-blocked and Dev/WWW untouched.
