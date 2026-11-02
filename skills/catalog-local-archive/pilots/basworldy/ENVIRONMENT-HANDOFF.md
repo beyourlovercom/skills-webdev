@@ -3,7 +3,7 @@
 **Recorded:** 2026-11-02
 
 ## Source vs target
-Source research site: `www.basworld.com`. No permission for copying source assets, descriptions, HTML or catalog records has been verified.
+Source research site: `basworld.com`. No permission for copying source assets, descriptions, HTML or catalog records has been verified.
 
 New target project: **basworldy.com**.
 
