@@ -107,7 +107,7 @@ async function test(){
  const overflow=await js("document.documentElement.scrollWidth-document.documentElement.clientWidth");
  assert.ok(overflow<=2,"mobile horizontal overflow: "+overflow);checks++;
  await screenshot("list-mobile.png");
- assert.equal(requests.filter(url=>/^https?:/i.test(url) && !url.startsWith("http://localdev.basworldy.com/")).length,0,"Remote requests found");checks++;
+ assert.equal(requests.filter(url=>{try{const u=new URL(url);return ["http:","https:"].includes(u.protocol) && u.hostname!=="localdev.basworldy.com";}catch{return false;}}).length,0,"Remote requests found");checks++;
  console.log(JSON.stringify({status:"LOCAL_HOST_BROWSER_PASS",checks,browser:"Windows Chrome headless CDP",mode:"http://localdev.basworldy.com/catalog-pilot/ + local assets only",vehicles:4,images_loaded:true,filter_events:true,detail:true,mobile_overflow_px:overflow,remote_requests:0,screenshots:["list-desktop.png","filtered-list-desktop.png","detail-desktop.png","list-mobile.png"],evidence:output},null,2));
 }
 try{await test();}
