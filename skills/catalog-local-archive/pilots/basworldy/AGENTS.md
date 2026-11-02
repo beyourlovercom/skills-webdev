@@ -36,3 +36,18 @@ The previous synthetic static catalog remains under `/catalog-pilot/` for histor
 - Exact local review: `http://localdev.basworldy.com/review-local/`. Actual Windows Chrome 51 browser checks PASS and 11 screenshots; Owner visual approval remains OPEN.
 - WordPress manages content and permalinks; source content/data harvesting permission is **not** inferred. No Dev or WWW writes or main merge.
 - Keep review screenshots only in local evidence; do not add local passwords, account tokens or screenshots with browser session state to public GitHub.
+
+
+## 2026-11-02 V0.4 superseding instruction — BACKUP WINS
+
+The previous `basworldy-local` WordPress theme and 4 synthetic vehicles were **only development fixtures**. They must **not** be treated as a real basworld.com backup or counted in real source completeness.
+
+New source-of-truth for the backup lane is the **private raw HTML/asset archive** `D:\ai\basworldy-source-archive\` plus manifest/actual asset hashes and real Chrome evidence. The local read-only 5-page preview is `http://localdev.basworldy.com/source-mirror/`, **not** the current WordPress homepage. No automatic switch of the homepage.
+
+Source exactness rules:
+- Real Logo byte/hash, product SKU/title/price/currency, and every gallery photo variant come only from actual source snapshots. Never substitute own SVG, stock image or sample inventory.
+- Catalog list coverage and product-detail coverage are independently measured. As of this report: 70 unique links on the first 2 pages, 2 detail pages, Volvo photo variants 82/82, Renault photo variants 8/88, and first three pages' media 68/337. Site-wide denominator unknown, so `FULL_ARCHIVE_NOT_READY`.
+- Source and local screenshots must be compared after all dependencies are localized. Current 5-page static mirror contains still-missing assets and externally referenced resources; dynamic interactions are OFF. This is *not* 99% visual parity.
+- Preserve existing system proxy exceptions for LocalWP, run real Chrome with normal proxy, do not reboot other machines or touch public DNS. Do not submit private HTML/image bytes to Public GitHub.
+- For source access and CDN, log 403/200, JPEG 201 and image/jpg aliases. Use only explicitly authorized source URLs and allowed hostnames; no challenge evasion, uncontrolled recursion or credential harvesting.
+- No automatic public Dev / WWW deployment or merge to main.
