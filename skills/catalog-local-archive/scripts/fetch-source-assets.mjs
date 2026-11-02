@@ -25,8 +25,8 @@ if(stage==='PILOT_FIRST_PAGE'){
 }
 const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const records=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css',item_sku:null}))];
-const allowHosts=['www.basworld.com','static.basworld.com','media.basworld.com','cms.media.basworld.com'];
-const format={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.css':'text/css'};
+const allowHosts=['www.basworld.com','static.basworld.com','media.basworld.com','cms.media.basworld.com','basgroup.a.bigcontent.io'];
+const format={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.css':'text/css','.gif':'image/gif','.ico':'image/x-icon','.avif':'image/avif','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf','.otf':'font/otf','.eot':'application/vnd.ms-fontobject'};
 const role=arg('role')||'all';
 if(!['all','logo','vehicle_gallery','page_image','css'].includes(role))throw Error('Invalid --role');
 const start=Number(arg('start')||0);
@@ -37,6 +37,14 @@ function magicOK(ext,bytes){
  if(ext==='.webp')return bytes.length>12&&bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP';
  if(ext==='.svg')return /<svg[\s>]/i.test(bytes.toString('utf8',0,2000));
  if(ext==='.css')return !/^\s*</.test(bytes.toString('utf8',0,100));
+ if(ext==='.gif')return bytes.toString('ascii',0,4)==='GIF8';
+ if(ext==='.ico')return bytes.length>8&&bytes[0]===0&&bytes[1]===0&&bytes[2]===1&&bytes[3]===0;
+ if(ext==='.avif')return bytes.length>12&&bytes.toString('ascii',4,8)==='ftyp'&&bytes.toString('ascii',8,12).startsWith('avi');
+ if(ext==='.woff2')return bytes.toString('ascii',0,4)==='wOF2';
+ if(ext==='.woff')return bytes.toString('ascii',0,4)==='wOFF';
+ if(ext==='.ttf')return (bytes[0]===0&&bytes[1]===1&&bytes[2]===0&&bytes[3]===0)||bytes.toString('ascii',0,4)==='true';
+ if(ext==='.otf')return bytes.toString('ascii',0,4)==='OTTO';
+ if(ext==='.eot')return bytes.length>64;
  return false;
 }
 const selected=records.filter(x=>role==='all'||x.role===role).slice(start,start+max),seen=new Set();
@@ -77,7 +85,7 @@ for(const entry of selected){
  const status=Number(codeText||0),bytes=fs.existsSync(dest)?fs.statSync(dest).size:0;
  let finalOK=false;try{finalOK=allowHosts.includes(new URL(final).hostname)}catch{}
  const valid=proc.status===0&&(status===200||(status===201&&['.jpg','.jpeg','.png','.webp'].includes(ext)))&&finalOK&&bytes>0&&bytes<=maxSize&&
- ((mime||'').toLowerCase().startsWith(format[ext])||(['.jpg','.jpeg'].includes(ext)&&/^image\/jpg(?:\s*;|$)/i.test(mime||'')))&&magicOK(ext,fs.readFileSync(dest));
+ ((mime||'').toLowerCase().startsWith(format[ext])||(['.jpg','.jpeg'].includes(ext)&&/^image\/jpg(?:\s*;|$)/i.test(mime||''))||(['.woff','.woff2','.ttf','.otf','.eot'].includes(ext)&&/(font|octet-stream|vnd.ms-fontobject)/i.test(mime||'')))&&magicOK(ext,fs.readFileSync(dest));
  if(!valid&&fs.existsSync(dest))fs.renameSync(dest,dest+'.invalid');
  const item={role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
  status:valid?'SAVED':'FAILED',http:status,bytes:valid?bytes:0,
