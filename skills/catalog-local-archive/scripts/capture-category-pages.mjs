@@ -8,13 +8,14 @@
  * node capture-real-catalog.mjs --mode details --root <absolute> --limit 25
  * --seed-manifest files can be repeated.
  */
+import { enforceVisualFirst } from './visual-first-gate.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 const a=n=>{const i=process.argv.indexOf('--'+n);return i===-1?null:process.argv[i+1];};
 const all=n=>{const o=[];for(let i=0;i<process.argv.length;i++)if(process.argv[i]==='--'+n)o.push(process.argv[i+1]);return o;};
-const root=a('root'),mode=a('mode'),limit=Number(a('limit')||10),start=Number(a('from')||3);
+const root=a('root'),mode=a('mode'),limit=Number(a('limit')||1),start=Number(a('from')||1);
 const sourceOrigin='https://www.basworld.com';
 const category=a('category')||'truck';
 if(!/^[a-z][a-z_-]{0,60}$/.test(category))throw Error('Invalid category');
@@ -25,6 +26,16 @@ const indexPath=path.join(root,'catalog-index.json');
 fs.mkdirSync(root,{recursive:true});
 const blank={schema_version:1,source_origin:sourceOrigin,started_at:new Date().toISOString(),pages:[],product_details:[],listing_urls:[],blocks:[],ended_at:null};
 let db=fs.existsSync(indexPath)?JSON.parse(fs.readFileSync(indexPath,'utf8')):blank;
+const stage=a('stage')||'PILOT_FIRST_PAGE';
+const pilotUrl=a('pilot-url');
+enforceVisualFirst({
+ phase:stage,approvalFile:a('visual-approval'),mode,from:start,limit,
+ category:category,
+ seedManifestCount:all('seed-manifest').length,
+ pilotUrl,
+ knownFirstPageUrls:db.listing_urls,
+ indexUrlCount:mode==='inventory'?db.listing_urls.length:db.listing_urls.length
+});
 if(db.catalog_scope_category&&db.catalog_scope_category!==category)throw Error('Cannot mix category in one catalog index');db.catalog_scope_category=category;
 const sha=buf=>crypto.createHash('sha256').update(buf).digest('hex');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -79,6 +90,7 @@ async function details(){
  let count=0;
  const done=new Set(db.product_details.map(p=>p.source_url));
  for(const url of db.listing_urls){
+  if(stage==='PILOT_FIRST_PAGE' && url!==pilotUrl)continue;
   if(done.has(url))continue;
   if(count>=limit)break;
   const h=sha(url).slice(0,24);
