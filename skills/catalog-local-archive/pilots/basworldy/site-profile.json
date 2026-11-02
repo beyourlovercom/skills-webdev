@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_id": "basworldy",
-  "project_name": "BASWORLDY owner-provided source-exact offline archive",
+  "project_name": "BASWORLDY source-exact local archive V0.4 development",
   "source": {
     "origin": "https://basworld.com",
     "relationship": "owner-claimed",
@@ -9,7 +9,7 @@
     "copy_html": "PENDING_VERIFIED_INPUT",
     "copy_photos": "PENDING_VERIFIED_INPUT",
     "copy_text": "PENDING_VERIFIED_INPUT",
-    "source_capture_status": "HOMEPAGE_HTML_CAPTURED_ONLY",
+    "source_capture_status": "REAL_SNAPSHOTS_5_PAGES_PARTIAL",
     "allowlist": [],
     "offline_archive_input_windows": "D:\\ai\\basworldy-source-archive",
     "direct_windows_http_status": 403,
@@ -19,7 +19,11 @@
     "user_agent_used": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "homepage_html_capture_bytes": 788730,
     "homepage_html_sha256": "38b068a22d5a60e80b7dd07b50aec740699fb499d19d9987bcf83a5f0343ca91",
-    "homepage_html_capture_location": "D:\\ai\\basworldy-source-archive\\preflight\\single-read-2026-11-02T07-23-45-042Z-21772\\source.html"
+    "homepage_html_capture_location": "D:\\ai\\basworldy-source-archive\\preflight\\single-read-2026-11-02T07-23-45-042Z-21772\\source.html",
+    "page_1_listing_unique_vehicle_urls": 36,
+    "page_2_listing_additional_unique_vehicle_urls": 34,
+    "listing_two_page_unique_urls": 70,
+    "real_detail_snapshots": 2
   },
   "target": {
     "brand": "BASWORLDY",
@@ -64,16 +68,18 @@
         "tailscale_host_header_http": 200,
         "hosts_change": "BLOCKED_ADMIN_AUTH"
       }
-    }
+    },
+    "source_mirror_origin": "http://localdev.basworldy.com/source-mirror/",
+    "source_mirror_runtime_status": "PARTIAL_STATIC_REPLAY_5_PAGES"
   },
   "scope": {
-    "mode": "SOURCE_EXACT_OFFLINE_ARCHIVE",
+    "mode": "REAL_HTML_ARCHIVE_IN_PROGRESS",
     "max_items": "SOURCE_INVENTORY_TBD",
     "blog_excluded": "DEFERRED_PRIORITY_PRODUCTS_FIRST",
     "external_assets_excluded": false,
     "real_checkout_excluded": true,
     "real_inquiry_excluded": true,
-    "real_site_crawl": false
+    "real_site_crawl": "EXPLICIT_ALLOWLIST_BOUNDED_SAMPLE"
   },
   "gates": {
     "local_fixture": "PASS",
@@ -90,15 +96,17 @@
     "owner_visual_review": "OPEN",
     "local_wordpress_templates": "PASS",
     "owner_browser_readback": "OPEN",
-    "logo_exact": "OPEN",
-    "products_exact": "OPEN",
-    "images_exact": "OPEN",
-    "full_archive_pass": "OPEN_NEEDS_CATALOG_AND_ASSETS",
+    "logo_exact": "PASS_2_OF_2_CAPTURED_SOURCE_VARIANTS",
+    "products_exact": "OPEN_2_REAL_DETAILS_NOT_FULL_SOURCE",
+    "images_exact": "PARTIAL_82_VOLVO_VARIANTS_COMPLETE_8_RENAULT_SAVED",
+    "full_archive_pass": "FULL_ARCHIVE_NOT_READY",
     "original_theme_fixture": "NOT_BACKUP",
-    "source_acquisition": "SOURCE_HTML_READ_PASS_HOME_ONLY",
+    "source_acquisition": "PASS_FOR_5_REAL_SOURCE_PAGES",
     "next_recovery": "OWNER_HOSTING_OR_ADMIN_EXPORT;OR_AUTHORIZED_TARGETED_CLOUDFLARE_WAF_EXCEPTION",
-    "real_catalog_capture": "OPEN",
-    "real_image_capture": "OPEN"
+    "real_catalog_capture": "PARTIAL_70_URLS_FROM_2_LIST_PAGES",
+    "real_image_capture": "PARTIAL_GALLERY_1_COMPLETE_GALLERY_2_SAMPLE",
+    "local_source_mirror": "PARTIAL_5_REAL_PAGES",
+    "offline_remote_dependencies": "FAIL_OPEN"
   },
   "evidence": {
     "unit_checks": 37,
@@ -153,15 +161,56 @@
     "wordpress_blog_public": 0,
     "core_owner_visual_signoff": "OPEN",
     "client_access_incident": "pilots/basworldy/LOCAL-ACCESS-INCIDENT-2026-11-02.md",
-    "source_exact_imported_products": 0,
-    "source_exact_imported_images": 0,
-    "source_exact_logo_verified": false,
+    "source_exact_imported_products": 2,
+    "source_exact_imported_images": 90,
+    "source_exact_logo_verified": true,
     "real_homepage_html_read": true,
     "http_user_agent_comparison": {
       "default_curl": 403,
       "chrome_120_user_agent": 200
     },
-    "source_read_script": "skills/catalog-local-archive/scripts/source-http-read.mjs"
+    "source_read_script": "skills/catalog-local-archive/scripts/source-http-read.mjs",
+    "real_source_html_pages": 5,
+    "real_list_vehicle_urls_two_pages": 70,
+    "real_product_skus_captured": [
+      "70320127",
+      "70323007"
+    ],
+    "real_gallery_by_product": {
+      "70320127": {
+        "source_full_size": "1280",
+        "full_saved": 41,
+        "full_expected": 41,
+        "thumbnail_saved": 41,
+        "thumbnail_expected": 41
+      },
+      "70323007": {
+        "source_full_size": "1080",
+        "full_saved": 4,
+        "full_expected": 44,
+        "thumbnail_saved": 4,
+        "thumbnail_expected": 44
+      }
+    },
+    "real_logo_source_variants_saved": 2,
+    "real_css_saved": 12,
+    "page_asset_scope_first_three_snapshots": {
+      "saved": 68,
+      "expected": 337,
+      "missing": 269
+    },
+    "source_mirror_copied_asset_files": 170,
+    "chrome_source_mirror_pages_tested": 6,
+    "chrome_source_mirror_external_attempts": 1073,
+    "actual_source_uat": "pilots/basworldy/REAL-SOURCE-ARCHIVE-PILOT-UAT-2026-11-02.md",
+    "script_syntax_checks": {
+      "pass": 7,
+      "total": 7
+    },
+    "reader_safety_unit_tests": {
+      "pass": 5,
+      "total": 5
+    }
   },
   "governance": {
     "no_automatic_deploy": true,
