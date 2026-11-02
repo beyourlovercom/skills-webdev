@@ -46,3 +46,11 @@ Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容
 - 只在 Owner 授权的 Windows Local 操作；不重启 READY 设备、别人的 Chrome 或 LocalWP 共用代理；现有其他站不受影响。
 - 本地恢复不等于对 `dev.basworldy.com` 或 `basworldy.com` 发布授权；不修改公共 DNS、不开放索引、不合并 main。
 - 若缺少源站完整备份、动态接口或图库，明确输出 `PARTIAL`/缺项，不造内容；获得合规源站管理导出后再补齐。
+
+## 403 / Cloudflare Attention Required — 备份中断处理门禁
+当 wget、HTTrack、网页离线备份器或 Windows curl 返回 Cloudflare branded `403 / Attention Required!` 时：
+1. **立即停止重复网页下载**，记录 UTC 时间、目标 URL、HTTP 状态、Cloudflare Ray ID 和原站 Security Events 对应的 blocking feature；不要通过代理池、UA 轮换、验证码破解或跳过 challenge 继续获取。
+2. **优先原始服务器/后台导出**：网站源码、数据库、上传媒体/图片、商品表/Feed、真实 Logo 和样式资源分别取得，权限与账号不保存在公开仓库。云服务器/托管备份比只复制 HTML 更可能完整恢复动态站。
+3. 只有在 Owner 具有原站 Cloudflare Zone 的管理权限、查看到 Security Events 中确切拦截规则，且另行批准本次真实生产安全修改时，才允许提出 **限源公网 IP + 限域名/路径 + 限时间的最小 Skip/WAF 例外**；保留原规则快照、实时监控并在备份结束后撤销。不可放宽整个站的安全设置，也不可将 Tailscale 100.x 私网 IP 误当公网访问 IP。不同 Cloudflare 产品（尤其 Free Bot Fight Mode）可能不能由 Skip 规则豁免。
+4. **绝不以本地 fixture 成功代替备份完成**。未取得真实 HTML/媒体/商品数据，保持 `SOURCE_ACQUISITION=BLOCKED_403`，`LOGO_EXACT=OPEN`，`PRODUCTS_EXACT=OPEN`，`IMAGES_EXACT=OPEN`。Owner 给出本地导出或备份后，通过 DC 重新进入 B0 只读盘点。
+5. 如浏览器能人工打开但下载器 403，可以先使用官方管理后台导出；单页浏览器保存仅作缺口修补，不等于全站备份。
