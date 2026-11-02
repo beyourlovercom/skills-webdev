@@ -4,6 +4,7 @@
  * Bounded, sequential, no recursive discovery, no cookies. Outputs private JSON report.
  * Usage: node fetch-source-assets.mjs --manifest <file> --out <abs> --limit 12
  */
+import { enforceVisualFirst } from './visual-first-gate.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -13,6 +14,15 @@ const file=arg('manifest'),out=arg('out'),max=Number(arg('limit')||6);
 if(!file||!out||!path.isAbsolute(out)||!Number.isInteger(max)||max<1||max>120)throw Error('Require --manifest --out absolute --limit 1..120');
 const manifest=JSON.parse(fs.readFileSync(file,'utf8'));
 if(manifest.origin!=='https://www.basworld.com')throw Error('Unrecognized source origin');
+const stage=arg('stage')||'PILOT_FIRST_PAGE';
+if(stage==='PILOT_FIRST_PAGE'){
+  if(manifest.pilot_scope!=='FIRST_PAGE' || manifest.approved_first_page_assets!==true)
+    throw Error('OWNER_VISUAL_GATE_BLOCKED: first round media must come from a verified FIRST_PAGE scoped manifest; bulk gallery queues prohibited');
+  if(manifest.source_page_numbers?.some(n=>n!==1))
+    throw Error('OWNER_VISUAL_GATE_BLOCKED: media manifest references a later page');
+}else{
+  enforceVisualFirst({phase:stage,approvalFile:arg('visual-approval'),mode:'inventory',from:2,limit:2});
+}
 const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const records=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css',item_sku:null}))];
 const allowHosts=['www.basworld.com','static.basworld.com','media.basworld.com','cms.media.basworld.com'];
