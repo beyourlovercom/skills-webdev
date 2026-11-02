@@ -34,12 +34,12 @@ Local source HTML remains immutable in private source archive. Replay strips ori
 Isolated Windows Chrome used with **normal system proxy configuration**, no `--no-proxy-server`. Screenshot evidence: `D:\ai\basworldy-source-archive\review-evidence\`.
 
 - Real homepage original H1: `BUY VEHICLES AND MACHINERY WORLDWIDE`, original CSS loaded, 14 images loaded on tested viewport.
-- Real truck catalog page 1: original H1 `New And Used Trucks For Sale`, 29 images loaded on tested viewport.
-- Real truck catalog page 2: original H1, 48 images loaded on tested viewport.
+- Real truck catalog page 1: original H1 `New And Used Trucks For Sale`, 44 images loaded on tested viewport after final CSP placement and HTML replay.
+- Real truck catalog page 2: original H1, 50 images loaded on tested viewport after final CSP placement and HTML replay.
 - Real Volvo detail: original title and styles loaded, 14 images loaded on tested desktop viewport, 21 on 375px mobile.
 - Real Renault detail: original title and styles loaded, 14 images on tested viewport.
 - JavaScript runtime exception count: 0 (source JavaScript is intentionally disabled).
-- **External attempts: 1,073 across six page-view checks**. These must be resolved/isolated; do **not** claim offline self-contained / high fidelity PASS. Nonlocal scripts & forms are blocked by replay policy, but source media and third-party subresources remain unresolved.
+- **External attempts: 1,061 across six page-view checks, with 0 actual external responses received**. These must be resolved/isolated; do **not** claim offline self-contained / high fidelity PASS. Nonlocal scripts & forms are blocked by replay policy, but source media and third-party subresources remain unresolved.
 
 ## Honest gates
 | Gate | Result |
@@ -73,3 +73,9 @@ All tool implementations are in the `skills/catalog-local-archive/scripts/` dire
 5. Run fully offline Chrome checks with network attempts zero and compare source/local screenshots. Only then progress towards source-exact fidelity qualification.
 
 Owner visual signoff OPEN. No switches to local homepage, no Dev or Production.
+
+## Final transport/safety readback
+- Replayed HTML puts CSP at the **start** of `<head>` and removes unresolved remote preload hints, scripts and form submission.
+- Final Windows Chrome CDP checked six desktop/mobile views: `external_attempts=1061`, `external_success_responses=0`; this is **not** an offline-complete result because 1,061 references still need elimination or local adaptation.
+- Second machine `007windows` (Tailscale hostname mapping from prior Local repair) independently returned **HTTP 200 on all 5 real source-mirror paths**, using private address `100.87.29.56`. This is HTTP readback, not a second Chrome visual UAT.
+- The source-mirror is a **local partial snapshot**, not the root homepage; `dev.basworldy.com`, `basworldy.com`, GitHub main and production remain unchanged.
