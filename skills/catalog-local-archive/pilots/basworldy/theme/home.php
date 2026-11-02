@@ -1,0 +1,5 @@
+<?php get_header(); ?>
+<section class="page-banner article-banner"><div class="shell"><div class="bread"><a href="<?php echo esc_url(home_url('/')); ?>">Home</a> / Insights</div><div class="overline light">KNOWLEDGE & JOURNAL</div><h1>Commercial vehicle <em>insights.</em></h1><p>Guides, technical explainers and resources for professional buyers.</p></div></section>
+<section class="section shell"><div class="section-heading"><div><span class="overline">ALL ARTICLES / EDITORIAL TEMPLATE</span><h2>Latest <em>thinking.</em></h2></div><span class="subtle-label">LOCAL SAMPLE EDITORIAL</span></div>
+<div class="article-grid"><?php if(have_posts()):while(have_posts()):the_post(); ?><a class="article-card" href="<?php the_permalink(); ?>"><div class="article-art"><span>INDUSTRY INSIGHTS</span><strong>BW</strong></div><div class="article-body"><span class="article-date"><?php echo esc_html(get_the_date('M d, Y')); ?> · RESEARCH</span><h3><?php the_title(); ?></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt(),17)); ?></p><span class="article-read">Read article ↗</span></div></a><?php endwhile;endif; ?></div></section>
+<?php get_footer(); ?>
