@@ -3,7 +3,14 @@ name: duplicate-site-skills
 description: Use for rights-cleared, auditable recreation or migration of an existing website into an independently owned target using GitHub and authorized Windows Local/Dev/WWW environments. Covers source inventories, local asset mapping, browser fidelity, WordPress MU adapters, forms, SEO, publication gates and rollback. Never assumes permission to copy third-party content or to publish a mirror.
 ---
 
-# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1)
+# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1.1)
+
+## 🔒 最高优先级：第一轮绝不翻页，视觉先行（Visual-first）
+**本条覆盖本 Skill 旧版 D1–D8 中任何“先完成全站清单、全量产品采集”的解释。**
+
+第一阶段只读取主页、**每个所选列表/分类/博客模板自己的第一页**、一条来自该第一页的真实代表性商品详情以及必要的标准 Pages。任何分页/搜索/筛选/评论/品牌/无限滚动，仅允许 page=1 / offset=0；**禁止访问或自动抓取第 2 页以上、next cursor 和后续详情集合**。对**第一轮所选页面**，应先取得并本地保存实际使用的全部原素材（原 Logo、字体、CSS、背景、Banner、第一屏到 Footer 的所有懒加载/响应式图片、首列表每个真实卡片图、样本商品完整图库与缩略图），不用合成占位资源。
+
+只在 Windows Local 完成所选页面的原站 100% 视觉还原目标，用原站与 Local 的真实浏览器全页截图、PC/移动布局和资源清单逐页核对，发现差异先修复。**视觉是否 PASS 只由 Owner 亲自审查并明确回复 `pass` 决定**；HTTP 200、功能单测、素材下载成功、或用户普通“继续”都不能替代。只有先保存 Owner 明确审批的消息引用、日期、审核页面范围和视觉基线后，才允许进入第二阶段：遍历所有分页 → 全量产品详情 → 图片 → 全量完整率审计。Dev/WWW 和 GitHub main 仍需独立审批。更详细的门禁见 [06-first-page-visual-gate.md](references/06-first-page-visual-gate.md)。
 
 ## 目的与调用边界
 从 CentralXI 项目提炼可复用**流程与测试方法**，不是复制 CentralXI 的 802 页 HTML、品牌、代码资产或账号。采用先清点现状、只补差异、隔离开发、可观测验收、受控发布。这个 Skill 是 GitHub 中的操作规范；读取文件不等于原生安装、拥有 GitHub/DC/WordPress 登录态或得到生产授权。
