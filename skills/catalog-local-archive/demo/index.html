@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Offline Vehicle Stock — Local Pilot</title><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; connect-src 'none'; img-src 'self' data:; script-src 'self'; style-src 'self'"><link rel="stylesheet" href="site.css"></head>
+<body data-page="list"><header><strong>Local Vehicle Catalog</strong><span>OFFLINE DEMO · NOT BAS WORLD</span></header>
+<main><div class="eyebrow">Windows Local · 4 Synthetic Vehicles</div><h1>Vehicle Stock</h1><p class="sub">Proof of concept: standalone files, local images, vehicle details and working filters.</p>
+<div class="notice">All vehicle records and illustrations are fictitious. No BAS World page, photo, product or branding is copied.</div>
+<div class="layout"><aside class="filters"><h2>Filters</h2>
+<label for="keyword">Search / reference</label><input id="keyword" placeholder="Search vehicles">
+<label for="type">Vehicle type</label><select id="type"><option value="">All types</option><option value="Truck">Truck</option><option value="Tractorhead">Tractorhead</option></select>
+<label for="brand">Brand</label><select id="brand"><option value="">All brands</option><option value="Atlas">Atlas</option><option value="Nord">Nord</option><option value="Ridge">Ridge</option></select>
+<label for="axle">Axle configuration</label><select id="axle"><option value="">All axles</option><option value="4X2">4X2</option><option value="6X4">6X4</option></select>
+<label for="year">Min. year</label><input id="year" type="number" min="1980" max="2100" placeholder="e.g. 2022">
+<p><button id="reset" type="button">Clear filters</button></p></aside>
+<section><div class="toolbar"><strong><span id="count">0</span> vehicles found</strong><label for="sort">Sort <select id="sort"><option value="">Relevance</option><option value="price-low">Price (low-high)</option><option value="price-high">Price (high-low)</option><option value="year-new">Newest year</option></select></label></div><div class="cards" id="results" aria-live="polite"></div></section></div></main>
+<footer>Offline training fixture · No source site requests · No live purchase or inquiry</footer>
+<script src="data.js"></script><script src="catalog.js"></script><script src="site.js"></script></body></html>
