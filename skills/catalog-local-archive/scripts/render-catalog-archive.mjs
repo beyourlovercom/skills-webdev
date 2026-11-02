@@ -12,6 +12,8 @@ const origin='https://www.basworld.com',local='/source-mirror-r2/';
 const db=JSON.parse(fs.readFileSync(indexFile,'utf8'));
 const globalIndexPath=a('all-index');const allDb=globalIndexPath&&fs.existsSync(globalIndexPath)?JSON.parse(fs.readFileSync(globalIndexPath,'utf8')):null;
 if(allDb&&allDb.catalog_scope_category!=='all')throw Error('Expected all-category source index');
+const extras=[];for(let i=0;i<process.argv.length;i++)if(process.argv[i]==='--category-index'){const p=process.argv[i+1];if(!fs.existsSync(p))throw Error('Category index missing');extras.push({path:p,data:JSON.parse(fs.readFileSync(p,'utf8'))});}
+const allowedCategories=new Set(['truck','all',...extras.map(x=>x.data.catalog_scope_category)]);
 if(db.source_origin!==origin)throw Error('Unexpected source');
 const seeds=JSON.parse(fs.readFileSync(a('seed-manifest'),'utf8')),pageMedia=JSON.parse(fs.readFileSync(a('page-assets'),'utf8'));
 const mediaManifest=a('media-queue')?JSON.parse(fs.readFileSync(a('media-queue'),'utf8')):{media_assets:[]};
@@ -41,11 +43,12 @@ add(origin+'/stock/truck',a('page1'));
 add(origin+'/stock/truck?page=2',a('page2'));
 for(const p of db.pages||[])if(p.valid&&fs.existsSync(path.join(path.dirname(indexFile),p.path)))add(p.url,path.join(path.dirname(indexFile),p.path));
 if(allDb)for(const p of allDb.pages||[])if(p.valid&&fs.existsSync(path.join(path.dirname(globalIndexPath),p.path)))add(p.url,path.join(path.dirname(globalIndexPath),p.path));
+for(const extra of extras)for(const p of extra.data.pages||[])if(p.valid&&fs.existsSync(path.join(path.dirname(extra.path),p.path)))add(p.url,path.join(path.dirname(extra.path),p.path));
 for(const p of db.product_details||[])if(p.source_record?.valid&&fs.existsSync(path.join(path.dirname(indexFile),p.source_record.path)))add(p.canonical_url||p.source_url,path.join(path.dirname(indexFile),p.source_record.path));
 const pageRoute=url=>{
  const u=new URL(url,origin);
  if(u.pathname==='/'&&!u.search)return local;
- if(u.pathname==='/stock/all'){const n=Number(u.searchParams.get('page')||1);return local+'stock/all/'+(n===1?'':'page-'+n+'/');}
+ if(u.pathname.startsWith('/stock/')){const type=u.pathname.slice('/stock/'.length).replace(/\/$/,'');if(allowedCategories.has(type)){const n=Number(u.searchParams.get('page')||1);return local+'stock/'+type+'/'+(n===1?'':'page-'+n+'/');}}
  if(u.pathname==='/stock/truck'){
   const n=Number(u.searchParams.get('page')||1);
   return local+'stock/truck/'+(n===1?'':'page-'+n+'/');
