@@ -4,7 +4,8 @@
 ```
 private rights scope + approved URL allowlist
   → scoped inventory (never discover unrestricted domains)
-  → optional licensed HTML / asset intake (NOT IMPLEMENTED)
+  → owner-approved single HTML preflight (IMPLEMENTED; explicit UA / allowlist)
+  → full product/asset ingest (NOT YET IMPLEMENTED)
   → immutable originals + SHA256 + provenance manifest
   → normalized product.json/SQLite
   → local image paths + detail routes + filter/search/sort
@@ -12,7 +13,7 @@ private rights scope + approved URL allowlist
 ```
 
 ## Pilot in this branch
-The pilot intentionally implements only the normalized model + static renderer + offline verification using four self-authored records and one original SVG illustration. Real BAS World crawling, downloading and rendering are **NOT** implemented. This allows testing whether the Windows toolchain, file:// links, local image loading and client filters work before requesting third-party content rights.
+The pilot intentionally implements only the normalized model + static renderer + offline verification using four self-authored records and one original SVG illustration. Real BAS World **homepage HTML single-read** is now implemented and Windows-tested in `scripts/source-http-read.mjs`. Bulk catalog discovery, image downloading, full product restore and source-exact rendering remain **NOT implemented**. This allows testing whether the Windows toolchain, file:// links, local image loading and client filters work before requesting third-party content rights.
 
 ## Real-source intake schema (future)
 - `source_origin`, `rights_reference`, `capture_at`, `source_url`, `canonical_url`
@@ -36,3 +37,6 @@ Until written licensing scope is verified: `SOURCE_ARCHIVE=BLOCKED_RIGHTS`, `FUL
 
 ## Estimated scaling risks
 Dynamic inventory churn, duplicate canonical URLs, photos lazy loaded via CDN, variable prices/currencies, dynamic filtering, video, third-party content, protected endpoints, page-layout drift, and huge asset volume. Preserve source URL and timestamp per record; enforce bounded fetch/concurrency/storage; ensure restore and offline operation before scaling.
+
+## Single-source read validation (2026-11-02)
+Windows runtime obtained real BAS World homepage with explicit Chrome/120 UA, HTTP 200, 788730 bytes, actual BAS World title, no Cloudflare challenge. `SOURCE_HTML_READ_PASS`, original SHA256 `38b068a22d5a60e80b7dd07b50aec740699fb499d19d9987bcf83a5f0343ca91`. The earlier 403 is reproducible with the default curl UA in an A/B comparison. Real source HTML is stored outside GitHub in the Windows private archive; no products or images have been archived yet. Do not equate a single homepage read with full-site mirroring.
