@@ -127,7 +127,7 @@
     "local_host_browser": "PASS",
     "local_home_redirect": "SUPERSEDED_BY_WORDPRESS",
     "local_core_pages": "PASS",
-    "owner_visual_review": "OPEN_NOT_APPROVED",
+    "owner_visual_review": "FAIL_REJECTED_NOT_PASS",
     "local_wordpress_templates": "PASS",
     "owner_browser_readback": "OPEN",
     "logo_exact": "PASS_2_OF_2_CAPTURED_SOURCE_VARIANTS",
@@ -143,8 +143,9 @@
     "offline_remote_dependencies": "FAIL_901_EXTERNAL_ATTEMPTS_0_RESPONSES",
     "visual_first_phase": "PILOT_FIRST_PAGE",
     "after_visual_pass_full_scrape": "BLOCKED",
-    "first_page_media_complete": "FAIL_98_OF_337_PLUS_UNCATALOGUED_ASSETS",
-    "first_page_pixel_parity": "OPEN_OWNER_NOT_REVIEWED"
+    "first_page_media_complete": "PARTIAL_263_OF_265_DIRECT_GRAPH_2_INVALID_SVG_JS_MODULES",
+    "first_page_pixel_parity": "FAIL_OWNER_SCREENSHOT_BLANK_REGIONS_AND_BROKEN_ICONS",
+    "first_page_rendered_components": "FAIL_NEXT_JS_RUNTIME_NOT_RESTORED"
   },
   "evidence": {
     "unit_checks": 37,
@@ -308,7 +309,29 @@
       "external_responses": 0,
       "owner_visual_pass": false
     },
-    "first_page_visual_report": "pilots/basworldy/FIRST-PAGE-VISUAL-GATE-2026-11-02.md"
+    "first_page_visual_report": "pilots/basworldy/FIRST-PAGE-VISUAL-GATE-2026-11-02.md",
+    "first_page_home_dependency_graph": {
+      "discovered": 265,
+      "downloaded": 263,
+      "rejected": 2,
+      "rejected_reason": "SVG suffix returned JavaScript modules",
+      "extra_dynamic_resources": "NOT_YET_INVENTORIED"
+    },
+    "first_page_latest_browser": {
+      "home_images_with_local_src": 422,
+      "home_images_with_remote_src": 0,
+      "home_loaded_images_after_partial_scroll": 95,
+      "home_scroll_height_px": 102078,
+      "source_visual_reference": "OPEN",
+      "js_runtime_removed_by_static_mirror": true,
+      "truck_first_page_loaded_images": 98,
+      "truck_first_page_total_img": 99,
+      "product_detail_broken_assets": "OPEN",
+      "browser_required_reaudit": "OPEN"
+    },
+    "first_page_visual_readiness": "FIRST_PAGE_VISUAL_GATE_FAIL",
+    "first_page_resource_graph_script": "skills/catalog-local-archive/scripts/discover-first-page-resource-graph.mjs",
+    "first_page_visual_audit_script": "skills/catalog-local-archive/scripts/audit-first-page-visual-readiness.mjs"
   },
   "governance": {
     "no_automatic_deploy": true,
