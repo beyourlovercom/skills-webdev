@@ -3,7 +3,7 @@ name: duplicate-site-skills
 description: Use for rights-cleared, auditable recreation or migration of an existing website into an independently owned target using GitHub and authorized Windows Local/Dev/WWW environments. Covers source inventories, local asset mapping, browser fidelity, WordPress MU adapters, forms, SEO, publication gates and rollback. Never assumes permission to copy third-party content or to publish a mirror.
 ---
 
-# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1)
+# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1.1)
 
 ## 目的与调用边界
 从 CentralXI 项目提炼可复用**流程与测试方法**，不是复制 CentralXI 的 802 页 HTML、品牌、代码资产或账号。采用先清点现状、只补差异、隔离开发、可观测验收、受控发布。这个 Skill 是 GitHub 中的操作规范；读取文件不等于原生安装、拥有 GitHub/DC/WordPress 登录态或得到生产授权。
@@ -81,4 +81,9 @@ references、template 和目标项目 AGENTS.md；先核对授权与既有 PASS�
 交付 manifest、源/目标页面清单、资产许可/哈希、路由映射、视觉差异、交互和询盘证据、SEO 门禁、精确发布/回滚记录和未关闭问题；任何未实测项为 OPEN。不要宣称该 Skill 已安装到 GPT 或已对任何新站执行。
 
 ## 2026-11-02 · Owner 原站离线备份优先契约（BASWORLDY 支线提纯）
-当 Owner 明确要求**把自有网站完整备份到本地**时，使用 `catalog-local-archive` V0.2 的 `OFFLINE ARCHIVE FIRST` 路径，而不是重建原版风格的原创模板。优先通过正式自建 DC 读取 Owner 自己下载至 Windows 本地的离线归档、官方整站备份/媒体/数据库导出。硬门为 **Logo 原始字节一致、产品 ID/字段/分类/URL 一一对应、每一张产品图片及相册顺序原样保留**；不存在源内容时不得使用假商品、示意 SVG、文字 Logo 或自主设计页面冒充 1:1 备份。静态网页归档不保证捕获动态产品、JS API、全部分页和图库；需要清点源总数、SHA、缺口、离线资源、PC/移动截图，并标注真实覆盖率。第三方权限和 WAF 不可绕过；输入源码/媒体与凭证保持私有，不提交公开 GitHub；未得 Owner 独立许可不得部署 Dev/WWW。
+当 Owner 明确要求**把自有网站完整备份到本地**时，使用 `catalog-local-archive` V0.6 的 `OFFLINE ARCHIVE FIRST` 路径，而不是重建原版风格的原创模板。优先通过正式自建 DC 读取 Owner 自己下载至 Windows 本地的离线归档、官方整站备份/媒体/数据库导出。硬门为 **Logo 原始字节一致、产品 ID/字段/分类/URL 一一对应、每一张产品图片及相册顺序原样保留**；不存在源内容时不得使用假商品、示意 SVG、文字 Logo 或自主设计页面冒充 1:1 备份。静态网页归档不保证捕获动态产品、JS API、全部分页和图库；需要清点源总数、SHA、缺口、离线资源、PC/移动截图，并标注真实覆盖率。第三方权限和 WAF 不可绕过；输入源码/媒体与凭证保持私有，不提交公开 GitHub；未得 Owner 独立许可不得部署 Dev/WWW。
+
+## 🔒 V1.1 Global rule — FIRST PAGE FIRST, Owner Visual PASS BEFORE EXPANSION (2026-11-02)
+**最高优先级，覆盖 D1/D2 旧条款：** 对已有网站的复制、迁移、原站备份/还原或高保真设计，第一轮只允许读取首页、**每种页面类型的第一页**和一个代表性详情，以及首轮页面的**全部真实资源**；任何分页/无限滚动、搜索、筛选、博客归档等只访问第 1 页，禁止第二页及后续 cursor/offset 自动抓取。先在 Windows Local 尽可能 100% 高保真还原所选页面（Logo、原图、背景、字体、CSS、完整首屏到 Footer、样本图库）；原站↔Local PC/移动真实 Chrome 截图、资源完整性检查和逐页缺陷明细交给 Owner 直接审核。**只有 Owner 明确回复视觉 `pass` 并保存基线/批准范围后，才能执行 D2 的全站 URL/产品/图片完整清点、后续分页和批量下载。**“继续”、代码测试 PASS、HTTP 200、局部图片完整都不是此审批。受控 Dev/WWW 仍需独立审批。
+
+继承可执行门禁：`../catalog-local-archive/scripts/visual-first-gate.mjs`、`../catalog-local-archive/templates/owner-visual-pass.example.json`；样例文件默认 `AWAITING_OWNER_REVIEW`。已经提前批量下载的历史内容冻结保留、不继续扩容、不当视觉签字。**不再把“全站清单先做完”写作第一轮必备工作。**
