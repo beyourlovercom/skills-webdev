@@ -36,7 +36,7 @@ const headers=path.join(dest,'headers.txt');
 const curl=(process.platform==='win32')?'curl.exe':'curl';
 const started=new Date().toISOString();
 const result=spawnSync(curl,[
- '--silent','--show-error','--compressed','--location','--max-redirs','2',
+ '--silent','--show-error','--location','--max-redirs','2',
  '--connect-timeout','8','--max-time','30','--retry','0','--max-filesize',String(maxBytes),
  '--user-agent',user_agent,'--dump-header',headers,'--output',body,
  '--write-out','\n%{http_code}\t%{url_effective}\t%{content_type}\n',source_url
