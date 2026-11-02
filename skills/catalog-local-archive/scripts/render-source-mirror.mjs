@@ -13,7 +13,8 @@ const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
 const htmlSources={'index.html':fs.readFileSync(home,'utf8'),'stock/truck/index.html':fs.readFileSync(listing,'utf8')};
 const detailCanonical=new URL(manifest.source_detail_products[0].canonical_url).pathname.replace(/^\//,'');
 htmlSources[detailCanonical+'/index.html']=fs.readFileSync(detail,'utf8');
-const all=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css'}))];
+const extra=arg('resources')?JSON.parse(fs.readFileSync(arg('resources'),'utf8')).media_assets:[];
+const all=[...manifest.media_assets,...extra,...manifest.css_dependencies.map(url=>({url,role:'css'}))];
 const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
