@@ -31,3 +31,27 @@ An **isolated test-only** Chrome instance on 007windows was invoked in headless 
 - If Chrome still errors after DNS fix, investigate its current profile proxy extension, HTTPS certificate trust, and DNS cache separately; do not restart Chrome preemptively.
 - Rollback on 007windows: delete only the exact BASWORLDY hosts line, leaving other hosts entries unchanged; backup available at the above path.
 - Scope remains Windows Local. `dev.basworldy.com` and `basworldy.com` are untouched; product content source copying remains blocked until rights confirmed.
+
+
+## Final diagnosis and verified remediation (supersedes earlier DNS-only diagnosis)
+
+The earlier investigation incorrectly inferred that repairing `007windows` hosts mapping was sufficient. The core reproducible Chrome failure affecting **both** Windows machines was the **system proxy path**:
+
+| Client | Active WinINET proxy | Explicitly proxied HTTP | Direct HTTP |
+|---|---|---|---|
+| Dev Windows | `127.0.0.1:7890` | **502** | **200** |
+| `007windows` | `127.0.0.1:7897` | **timeout at 12s** | **200** |
+
+Both clients' existing `HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyOverride` entries lacked `localdev.basworldy.com`. The earlier tests had forced `--no-proxy-server`, masking precisely this browser-path fault. Neither the theme nor WordPress was the root of these reported page-load errors.
+
+**Minimal completed fix:** Appended **only** `localdev.basworldy.com` to the end of each Windows user's existing `ProxyOverride` semicolon-delimited list, without changing `ProxyEnable`, `ProxyServer`, other patterns, browser processes, or site services. Each prior full string was saved locally before editing:
+- Dev Windows: `%TEMP%\basworldy-proxyoverride-before-20261102.txt`.
+- `007windows`: `%TEMP%\basworldy-proxyoverride-before-20261102.txt`.
+The `007windows` private hosts mapping to `100.87.29.56` remains required and was already applied in the previous repair.
+
+**Real Chrome validation:** Ran isolated Chrome headless CDP browser scripts **without** `--no-proxy-server` on both machines after modifying the WinINET bypass rules.
+- Dev Windows: `LOCAL_CORE_BROWSER_PASS`, `51/51`; captures `C:\Users\Administrator\Documents\catalog-local-archive-pilot-20261102\core-pages-system-proxy-review-20261102`.
+- `007windows`: `LOCAL_CORE_BROWSER_PASS`, `51/51`; captures `D:\Users\ADMINI~1\TEMP\basworldy-007-qa`.
+Both checked real local WordPress pages, vehicle filtering, details, mobile layouts, 0 JS exceptions and 0 external requests. Existing interactive Chrome profiles were **not restarted or modified**. A custom Chrome proxy-management extension in a pre-existing profile can still supersede system settings; only the isolated default-system-proxy browser path is proven.
+
+**Rollback:** On each device restore the exact prior `ProxyOverride` value from that device's local backup (or remove only the appended exact `localdev.basworldy.com` segment if unchanged since). Preserve the earlier 007 hosts backup separately. No changes to GitHub main, Dev/WWW, public DNS, or Production.
