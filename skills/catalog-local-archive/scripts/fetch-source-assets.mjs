@@ -16,7 +16,7 @@ const manifest=JSON.parse(fs.readFileSync(file,'utf8'));
 if(manifest.origin!=='https://www.basworld.com')throw Error('Unrecognized source origin');
 const stage=arg('stage')||'PILOT_FIRST_PAGE';
 if(stage==='PILOT_FIRST_PAGE'){
-  if(manifest.pilot_scope!=='FIRST_PAGE' || manifest.approved_first_page_assets!==true)
+  if(manifest.pilot_scope!=='FIRST_PAGE' || manifest.verified_first_page_assets!==true)
     throw Error('OWNER_VISUAL_GATE_BLOCKED: first round media must come from a verified FIRST_PAGE scoped manifest; bulk gallery queues prohibited');
   if(manifest.source_page_numbers?.some(n=>n!==1))
     throw Error('OWNER_VISUAL_GATE_BLOCKED: media manifest references a later page');
