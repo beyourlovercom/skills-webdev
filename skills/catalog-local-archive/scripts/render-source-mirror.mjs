@@ -19,7 +19,8 @@ const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
  const u=new URL(a.url);
- const ext=path.extname(u.pathname).toLowerCase();
+ let ext=path.extname(u.pathname).toLowerCase();
+ if(!['.jpg','.jpeg','.png','.svg','.webp','.css'].includes(ext)&&['cms.media.basworld.com','media.basworld.com'].includes(u.hostname)){ext=u.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}
  const id=crypto.createHash('sha256').update(u.href).digest('hex').slice(0,20);
  const rel='assets/'+a.role+'/'+id+ext;
  const src=path.join(assetsPath,rel),dst=path.join(out,rel);
