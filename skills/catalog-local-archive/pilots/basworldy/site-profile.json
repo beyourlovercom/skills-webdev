@@ -36,7 +36,26 @@
     "local_theme": "basworldy-local",
     "local_theme_version": "0.2.1",
     "local_home_url": "http://localdev.basworldy.com/",
-    "local_visual_review_url": "http://localdev.basworldy.com/review-local/"
+    "local_visual_review_url": "http://localdev.basworldy.com/review-local/",
+    "client_access": {
+      "windows_developer": {
+        "dns": "LOCAL_LOOPBACK_OK",
+        "http": 200,
+        "https_with_insecure_curl": 200
+      },
+      "windows_007": {
+        "dns": "TAILSCALE_PRIVATE_HOSTS_FIXED",
+        "server_ip": "100.87.29.56",
+        "http": 200,
+        "https_with_insecure_curl": 200,
+        "chrome_browser_visual": "OPEN"
+      },
+      "china_mac": {
+        "dns": "UNRESOLVED",
+        "tailscale_host_header_http": 200,
+        "hosts_change": "BLOCKED_ADMIN_AUTH"
+      }
+    }
   },
   "scope": {
     "mode": "fixture-only",
@@ -60,7 +79,8 @@
     "local_home_redirect": "SUPERSEDED_BY_WORDPRESS",
     "local_core_pages": "PASS",
     "owner_visual_review": "OPEN",
-    "local_wordpress_templates": "PASS"
+    "local_wordpress_templates": "PASS",
+    "owner_browser_readback": "OPEN"
   },
   "evidence": {
     "unit_checks": 37,
@@ -113,7 +133,8 @@
     "core_browser_js_exceptions": 0,
     "previous_local_home_mu_redirect": "DISABLED_AND_ARCHIVED",
     "wordpress_blog_public": 0,
-    "core_owner_visual_signoff": "OPEN"
+    "core_owner_visual_signoff": "OPEN",
+    "client_access_incident": "pilots/basworldy/LOCAL-ACCESS-INCIDENT-2026-11-02.md"
   },
   "governance": {
     "no_automatic_deploy": true,
