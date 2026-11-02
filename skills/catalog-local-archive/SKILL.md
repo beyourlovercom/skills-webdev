@@ -3,7 +3,25 @@ name: catalog-local-archive
 description: Source-exact, owner-authorized offline website backup into isolated Windows Local. Preserve original logo, all source products, product galleries, images and URL paths; ingest owner's offline archive first instead of rebuilding mock templates.
 ---
 
-# catalog-local-archive V0.5 — 原站离线备份恢复
+# catalog-local-archive V0.6 — 原站离线备份恢复
+
+## 🔒 最高级执行门禁 V0.6：FIRST PAGE → OWNER VISUAL PASS → FULL INVENTORY
+**本节具有最高优先级，覆盖本 Skill 旧版 B0–B6、V0.3–V0.5 和任何要求在第一轮遍历全部分页/所有商品的文字或脚本示例。违背本节的旧步骤视为已废止。**
+
+### 第一轮必须只做页面与视觉，不做全量数据
+1. **FIRST_PAGE_ONLY（硬编码）**：任何带分页的区域——产品列表、所有分类、博客文章列表、搜索结果、筛选结果、评论、品牌、图库分页及 API cursor——初次读取和复刻都**只准第一页**：`page=1` 或没有分页参数的首屏/首页。禁止抓取 `page=2`、`page>1`、`offset>0`、`cursor`/nextToken、无限滚动下一屏，禁止自动跟踪页面中的 `next` 链接。可读取/记录其存在，但**不能访问或下载后续页**。
+2. **每个页面类型选一个真实样本**：仅抓主页、分类/列表第一页、选中的首屏商品详情（必要时各类型一条）、About/Contact/Shipping 等标准页和博客索引第一页/一篇文章（如属于本期范围）。不能为了“商品总数”读取下一页或多条详情；同类多个分类可以分别取**自己的第 1 页**用于视觉模板，但不翻页。
+3. **FIRST_PAGE_ASSETS_EXACT**：把第一轮所选页面上**全部实际需要的** Logo 原文件/变体、字体、CSS、JS（只读离线安全版本）、首屏到页尾 Banner、分类图、第一页各商品卡片图、背景图、`srcset`/lazyload 资源保存到 Windows 私有本地；所选真实详情要把实际图库与缩略图按顺序完整保存。缺项要列出，不得拿原图 placeholder、模板、热链替代。
+4. **FIRST_PAGE_VISUAL_100_TARGET**：先在 Windows Local 将这几种核心页面**尽可能做到逐像素/布局高保真 100% 目标**：原始 Logo、Header/Footer、字体、间距、颜色、导航、商品卡片、图库、PC 和移动端。对照源站真实截图和 Local Chrome 截图，出逐页面缺陷报告；视觉上不符就修复或如实列为 OPEN，不能自称“100% PASS”。
+5. **OWNER_VISUAL_REVIEW（唯一阶段转换）**：将首页、列表第 1 页、单个详情、基础页面审核链接交给 Owner 直接看。即使程序 51/51 测试通过、图片 100%、HTML 200，也**不能**代替 Owner 明确回复 `pass` 或更具体的视觉审批。只有在私有审批记录内引用具体 Owner 消息、审核基线/页面/日期后才允许转下一阶段。普通“继续”**不等于**视觉 PASS。
+6. **AFTER_OWNER_VISUAL_PASS 才解锁**：先冻住已确认的页面视觉与 CSS，然后有序遍历所有分类分页 → 产品清单/详情 → 每件原图 → 完整率核验。以后遇到其他新模板/页面类型，仍先第一页+Owner 视觉签字。所有生产发布和 GitHub main 合并仍需**独立审批**。
+7. **已有越界数据只存档、不算视觉 PASS**：BASWORLDY 之前因流程偏差预抓了 3 类、2,115 URL、195 详情等；保留原始哈希以免损失、不重复抓取，但标为 `LEGACY_PREMATURE_BULK_FROZEN`，**不能据此允许再抓页 2+，也不能把 R6 数据 PASS 当成 Owner 视觉 PASS**。
+
+### 可执行门禁
+- 读取模块 `scripts/source-http-read.mjs` 只准第一轮页面；`scripts/capture-real-catalog.mjs`、`scripts/capture-category-pages.mjs` 默认 `--from 1 --limit 1`，其他分页/批量详情需要 `--stage EXPANSION_AFTER_OWNER_PASS --visual-approval <private-approval-json>`，且校验该文件中明确 Owner 视觉通过的可追溯凭据。样例见 `templates/owner-visual-pass.example.json`，默认 `AWAITING_OWNER_REVIEW`，**不是授权文件**。
+- 默认阶段永远为 `PILOT_FIRST_PAGE`；首轮使用独立 `first-page-pilot` 清单，不准将已采集多页的旧目录作为首轮索引继续抓取。
+- 单元测试必须覆盖：首轮翻页拒绝、首轮批量拒绝、历史多页清单拒绝、缺审批拒绝、篡造/不完整的 PASS 拒绝。自测仅证明门禁代码有效，不替代 Owner 审批。
+- 以下所有关于“全量清点”的旧描述仅适用于**Owner 视觉 PASS 之后**。
 
 ## 最高优先级：BACKUP，不是重新设计
 Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容为准，达到尽可能 100% 的网站一致性。**不能**把四条模拟产品、原创 SVG、重做的 Logo 或原创主题当作原站备份、商品同步或视觉一致性 PASS。之前的 `basworldy-local` V0.2.1 仅是测试用本地主题，状态 `FIXTURE_ONLY`。
@@ -15,7 +33,7 @@ Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容
 
 ## 原始归档不可修改
 - 输入目录只读，另建 `source-manifest`、`assets`、`restore-worktree`；不得直接在原始备份上全局替换链接。
-- 第一轮盘点记录真实文件数/总字节、主页及分类路由、所有产品详情链接、产品唯一 ID、源图 URL→本地文件、媒体顺序、Logo 原始版本与每个资源 SHA256。
+- 第一轮只记录**首选核心页面及各列表第一页**的实际 HTML/资源、所选样本详情和对应原始媒体；只对这批页面做 Logo/图像 SHA256 与视觉验收。全量商品清单/分页仅在 Owner 视觉 PASS 后盘点。
 - 原始 `index.html` 不代表全站完整；每类网页需检查分页、延迟加载、JS 路由、移动版本、商品变体、源站 API 和隐藏图库。动态查询和站内搜索不能因为网页下载成功就宣称可离线使用。
 - 原始网页及资源/私有凭据**不得提交 Public GitHub**。GitHub 分支只保留技能、恢复脚本和去敏化报告；不得包含真实交易/客户/账号/会话 Cookie。
 
@@ -28,12 +46,12 @@ Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容
 
 ## 执行顺序
 - **B0 读取目录**：Owner 明确提供的 Windows 本地目录，通过正式 DC 执行；只读列出根目录、结构、文件数量、实际大小、可打开入口。
-- **B1 基线清点**：Logo / CSS / JS / 首页 / 类目 / 产品链接 / 所有图库，找出缺图、丢失路由、无来源链接及动态依赖。
+- **B1 第一页清点**：仅首页、各核心类型列表第一页、一条有代表性的真实商品详情与基础页；完整归档这些选定页面的 Logo / CSS / 字体 / 图片 / 该样本图库。不翻下一页、不列出全部商品。
 - **B2 原样本地预览**：先用备份的 HTML/静态资源建一个原版只读预览，不改写视觉、不先套 WordPress 主题；独立于现有测试网站。
 - **B3 Local 还原**：在 `http://localdev.basworldy.com` 本地隔离站恢复原始站点路由与前台组件；仅在确有必要时使用 WordPress adapter，优先原样资源+HTML。离线禁用所有线上支付、表单提交、真实用户账号、分析脚本及外部回调。
-- **B4 一致性对账**：来源商品数=已恢复+明确排除+失败项；Logo SHA256、全部产品图 URL/顺序/Hash、页面路径和所需资源均列表审计；丢失内容不可悄悄替代。
-- **B5 Windows Chrome 真实验收**：先首页、类目列表、产品详情，再分页/筛选/搜索/图片 Gallery；PC 1440px 与 375px 截图对比。**必须使用实际系统代理例外配置**，不能只靠 `--no-proxy-server` 的 Headless 测试。
-- **B6 离线与全量**：断开远程资源依赖后可浏览所有已承诺归档页面、图片以及必要交互，输出准确覆盖率、缺口、SHA 和独立回滚。不可凭 `HTTP 200` 或测试 fixture 宣称 `FULL_ARCHIVE_PASS`。
+- **B4 首轮一致性对账**：只对**第一轮选定页面**的 Logo、页面结构、第一页每张资源、样本商品图库和展示顺序审计；全站商品总数和全站图片对账不得提前做。
+- **B5 Windows Chrome 真实验收**：首轮仅首页、类目**第一页**、样本产品详情/图库及基础页，PC 1440px 与 375px 原站↔Local 对照，提交 Owner 视觉确认。**在 Owner 明确 pass 前禁止进入后续分页。****必须使用实际系统代理例外配置**，不能只靠 `--no-proxy-server` 的 Headless 测试。
+- **B6 视觉 PASS 后的离线与全量**：仅 Owner 视觉审核已 pass 后才启动其余分页、所有商品/图库及全站离线覆盖率的审计。不可凭 `HTTP 200` 或测试 fixture 宣称 `FULL_ARCHIVE_PASS`。
 
 ## BASWORLDY 已知项目事实（2026-11-02）
 - Source: `https://www.basworld.com/`；Owner 声明该站属于自己，目标是私人本地备份。此声明记为 `OWNER_ATTESTED`；素材/后台源导出权限以实际接入核对，不能伪造。
