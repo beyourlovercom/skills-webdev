@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "project_id": "basworldy",
+  "project_name": "BASWORLDY catalog-local-archive pilot",
+  "source": {
+    "origin": "https://www.basworld.com",
+    "relationship": "third-party",
+    "rights_status": "unverified",
+    "copy_html": false,
+    "copy_photos": false,
+    "copy_text": false,
+    "source_capture_status": "BLOCKED_RIGHTS",
+    "allowlist": []
+  },
+  "target": {
+    "brand": "BASWORLDY",
+    "public_origin": "https://basworldy.com",
+    "platform": "UNVERIFIED",
+    "indexing": "hold",
+    "publication_status": "NOT_DEPLOYED"
+  },
+  "environments": {
+    "windows_device": "windows",
+    "local_origin": "http://localdev.basworldy.com",
+    "local_role": "Windows Local",
+    "local_runtime_status": "HOSTNAME_NOT_CONFIGURED",
+    "online_dev_origin": "https://dev.basworldy.com",
+    "online_dev_role": "Online Dev/UAT",
+    "online_dev_runtime_status": "UNVERIFIED",
+    "future_www_origin": "https://basworldy.com",
+    "future_www_role": "Future Production",
+    "future_www_runtime_status": "UNVERIFIED"
+  },
+  "scope": {
+    "mode": "fixture-only",
+    "max_items": 4,
+    "blog_excluded": true,
+    "external_assets_excluded": true,
+    "real_checkout_excluded": true,
+    "real_inquiry_excluded": true,
+    "real_site_crawl": false
+  },
+  "gates": {
+    "local_fixture": "PASS",
+    "browser_fixture": "PASS",
+    "licensed_source_backup": "BLOCKED_RIGHTS",
+    "live_local_hostname": "OPEN",
+    "online_dev": "BLOCKED_OWNER_PASS",
+    "www": "BLOCKED_OWNER_PASS",
+    "seo": "HOLD"
+  },
+  "evidence": {
+    "unit_checks": 37,
+    "browser_checks": 17,
+    "images_loaded": true,
+    "filters_pass": true,
+    "detail_pass": true,
+    "remote_requests": 0,
+    "mode": "synthetic",
+    "local_test_path": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102"
+  },
+  "governance": {
+    "no_automatic_deploy": true,
+    "no_automatic_indexing": true,
+    "no_credential_copy": true,
+    "no_restart_ready_devices": true,
+    "no_conflict_with_localwp": true,
+    "changes_require_separate_owner_pass": true
+  }
+}
