@@ -44,7 +44,7 @@ for(const entry of selected){
  if(!fs.existsSync(dest)&&fs.existsSync(invalid)){
   const header=fs.existsSync(headerFile)?fs.readFileSync(headerFile,'utf8'):'';
   const b=fs.readFileSync(invalid);
-  if(b.length>0&&b.length<=maxSize&&magicOK(ext,b)&&/^HTTP\/1\.1 201 Created/m.test(header)&&/content-type:\s*image\/jpeg/im.test(header)){
+  if(b.length>0&&b.length<=maxSize&&magicOK(ext,b)&&/^HTTP\/1\.1 (?:200 OK|201 Created)/m.test(header)&&/content-type:\s*image\/(?:jpeg|jpg)/im.test(header)){
    fs.renameSync(invalid,dest);console.log(JSON.stringify({role:entry.role,status:'RECOVERED_VERIFIED_HTTP_201_JPEG',bytes:b.length}));
   }
  }
@@ -67,7 +67,7 @@ for(const entry of selected){
  const status=Number(codeText||0),bytes=fs.existsSync(dest)?fs.statSync(dest).size:0;
  let finalOK=false;try{finalOK=allowHosts.includes(new URL(final).hostname)}catch{}
  const valid=proc.status===0&&(status===200||(status===201&&['.jpg','.jpeg','.png','.webp'].includes(ext)))&&finalOK&&bytes>0&&bytes<=maxSize&&
- (mime||'').toLowerCase().startsWith(format[ext])&&magicOK(ext,fs.readFileSync(dest));
+ ((mime||'').toLowerCase().startsWith(format[ext])||(['.jpg','.jpeg'].includes(ext)&&/^image\/jpg(?:\s*;|$)/i.test(mime||'')))&&magicOK(ext,fs.readFileSync(dest));
  if(!valid&&fs.existsSync(dest))fs.renameSync(dest,dest+'.invalid');
  const item={role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
  status:valid?'SAVED':'FAILED',http:status,bytes:valid?bytes:0,
