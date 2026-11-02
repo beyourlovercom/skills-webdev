@@ -153,3 +153,16 @@ Local source-mirror-r2 currently contains 272 authentic HTML page snapshots plus
 Private Windows source archive: D:\ai\basworldy-source-archive. Local view: http://localdev.basworldy.com/source-mirror-r2/ ; searchable captured inventory: /source-mirror-r2/inventory.html ; R6 review: /source-mirror-r2/R6-review.html.
 
 Do not merge main, change root LocalWP page, publish Dev/WWW, transmit private source HTML/photos to Public GitHub, or enable live order/payment/forms without separate Owner approval.
+
+## V0.6a — 实际浏览器页面还原的工程验收（首页 FAIL 后补充）
+**不可再用「原始 HTML 删除全部 JavaScript + 仅下载 IMG 主图」代替原站复刻。** 本项目的原始首页含 35 个 JS 标签和 422 个 IMG；旧本地 HTML 只保留 0 个 JS，仍有 358 个外链 IMG，Trustpilot 图标来自 `basgroup.a.bigcontent.io`；源 CSS 中额外有 24 处 `url(...)`（字体、图标、背景）。这就是 Owner 2026-11-02 截图中大面积空白、破图及框架缺失的已验证主要技术缺口。
+
+**第一轮必经流水线：**
+1. 用真实浏览器对同一源 URL（首页/类别第一页/首屏样本详情/基础页）获取渲染态 DOM、完整第一页面 Network 依赖与原版截图；在当前第一页正常滚动以激活本页 lazyload，禁止进入下一页、无限滚动续页或点击 Load more。若源站 Headless 无法正常渲染，不可以拿静态请求冒充实时视觉；改用有授权的实际 Chrome 会话只读 DOM/HAR/截图，或由 Owner 提供源站截图做参考。
+2. `scripts/discover-first-page-resource-graph.mjs` 必须扫描 IMG、Picture/srcset、CSS 内嵌 URL、`@font-face`、Banner 内联背景、Logo、Svg/评论星星、轮播图、图标字体和动态媒体来源，保存来源 URL/二进制 SHA/MIME；实测样本依赖图 265 条（仅原始首页及已捕获 CSS 的直接引用，尚不等于动态资源全量）。
+3. `scripts/fetch-source-assets.mjs` 下载白名单内真实页面资源，文件签名必须与 MIME/字节一致；遇到同名 .svg 返回 JavaScript 模块须拒绝，不得伪装资源 PASS。媒体下载范围严格限选定第一页和该页样本详情，不扩展到后续产品分页。
+4. 恢复 CSS 字体路径/背景 URI、图片/图标、必要 UI 组件运行时。对 React/Next.js，应采用**已渲染 DOM 快照 + 可审计本地轻交互适配**，或从 Owner 有授权的源码构建隔离本地前端 + mock API；不得粗暴开放线上脚本、生产登录、支付、表单、跟踪或私密 API。原站是可交互的，不能把所有交互禁止后声称 100% 功能一样。
+5. Windows Chrome 对来源与本地相同视口进行**全页**截图/组件坐标差分，验证可见与页尾懒加载图片、Hero/轮播、Logo、Trustpilot、字体、商品卡片、Header/Footer、移动端。任何破图、主视觉空白、CSS 字体缺失、外链依赖、未完成 source↔Local 截图对比必须 `VISUAL_REVIEW_NOT_READY`，**禁止请求 Owner PASS**。
+6. 用 `scripts/audit-first-page-visual-readiness.mjs` 记录资源缺口、Chrome 外域请求、原版视觉基线是否存在、动态组件及 Owner 审批未完成。源站/Local 视觉一致率不能凭主观形容造数，100% 是目标，不是机器已经达到的状态。
+
+BASWORLDY 本轮第一轮样本：Logo 2/2、CSS 12/12、Volvo 图库 82/82 已归档；原先三页范围图片为 98/337。随后识别首页+CSS 的 265 个直接依赖，包括 BigContent SVG、TitilliumWeb/图标字体和 Hero 背景，但它们仍需逐项落盘、检查浏览器及动态运行时；不可把「资源清单已建立」当「页面高保真 PASS」。
