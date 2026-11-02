@@ -15,17 +15,17 @@ const manifest=JSON.parse(fs.readFileSync(file,'utf8'));
 if(manifest.origin!=='https://www.basworld.com')throw Error('Unrecognized source origin');
 const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const records=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css',item_sku:null}))];
-const allowHosts=['www.basworld.com','static.basworld.com'];
+const allowHosts=['www.basworld.com','static.basworld.com','media.basworld.com','cms.media.basworld.com'];
 const format={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.css':'text/css'};
 const role=arg('role')||'all';
-if(!['all','logo','vehicle_gallery','css'].includes(role))throw Error('Invalid --role');
+if(!['all','logo','vehicle_gallery','page_image','css'].includes(role))throw Error('Invalid --role');
 const start=Number(arg('start')||0);
 if(!Number.isInteger(start)||start<0||start>100000)throw Error('Invalid --start');
 const selected=records.filter(x=>role==='all'||x.role===role).slice(start,start+max),seen=new Set();
 const reports=[];
 fs.mkdirSync(out,{recursive:true});
 for(const entry of selected){
- let url,ext;try{url=new URL(entry.url);ext=path.extname(url.pathname).toLowerCase();}catch{throw Error('Invalid asset URL');}
+ let url,ext;try{url=new URL(entry.url);ext=path.extname(url.pathname).toLowerCase();if(!format[ext] && ['cms.media.basworld.com','media.basworld.com'].includes(url.hostname)){ext=url.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}}catch{throw Error('Invalid asset URL');}
  if(url.protocol!=='https:'||!allowHosts.includes(url.hostname)||!format[ext]||entry.url.length>2048)throw Error('Asset outside allowlist '+entry.url);
  if(seen.has(url.href))continue;seen.add(url.href);
  const id=crypto.createHash('sha256').update(url.href).digest('hex').slice(0,20);
