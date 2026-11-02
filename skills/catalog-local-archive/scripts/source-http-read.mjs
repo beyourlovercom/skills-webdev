@@ -5,6 +5,7 @@
  * challenge-solving, proxy rotation, robots bypass, or publication.
  * Usage: node source-http-read.mjs <policy.json>
  */
+import { enforceVisualFirst } from './visual-first-gate.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -28,6 +29,23 @@ if (typeof user_agent !== 'string' || user_agent.length < 12 || user_agent.lengt
 if (!output_directory || typeof output_directory!=='string' || !path.isAbsolute(output_directory)) fail('Absolute output_directory required');
 if (!Number.isInteger(maxBytes) || maxBytes<1024 || maxBytes>20000000) fail('max_bytes must be 1024..20000000');
 if (policy.max_pages_per_run !== 1) fail('Only one URL per run is permitted');
+const prePage=u.searchParams.get('page') || u.searchParams.get('paged') || '1';
+const offset=u.searchParams.get('offset')||'0';
+const hasCursor=[...u.searchParams.keys()].some(x=>/cursor|after|nexttoken|continuation/i.test(x));
+const pathPage=/(?:\/page\/)(\d+)\/?$/.exec(u.pathname);
+const isAdvancedPage=Number(prePage)>1 || Number(offset)>0 || hasCursor || (pathPage && Number(pathPage[1])>1);
+const stage=policy.stage||'PILOT_FIRST_PAGE';
+try {
+ if(stage==='PILOT_FIRST_PAGE') {
+   if(isAdvancedPage) fail('OWNER_VISUAL_GATE_BLOCKED: first round only page 1, no offset/cursor');
+   if(/^\/vehicles\/(new|used)\//.test(u.pathname) &&
+     (!Array.isArray(policy.pilot_representative_detail_urls) || !policy.pilot_representative_detail_urls.includes(u.href)))
+       fail('OWNER_VISUAL_GATE_BLOCKED: detail must be explicitly selected as first-page representative');
+ } else {
+   enforceVisualFirst({phase:stage,approvalFile:policy.visual_approval_file,mode:'inventory',from:2,limit:2});
+ }
+} catch(e) {fail(e.message);}
+
 const root=path.resolve(output_directory);
 const dest=path.join(root,'single-read-'+new Date().toISOString().replace(/[:.]/g,'-')+'-'+process.pid);
 fs.mkdirSync(dest,{recursive:true});
