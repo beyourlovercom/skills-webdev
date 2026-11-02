@@ -3,7 +3,7 @@ name: catalog-local-archive
 description: Source-exact, owner-authorized offline website backup into isolated Windows Local. Preserve original logo, all source products, product galleries, images and URL paths; ingest owner's offline archive first instead of rebuilding mock templates.
 ---
 
-# catalog-local-archive V0.2 — 原站离线备份恢复
+# catalog-local-archive V0.3 — 原站离线备份恢复
 
 ## 最高优先级：BACKUP，不是重新设计
 Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容为准，达到尽可能 100% 的网站一致性。**不能**把四条模拟产品、原创 SVG、重做的 Logo 或原创主题当作原站备份、商品同步或视觉一致性 PASS。之前的 `basworldy-local` V0.2.1 仅是测试用本地主题，状态 `FIXTURE_ONLY`。
@@ -54,3 +54,25 @@ Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容
 3. 只有在 Owner 具有原站 Cloudflare Zone 的管理权限、查看到 Security Events 中确切拦截规则，且另行批准本次真实生产安全修改时，才允许提出 **限源公网 IP + 限域名/路径 + 限时间的最小 Skip/WAF 例外**；保留原规则快照、实时监控并在备份结束后撤销。不可放宽整个站的安全设置，也不可将 Tailscale 100.x 私网 IP 误当公网访问 IP。不同 Cloudflare 产品（尤其 Free Bot Fight Mode）可能不能由 Skip 规则豁免。
 4. **绝不以本地 fixture 成功代替备份完成**。未取得真实 HTML/媒体/商品数据，保持 `SOURCE_ACQUISITION=BLOCKED_403`，`LOGO_EXACT=OPEN`，`PRODUCTS_EXACT=OPEN`，`IMAGES_EXACT=OPEN`。Owner 给出本地导出或备份后，通过 DC 重新进入 B0 只读盘点。
 5. 如浏览器能人工打开但下载器 403，可以先使用官方管理后台导出；单页浏览器保存仅作缺口修补，不等于全站备份。
+
+## 真实源站读取 V0.3 — 已有实际可执行模块
+Skills Markdown 是流程规范，不等于真实联网抓取程序。新增 `scripts/source-http-read.mjs`，单次仅读取一条获得授权、精确列在 allowlist 的 HTTPS URL；可配置单一 User-Agent，限制体积/耗时、保留原始 HTML、HTTP 响应头、真实标题、SHA256、Cloudflare Ray、状态码和 JSON 报告。没有递归、重试、代理轮换、破解挑战、图库下载、后台登录或真实商品同步。
+
+项目配置：`pilots/basworldy/source-access-policy.example.json`，将 Owner 提供的 `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36` 作为**该源站本次测试的显式请求头**，不固定为所有站点的长期默认 UA。
+
+Windows Local 运行：
+```bash
+node skills/catalog-local-archive/scripts/source-http-read.mjs skills/catalog-local-archive/pilots/basworldy/source-access-policy.example.json
+```
+
+### 2026-11-02 源站实际测试
+同机同源站首页 A/B：默认 curl 请求 HTTP 403（4572 字节）；指定 Chrome/120 UA 后 HTTP 200（788730 字节）。页面标题 BAS World: trucks, vans, construction equipment & trailers，无 Cloudflare challenge。新增脚本 Windows 实测 `SOURCE_HTML_READ_PASS`，归档 SHA256 `38b068a22d5a60e80b7dd07b50aec740699fb499d19d9987bcf83a5f0343ca91`。该证据**只说明首页 HTML 读取成功**；不代表全站、所有真实商品、Logo 和图片都已备份。
+
+### 仍必须完成的能力
+1. SOURCE INVENTORY：基于获准真实目录页、源站导出清单、分页与产品 ID，审计真实总 SKU/车辆量，保持源路径。
+2. ASSET INTAKE：发现并保存实际 Logo、全部商品图片/图库、lazyload/srcset/CSS 图，保留源 URL、SHA、bytes 与商品关联；不热链不填假图。
+3. LOCAL REPLAY：用原始 HTML/CSS/JS/图片构成私有只读本地镜像；动态筛选、API 依赖与分页需单独实现或留缺口。
+4. FULL AUDIT：按真实源商品清单逐项核验数量、字段、价格、图片顺序、链接以及 Chrome 视觉对照；不使用模拟页面冒充备份成功。
+
+### 403 诊断边界
+Cloudflare Browser Integrity Check 等安全服务可能检查 UA 和其他请求头；目前 A/B 只能说明 UA 与 403 有关，**不能确定具体安全规则**。需要 Cloudflare Security Events + Ray ID 才能归因。不得批量轮换 User-Agent/代理或绕过明确挑战；源站管理员优先采用后台数据/原始服务器导出。原站源码、真实图片、认证信息仅留 Windows 私有路径，不上传 Public GitHub。
