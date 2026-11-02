@@ -46,3 +46,12 @@ Before any real source import: verify explicit content/photo/domain permissions 
 ## Overall status
 `DESIGN_READY` + `FIXTURE_UNIT_PASS` + `OFFLINE_BROWSER_PASS` + `LOCAL_HOST_BROWSER_PASS`.
 `SOURCE_ARCHIVE=BLOCKED_RIGHTS` · `DEV_NOT_DEPLOYED` · `WWW_NOT_DEPLOYED` · `INDEXING_HOLD`.
+
+
+## Addendum — bare-domain homepage and Dev preflight
+
+- Created one local-only WordPress MU adapter at `wp-content/mu-plugins/basworldy-local-home.php`, scoped by an exact host check. `php -l` passed.
+- Bare `http://localdev.basworldy.com/` returns HTTP `302` to `/catalog-pilot/index.html`; following redirect returns HTTP `200`.
+- LocalWP admin password is held only in Windows in a private file. ACL now permits only the Windows Administrator account, SYSTEM and Administrators; secrets were never committed or displayed.
+- Windows read-only external preflight: `dev.basworldy.com` DNS lookup was unresolved from that device and curl returned 000. This is not proof that DNS is globally absent. No online changes.
+- Root redirect is reversible by removing **only** the BASWORLDY local MU file; do not touch shared LocalWP routes or other sites. No migration or deployment to Dev/WWW.
