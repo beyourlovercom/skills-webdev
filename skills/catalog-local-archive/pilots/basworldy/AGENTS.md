@@ -25,3 +25,14 @@ Scope: this file governs the BASWORLDY pilot within `skills-webdev` only. It doe
 - LocalWP site ID `BgNoFMOb5`; `D:\ai\basworldy-local\app\public`.
 - Self-authored fixture served at `http://localdev.basworldy.com/catalog-pilot/index.html`; 18 browser checks PASS and 0 nonlocal requests.
 - 4 vehicle records are synthetic. Real-source intake remains `BLOCKED_RIGHTS`; online Dev and WWW remain unauthorized and untouched.
+
+
+## Native WordPress local theme — current (2026-11-02)
+
+The previous synthetic static catalog remains under `/catalog-pilot/` for historical test isolation, but it is **not** the current homepage. WordPress now serves the root using `basworldy-local` theme v0.2.1; the old MU redirect has been moved out of the active plugin folder and retained in the private Windows archive.
+
+- Reusable native templates: `front-page.php`, `archive-vehicle.php`, `single-vehicle.php`, `page.php`, `home.php`, `single.php`, with shared header/footer, CSS and JS.
+- Four synthetic Vehicle posts, six native Pages (including Home and Insights), three synthetic Blog posts. Original WP sample content was moved to Draft.
+- Exact local review: `http://localdev.basworldy.com/review-local/`. Actual Windows Chrome 51 browser checks PASS and 11 screenshots; Owner visual approval remains OPEN.
+- WordPress manages content and permalinks; source content/data harvesting permission is **not** inferred. No Dev or WWW writes or main merge.
+- Keep review screenshots only in local evidence; do not add local passwords, account tokens or screenshots with browser session state to public GitHub.
