@@ -59,7 +59,7 @@ const csp="<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 's
 const noindex='<meta name="robots" content="noindex,nofollow"><meta name="bwy-archive" content="AUTHENTIC_SOURCE_PARTIAL_READ_ONLY">';
 function linksRewrite(html){
  return html.replace(/\bhref=(["'])([^"']+)\1/gi,(full,quote,raw)=>{
-  const link=raw.replaceAll('&amp;','&');if(link.startsWith('#')||link.startsWith('mailto:')||link.startsWith('tel:'))return full;
+  const link=raw.replaceAll('&amp;','&');if(link.startsWith(local)||link.startsWith('#')||link.startsWith('mailto:')||link.startsWith('tel:'))return full;
   let u;try{u=new URL(link,origin)}catch{return full;}
   if(!['http:','https:'].includes(u.protocol))return full;
   if(u.hostname!=='www.basworld.com')return 'href='+quote+local+'unarchived.html?external=1'+quote;
