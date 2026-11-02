@@ -1,0 +1,16 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+import {enforceVisualFirst} from '../visual-first-gate.mjs';
+const inv={mode:'inventory',from:1,limit:1,category:'truck'};
+test('first page only allowed',()=>assert.equal(enforceVisualFirst(inv).page_limit,1));
+test('page 2 blocked in first round',()=>assert.throws(()=>enforceVisualFirst({...inv,from:2}),/OWNER_VISUAL_GATE_BLOCKED/));
+test('extra pages blocked in first round',()=>assert.throws(()=>enforceVisualFirst({...inv,limit:20}),/ONLY page=1/));
+test('historical bulk index cannot be reused as pilot',()=>assert.throws(()=>enforceVisualFirst({...inv,indexUrlCount:988}),/historic bulk index/));
+test('bulk seed manifests cannot be mixed into pilot',()=>assert.throws(()=>enforceVisualFirst({...inv,seedManifestCount:1}),/bulk seed/));
+test('detail requires explicit first-page product URL',()=>assert.throws(()=>enforceVisualFirst({mode:'details',limit:1,knownFirstPageUrls:['https://www.basworld.com/vehicles/used/a']}),/representative/));
+test('detail from page 1 allowed',()=>{const u='https://www.basworld.com/vehicles/used/a';assert.equal(enforceVisualFirst({mode:'details',limit:1,pilotUrl:u,knownFirstPageUrls:[u]}).stage,'PILOT_FIRST_PAGE');});
+test('media bulk blocked first round',()=>assert.throws(()=>enforceVisualFirst({mode:'media'}),/bulk media/));
+test('expansion requires recorded approval',()=>assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:null}),/Owner visual PASS/));
+test('fabricated incomplete approval rejected',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({status:'PASS'}));assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:p}),/requires verified/);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
+test('properly recorded review PASS enables explicit expansion',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({schema_version:1,project_id:'basworldy',source_origin:'https://www.basworld.com',gate:'OWNER_VISUAL_PASS',status:'PASS',owner_explicit_pass:true,approval_recorded_at:'2026-11-02',owner_message_reference:'conversation approval turn 123',review_baseline_id:'review-local-snapshots-sha256',approved_template_urls:['https://www.basworld.com/stock/truck']}));assert.equal(enforceVisualFirst({mode:'inventory',from:4,limit:30,phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:p}).approved,true);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
