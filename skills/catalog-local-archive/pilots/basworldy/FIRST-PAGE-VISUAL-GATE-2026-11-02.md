@@ -38,3 +38,20 @@ Private first-page source asset manifest:
 
 ## GitHub governance
 A separate **draft** policy-only PR #15 was opened from main with generic visual-first rules, not yet merged. BASWORLDY V0.6 executable code remains on `feat/catalog-local-archive-pilot-20261102`. No main merge and no Dev/WWW writes occurred.
+
+## Owner screenshot FAIL — real technical root causes and remediation (2026-11-02 late afternoon)
+Owner inspected Local homepage and rejected the visual: blank regions, Trustpilot broken stars, incomplete component/layout. **No visual PASS**, no pagination.
+
+**Before:** original source homepage 35 script tags, 422 IMG tags; initial Local renderer deleted all 35 scripts; 358 external IMG URLs remained; CSS downloaded but missed 24 nested font/icon/background references; critical Trustpilot icons came from `basgroup.a.bigcontent.io`, an excluded host. Original page depended on Next.js/React runtime. Local read-only CSP and HTTP 200 cannot replace working UI hydration.
+
+**Remediation already executed on first-page-only scope:**
+- `discover-first-page-resource-graph.mjs`: 265 direct resource URL references from original homepage HTML and already captured CSS, including img/src, first-page lazy images, inline background, CSS font/icon URLs, and BigContent review SVG.
+- `fetch-source-assets.mjs` recognizes safe image/font content signatures and the verified BigContent SVG host; first-page resource download batches (0–100, 100–200, 200–265) executed. Final **263/265 physically saved**; two endpoints ending .svg actually returned JavaScript modules, correctly rejected (do not count them as valid SVG).
+- `render-source-mirror.mjs` now rewrites CSS url(...) font/background references and references original captured assets locally. Homepage source IMG tags: **422/422 local paths, zero external src**; 403 mapped local resources across selected first-page templates and previous source scoped assets. No production/Dev changes.
+- Chrome full scroll (within page 1 only; no next-page trigger): homepage **95 images loaded**, zero broken `<img>` in loaded-viewport assessment, fonts status `loaded`, reported document height **102,078px**, with 32 scroll steps to first 24,000px only (not entire 102,078px). Truck first page **98/99 images loaded**, no reported broken; selected Volvo detail still has broken skeleton and external YouTube/static images. The homepage absurd page height requires a real source reference comparison, not an assumption.
+- Local browser still has unlocalized resource attempts and **the original Next.js runtime/UI interaction is not recreated**. An isolated headless source live Chrome probe did not complete and its isolated processes were stopped; no original live rendered screenshot PASS can be claimed. Existing user Chrome sessions were untouched.
+- `audit-first-page-visual-readiness.mjs` produced `FIRST_PAGE_VISUAL_GATE_FAIL`: remaining raw graph media mismatch (2 JS modules disguised as .svg), external asset attempts, no source↔Local pixel comparison, no dynamic component PASS and no Owner visual approval.
+
+**Correct next actions:** do not expand to page 2; obtain authentic rendered browser DOM/Network/screenshot reference for *first page* using authorized normal Chrome or source frontend build. Recover banner/carousel/header/review layout either as safe, locally replayed runtime + mock API or as actual hydrated DOM + small local UI adapters. Then compare viewport and full-page screenshots against source; resolve page-height overgrowth and remaining external/skeleton resources before requesting Owner visual PASS.
+
+Feature branch: `feat/catalog-local-archive-pilot-20261102`; global reusable policy draft PR #15. Nothing merged or deployed.
