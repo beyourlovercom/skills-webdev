@@ -107,3 +107,9 @@ Cloudflare Browser Integrity Check 等安全服务可能检查 UA 和其他请�
 - 两个源 Logo **2/2**，CSS **12/12**；三类页面抽取的可归档媒体 **68/337**，另有外域资源未纳入，完整率此处不能视为全站比例。
 - Local `/source-mirror/` 真实源 HTML 页面 **5 个**，已存档资产 **170 个**；Chrome 已真实渲染，仍有未本地化资源和动态交互缺口。
 - **最高门禁 `FULL_ARCHIVE_NOT_READY`**：产品站内总数量尚未知，至少两个分页以外的产品未审计，绝不可宣称 99%/100%。
+
+### 本轮实测补充：镜像响应安全和跨设备 UAT
+- 静态 HTML 镜像必须在 `<head>` **最前面**注入 CSP，不允许等到 `</head>` 才禁止外部预加载；未保存的第三方 `preload/preconnect` 也必须移除。
+- 真实 Chrome 检查同时报告 `external_attempts` 和 `external_success_responses`，两项不能混淆。本轮已取得 `1061` 次外域尝试、`0` 个外域实际响应；**离线完整门禁仍未通过**。
+- 支持第二页列表与第二种产品尺寸，URL 去重后只有前两页的 **70** 条真实商品链接；源站页面继续指向 `?page=3`，说明必须继续分页清点，不能把 70 当全站总数。
+- 原站测试与本地视觉截图只在私有 Windows 中保存；第二 Windows `007windows` HTTP 5/5 PASS，不等于该设备 Chrome 视觉 PASS。
