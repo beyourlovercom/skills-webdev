@@ -3,7 +3,7 @@ name: catalog-local-archive
 description: Source-exact, owner-authorized offline website backup into isolated Windows Local. Preserve original logo, all source products, product galleries, images and URL paths; ingest owner's offline archive first instead of rebuilding mock templates.
 ---
 
-# catalog-local-archive V0.3 — 原站离线备份恢复
+# catalog-local-archive V0.4 — 原站离线备份恢复
 
 ## 最高优先级：BACKUP，不是重新设计
 Owner 要求把自有源站整个备份到 Windows Local，以真实来源内容为准，达到尽可能 100% 的网站一致性。**不能**把四条模拟产品、原创 SVG、重做的 Logo 或原创主题当作原站备份、商品同步或视觉一致性 PASS。之前的 `basworldy-local` V0.2.1 仅是测试用本地主题，状态 `FIXTURE_ONLY`。
@@ -76,3 +76,34 @@ node skills/catalog-local-archive/scripts/source-http-read.mjs skills/catalog-lo
 
 ### 403 诊断边界
 Cloudflare Browser Integrity Check 等安全服务可能检查 UA 和其他请求头；目前 A/B 只能说明 UA 与 403 有关，**不能确定具体安全规则**。需要 Cloudflare Security Events + Ray ID 才能归因。不得批量轮换 User-Agent/代理或绕过明确挑战；源站管理员优先采用后台数据/原始服务器导出。原站源码、真实图片、认证信息仅留 Windows 私有路径，不上传 Public GitHub。
+
+
+## V0.4 可运行的真实源站备份管线（2026-11-02）
+
+**本节替代早期“仅有模拟样本”的能力说明。** 已在 Windows 开发机使用真实 BAS World 首页、卡车列表第 1/2 页和两条商品详情进行验证，**但全站仍远未完整**。真实源素材保存在 Windows 私有目录；Public GitHub 只保存代码、Skill、非敏感审计结果，不上传网页 HTML、商品图库或私有凭据。
+
+| 顺序 | 工具 | 真实工程用途 | 验收证据 |
+|---|---|---|---|
+| 0 | `scripts/source-http-read.mjs` | 精确 allowlist URL 的单页 HTTP 快照；可配置合法 UA、原始 HTTP headers/HTML、SHA256 | 单请求 `SOURCE_HTML_READ_PASS` |
+| 1 | `scripts/extract-source-manifest.mjs` | 从真实列表的 href 和商品详情 JSON-LD 取得真实 SKU/名称/价格/币种/分类路径；扫描 **DOM 全图库**（JSON-LD 可能仅含 2 张） | 明确 unique link 数及图片尺寸变体 |
+| 2 | `scripts/discover-page-assets.mjs` | 从首页/列表/详情的 IMG 与 image preload 提取 Banner、类目图、Logo 等来源 URL | `page-assets.json`、外域排除清单 |
+| 3 | `scripts/fetch-source-assets.mjs` | 分角色下载 Logo、图片、CSS；支持 --start/--limit、源 URL hash 路径、断点已有文件复用、HTTP 200/201 + 文件签名验证 | JSON 逐资产 SHA256 和媒体成功/失败 |
+| 4 | `scripts/render-source-mirror.mjs` | 原站**实际 HTML + 原站 CSS/图片**恢复到 `/source-mirror/`，支持两个分页和两条商品详情；不覆盖 WordPress 主站 | 静态文件实读、报告区分缺失 |
+| 5 | `scripts/verify-source-mirror.mjs` | Windows Chrome 默认系统代理、单独临时 profile，对源站快照做真实截图/资源加载统计 | 原始标题、图片加载数、外域请求数 |
+| 6 | `scripts/audit-source-completeness.mjs` | 真实产品列表 URL 去重、Logo/CSS、各 SKU 原图及 thumbnail 两套尺寸、页面资源完整率独立统计 | 必须输出 `FULL_ARCHIVE_NOT_READY` 或可靠关闭全部缺口 |
+
+### 必须保留的真实故障回归
+- Cloudflare：默认 curl UA → 403；Owner 指定 Chrome 120 UA → 首页真实 HTML 200。UA 是单站访问诊断参数，不允许未经授权轮换身份/IP或绕过挑战；出现 WAF/验证码应停并通过源站管理员核实。
+- 图片规格：首个 SKU `70320127` 实际 41 张 × (1280/250)，第二个 SKU `70323007` 实际 44 张 × (1080/250)。尺寸**不得固定写死**，按真实详情建立文件与 SKU 的关联、图库顺序。
+- 图片 URL 可能没有文件扩展名，只靠 `fmt=webp` 指示；下载与 Local replay 必须使用**相同**归档路径规则，否则产生假缺图。
+- 静态图像 CDN 可合法返回 `201 Created`；其他媒体服务器可能发送 `image/jpg`。验收用实际 MIME、JPEG/PNG/WebP/SVG 文件签名及非零字节组合判断，拒绝伪装成图片的 HTML；误判的有效文件仅校验后恢复，不重复批量下载。
+- 本地浏览器的外域请求尝试不能被忽略；虽然 CSP 禁止远端脚本/表单并在静态快照中去除原站 JS，尚存在未改写的源站素材 URL。只有外域依赖清零并做完整离线 Chrome 复验，才可能关闭 `OFFLINE_COMPLETE`。
+- 主站上的 4 个模拟商品属于历史 fixture，**一律不计入**真实备份的 SKU/图库/视觉覆盖率。
+- 不采集支付、账号、客户、Cookie、任何原站实时询盘。不开外部索引，不向 Dev/WWW 部署，主站切换需 Owner 单独审批。
+
+### BASWORLDY 截至 2026-11-02 的实测基线
+- 两页真实卡车列表：**70** 条唯一商品链接（只代表两个分页，不是全站总数）。
+- 两条真实产品详情：Volvo `70320127`、Renault `70323007`。Volvo 大图 41/41、缩略图 41/41；Renault 1080 大图 4/44、250 缩略图 4/44。
+- 两个源 Logo **2/2**，CSS **12/12**；三类页面抽取的可归档媒体 **68/337**，另有外域资源未纳入，完整率此处不能视为全站比例。
+- Local `/source-mirror/` 真实源 HTML 页面 **5 个**，已存档资产 **170 个**；Chrome 已真实渲染，仍有未本地化资源和动态交互缺口。
+- **最高门禁 `FULL_ARCHIVE_NOT_READY`**：产品站内总数量尚未知，至少两个分页以外的产品未审计，绝不可宣称 99%/100%。
