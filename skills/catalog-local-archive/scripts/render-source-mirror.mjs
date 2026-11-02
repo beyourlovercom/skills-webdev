@@ -10,11 +10,18 @@ const manifestPath=arg('manifest'),assetsPath=arg('assets'),out=arg('out');
 if(!home||!listing||!detail||!manifestPath||!assetsPath||!out)throw Error('Missing required arguments');
 if(!path.isAbsolute(out)||!path.resolve(out).toLowerCase().endsWith('source-mirror'))throw Error('Output must be an absolute dedicated source-mirror directory');
 const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+const manifest2=arg('manifest2')?JSON.parse(fs.readFileSync(arg('manifest2'),'utf8')):null;
+if(manifest2&&(!arg('listing2')||!arg('detail2')))throw Error('Second manifest requires --listing2 and --detail2');
 const htmlSources={'index.html':fs.readFileSync(home,'utf8'),'stock/truck/index.html':fs.readFileSync(listing,'utf8')};
 const detailCanonical=new URL(manifest.source_detail_products[0].canonical_url).pathname.replace(/^\//,'');
 htmlSources[detailCanonical+'/index.html']=fs.readFileSync(detail,'utf8');
+let canonical2=null;
+if(manifest2){canonical2=new URL(manifest2.source_detail_products[0].canonical_url).pathname.replace(/^\//,'');
+ htmlSources['stock/truck/page-2/index.html']=fs.readFileSync(arg('listing2'),'utf8');
+ htmlSources[canonical2+'/index.html']=fs.readFileSync(arg('detail2'),'utf8');
+}
 const extra=arg('resources')?JSON.parse(fs.readFileSync(arg('resources'),'utf8')).media_assets:[];
-const all=[...manifest.media_assets,...extra,...manifest.css_dependencies.map(url=>({url,role:'css'}))];
+const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,...manifest.css_dependencies.map(url=>({url,role:'css'}))];
 const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
@@ -36,6 +43,12 @@ const sourceRoutes=[
  [canonicalPath,'/source-mirror/'+detailCanonical+'/']
 ];
 if(shortUrl)sourceRoutes.push([new URL(shortUrl).pathname,'/source-mirror/'+detailCanonical+'/']);
+if(manifest2){
+ sourceRoutes.push(['/stock/truck?page=2','/source-mirror/stock/truck/page-2/']);
+ sourceRoutes.push(['/'+canonical2,'/source-mirror/'+canonical2+'/']);
+ const short2=manifest2.listed_vehicle_urls.find(u=>u.includes(String(manifest2.source_detail_products[0].sku)));
+ if(short2)sourceRoutes.push([new URL(short2).pathname,'/source-mirror/'+canonical2+'/']);
+}
 const csp='<meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data:; script-src &#39;none&#39;; img-src &#39;self&#39; data:; style-src &#39;self&#39; &#39;unsafe-inline&#39;; font-src &#39;self&#39; data:; connect-src &#39;none&#39;; form-action &#39;none&#39;; frame-src &#39;none&#39;; object-src &#39;none&#39;">';
 const meta='<meta name="robots" content="noindex,nofollow"><meta name="bwy-snapshot" content="PARTIAL_STATIC_READ_ONLY">';
 const fileReports=[];
@@ -56,8 +69,8 @@ for(const [rel,raw] of Object.entries(htmlSources)){
  const dest=path.join(out,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,html,'utf8');
  fileReports.push({path:rel,bytes:Buffer.byteLength(html),authentic_html_sha256:crypto.createHash('sha256').update(raw).digest('hex')});
 }
-const report={status:'PARTIAL_REAL_SOURCE_REPLAY',pages:fileReports,source_listed_vehicle_count:manifest.listed_vehicle_urls.length,
- source_product_sku:manifest.source_detail_products[0].sku,original_gallery_count:manifest.source_detail_products[0].gallery.length,
+const report={status:'PARTIAL_REAL_SOURCE_REPLAY',pages:fileReports,source_listed_vehicle_count:new Set([...manifest.listed_vehicle_urls,...(manifest2?.listed_vehicle_urls||[])]).size,
+ source_product_skus:[manifest.source_detail_products[0].sku,...(manifest2?[manifest2.source_detail_products[0].sku]:[])],original_gallery_count:manifest.source_detail_products[0].gallery.length,
  locally_saved_asset_count:mapped.size,missing_manifest_assets:unavailable.length,missing_sample:unavailable.slice(0,5),
  scripts_executed:false,forms_enabled:false,remote_network_allowed:false,full_coverage_verified:false};
 fs.writeFileSync(path.join(out,'source-mirror-report.json'),JSON.stringify(report,null,2)+'\n','utf8');
