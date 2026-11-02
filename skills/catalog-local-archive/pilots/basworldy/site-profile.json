@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_id": "basworldy",
-  "project_name": "BASWORLDY source-exact Local real-site archive V0.5",
+  "project_name": "BASWORLDY visual-first source-exact Local pilot V0.6",
   "source": {
     "origin": "https://basworld.com",
     "relationship": "owner-claimed",
@@ -94,13 +94,26 @@
     "source_mirror_007windows_http_status": "PASS_5_OF_5"
   },
   "scope": {
-    "mode": "R1_R6_REAL_SOURCE_ARCHIVE_AUDITED_PARTIAL",
+    "mode": "PILOT_FIRST_PAGE_OWNER_VISUAL_REVIEW_REQUIRED",
     "max_items": "SOURCE_INVENTORY_TBD",
     "blog_excluded": "DEFERRED_PRIORITY_PRODUCTS_FIRST",
     "external_assets_excluded": false,
     "real_checkout_excluded": true,
     "real_inquiry_excluded": true,
-    "real_site_crawl": "EXPLICIT_ALLOWLIST_BOUNDED_SAMPLE"
+    "real_site_crawl": "EXPLICIT_ALLOWLIST_BOUNDED_SAMPLE",
+    "first_round_page_limit": 1,
+    "first_round_pagination_allowed": false,
+    "first_round_bulk_catalog_capture_allowed": false,
+    "first_round_full_product_scrape_allowed": false,
+    "source_visual_fidelity_target": "100% of approved core-page templates",
+    "owner_visual_pass_required_before_expand": true,
+    "first_round_templates": [
+      "homepage",
+      "catalog-listing-first-page",
+      "selected-authentic-product-detail",
+      "basic-pages-as-scoped",
+      "blog-listing-first-page-if_in_scope"
+    ]
   },
   "gates": {
     "local_fixture": "PASS",
@@ -114,20 +127,24 @@
     "local_host_browser": "PASS",
     "local_home_redirect": "SUPERSEDED_BY_WORDPRESS",
     "local_core_pages": "PASS",
-    "owner_visual_review": "OPEN",
+    "owner_visual_review": "OPEN_NOT_APPROVED",
     "local_wordpress_templates": "PASS",
     "owner_browser_readback": "OPEN",
     "logo_exact": "PASS_2_OF_2_CAPTURED_SOURCE_VARIANTS",
     "products_exact": "PARTIAL_195_REAL_DETAILS",
     "images_exact": "PARTIAL_220_OF_5506_CAPTURED_DETAILS_GALLERY_VARIANTS",
-    "full_archive_pass": "R6_AUDITED_FULL_SITE_FAIL_15_BLOCKERS",
+    "full_archive_pass": "HISTORIC_R6_FAIL_FROZEN_UNTIL_OWNER_VISUAL_PASS",
     "original_theme_fixture": "NOT_BACKUP",
     "source_acquisition": "PASS_FOR_CAPTURED_PAGES",
     "next_recovery": "OWNER_HOSTING_OR_ADMIN_EXPORT;OR_AUTHORIZED_TARGETED_CLOUDFLARE_WAF_EXCEPTION",
-    "real_catalog_capture": "R1_3_CATEGORY_END_PAGES_CONFIRMED_MORE_CATEGORIES_OPEN",
-    "real_image_capture": "R3_REAL_GALLERY_PARTIAL",
+    "real_catalog_capture": "LEGACY_PREMATURE_BULK_FROZEN_NO_MORE_PAGINATION",
+    "real_image_capture": "LEGACY_BULK_FROZEN_PILOT_GALLERY_OK",
     "local_source_mirror": "R4_PARTIAL_272_AUTHENTIC_HTML_SNAPSHOTS",
-    "offline_remote_dependencies": "FAIL_901_EXTERNAL_ATTEMPTS_0_RESPONSES"
+    "offline_remote_dependencies": "FAIL_901_EXTERNAL_ATTEMPTS_0_RESPONSES",
+    "visual_first_phase": "PILOT_FIRST_PAGE",
+    "after_visual_pass_full_scrape": "BLOCKED",
+    "first_page_media_complete": "OPEN",
+    "first_page_pixel_parity": "OPEN"
   },
   "evidence": {
     "unit_checks": 37,
@@ -249,7 +266,17 @@
     "chrome_local_inventory_filter_pass": true,
     "r6_blockers": 15,
     "r6_uat_report": "pilots/basworldy/R1-R6-REAL-SOURCE-UAT-2026-11-02.md",
-    "private_r6_audit": "D:\\ai\\basworldy-local\\app\\public\\source-mirror-r2\\R6-completeness.json"
+    "private_r6_audit": "D:\\ai\\basworldy-local\\app\\public\\source-mirror-r2\\R6-completeness.json",
+    "owner_visual_approval": null,
+    "historical_2115_urls_stage": "FROZEN_NOT_VISUAL_PASS",
+    "historical_195_real_product_details_stage": "FROZEN_NOT_VISUAL_PASS",
+    "historical_272_source_html_pages_stage": "FROZEN_NOT_VISUAL_PASS",
+    "visual_first_guard_tests": {
+      "pass": 16,
+      "total": 16,
+      "run_environment": "Windows Local"
+    },
+    "first_round_focus": "Finish exact visuals and assets on HOME + PAGE1 CATALOG + ONE REPRESENTATIVE DETAIL; Owner review before subsequent pagination"
   },
   "governance": {
     "no_automatic_deploy": true,
