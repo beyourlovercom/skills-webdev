@@ -10,6 +10,8 @@ if(!indexFile||!out||!assets||!a('home')||!a('page1')||!a('page2')||!a('seed-man
 if(!path.isAbsolute(out)||!path.resolve(out).toLowerCase().endsWith('source-mirror-r2'))throw Error('Output must be isolated absolute source-mirror-r2 directory');
 const origin='https://www.basworld.com',local='/source-mirror-r2/';
 const db=JSON.parse(fs.readFileSync(indexFile,'utf8'));
+const globalIndexPath=a('all-index');const allDb=globalIndexPath&&fs.existsSync(globalIndexPath)?JSON.parse(fs.readFileSync(globalIndexPath,'utf8')):null;
+if(allDb&&allDb.catalog_scope_category!=='all')throw Error('Expected all-category source index');
 if(db.source_origin!==origin)throw Error('Unexpected source');
 const seeds=JSON.parse(fs.readFileSync(a('seed-manifest'),'utf8')),pageMedia=JSON.parse(fs.readFileSync(a('page-assets'),'utf8'));
 const mediaManifest=a('media-queue')?JSON.parse(fs.readFileSync(a('media-queue'),'utf8')):{media_assets:[]};
@@ -38,10 +40,12 @@ add(origin+'/',a('home'));
 add(origin+'/stock/truck',a('page1'));
 add(origin+'/stock/truck?page=2',a('page2'));
 for(const p of db.pages||[])if(p.valid&&fs.existsSync(path.join(path.dirname(indexFile),p.path)))add(p.url,path.join(path.dirname(indexFile),p.path));
+if(allDb)for(const p of allDb.pages||[])if(p.valid&&fs.existsSync(path.join(path.dirname(globalIndexPath),p.path)))add(p.url,path.join(path.dirname(globalIndexPath),p.path));
 for(const p of db.product_details||[])if(p.source_record?.valid&&fs.existsSync(path.join(path.dirname(indexFile),p.source_record.path)))add(p.canonical_url||p.source_url,path.join(path.dirname(indexFile),p.source_record.path));
 const pageRoute=url=>{
  const u=new URL(url,origin);
  if(u.pathname==='/'&&!u.search)return local;
+ if(u.pathname==='/stock/all'){const n=Number(u.searchParams.get('page')||1);return local+'stock/all/'+(n===1?'':'page-'+n+'/');}
  if(u.pathname==='/stock/truck'){
   const n=Number(u.searchParams.get('page')||1);
   return local+'stock/truck/'+(n===1?'':'page-'+n+'/');
@@ -101,6 +105,6 @@ const navJs="const raw="+inventory+";const list=document.querySelector('#cards')
 fs.writeFileSync(path.join(out,'inventory.js'),navJs);
 const miss='<!doctype html><html><head><meta charset="utf-8">'+csp+noindex+'<title>Not archived yet</title><style>'+style+'</style></head><body><header><h1>Not archived yet</h1></header><main><div class="warning">This exact source URL has not been saved. No placeholder item will be invented.</div><p><a href="'+local+'inventory.html">Browse captured products</a></p></main></body></html>';
 fs.writeFileSync(path.join(out,'unarchived.html'),miss);
-const report={status:'SOURCE_HTML_LOCAL_REPLAY_PARTIAL',started:new Date().toISOString(),pages_saved:reports.length,sku_count:(db.product_details||[]).length,list_urls:db.listing_urls.length,assets_saved:assetStatuses.filter(x=>x.state==='SAVED').length,assets_missing:assetStatuses.filter(x=>x.state==='MISSING').length,route_reports:reports,root_out:out,source_files_immutable:true,external_scripts_disabled:true,external_forms_disabled:true,all_products_archived:false};
+const report={status:'SOURCE_HTML_LOCAL_REPLAY_PARTIAL',started:new Date().toISOString(),pages_saved:reports.length,sku_count:(db.product_details||[]).length,list_urls:db.listing_urls.length,all_category_listed_urls:allDb?.listing_urls.length??null,assets_saved:assetStatuses.filter(x=>x.state==='SAVED').length,assets_missing:assetStatuses.filter(x=>x.state==='MISSING').length,route_reports:reports,root_out:out,source_files_immutable:true,external_scripts_disabled:true,external_forms_disabled:true,all_products_archived:false};
 fs.writeFileSync(path.join(out,'replay-report.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({status:report.status,pages:report.pages_saved,products:report.sku_count,urls:report.list_urls,assets:report.assets_saved,missing:report.assets_missing,entry:local+'inventory.html'}));
