@@ -21,6 +21,14 @@ const role=arg('role')||'all';
 if(!['all','logo','vehicle_gallery','page_image','css'].includes(role))throw Error('Invalid --role');
 const start=Number(arg('start')||0);
 if(!Number.isInteger(start)||start<0||start>100000)throw Error('Invalid --start');
+function magicOK(ext,bytes){
+ if(ext==='.jpg'||ext==='.jpeg')return bytes.length>4&&bytes[0]===255&&bytes[1]===216&&bytes[2]===255;
+ if(ext==='.png')return bytes.length>8&&bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]));
+ if(ext==='.webp')return bytes.length>12&&bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP';
+ if(ext==='.svg')return /<svg[\s>]/i.test(bytes.toString('utf8',0,2000));
+ if(ext==='.css')return !/^\s*</.test(bytes.toString('utf8',0,100));
+ return false;
+}
 const selected=records.filter(x=>role==='all'||x.role===role).slice(start,start+max),seen=new Set();
 const reports=[];
 fs.mkdirSync(out,{recursive:true});
@@ -32,10 +40,18 @@ for(const entry of selected){
  const rel=path.join('assets',entry.role,id+ext),dest=path.join(out,rel);
  fs.mkdirSync(path.dirname(dest),{recursive:true});
  const maxSize=8000000;
+ const invalid=dest+'.invalid',headerFile=dest+'.headers';
+ if(!fs.existsSync(dest)&&fs.existsSync(invalid)){
+  const header=fs.existsSync(headerFile)?fs.readFileSync(headerFile,'utf8'):'';
+  const b=fs.readFileSync(invalid);
+  if(b.length>0&&b.length<=maxSize&&magicOK(ext,b)&&/^HTTP\/1\.1 201 Created/m.test(header)&&/content-type:\s*image\/jpeg/im.test(header)){
+   fs.renameSync(invalid,dest);console.log(JSON.stringify({role:entry.role,status:'RECOVERED_VERIFIED_HTTP_201_JPEG',bytes:b.length}));
+  }
+ }
  if(fs.existsSync(dest)&&fs.statSync(dest).size>0){
   const bytes=fs.statSync(dest).size;
   reports.push({role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
-   status:'SAVED',http:200,bytes,local_path:rel.replaceAll('\\','/'),
+   status:'SAVED',http:(fs.existsSync(headerFile)&&/^HTTP\/1\.1 201 Created/m.test(fs.readFileSync(headerFile,'utf8'))?201:200),bytes,local_path:rel.replaceAll('\\','/'),
    sha256:crypto.createHash('sha256').update(fs.readFileSync(dest)).digest('hex'),
    content_type:format[ext],error:null,previously_saved:true});
   console.log(JSON.stringify({role:entry.role,status:'ALREADY_SAVED',bytes,url:entry.url.slice(0,120)}));
@@ -50,8 +66,8 @@ for(const entry of selected){
  const [codeText,final,mime]=(proc.stdout||'').trim().split('\t');
  const status=Number(codeText||0),bytes=fs.existsSync(dest)?fs.statSync(dest).size:0;
  let finalOK=false;try{finalOK=allowHosts.includes(new URL(final).hostname)}catch{}
- const valid=proc.status===0&&status===200&&finalOK&&bytes>0&&bytes<=maxSize&&
- (mime||'').toLowerCase().startsWith(format[ext]);
+ const valid=proc.status===0&&(status===200||(status===201&&['.jpg','.jpeg','.png','.webp'].includes(ext)))&&finalOK&&bytes>0&&bytes<=maxSize&&
+ (mime||'').toLowerCase().startsWith(format[ext])&&magicOK(ext,fs.readFileSync(dest));
  if(!valid&&fs.existsSync(dest))fs.renameSync(dest,dest+'.invalid');
  const item={role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
  status:valid?'SAVED':'FAILED',http:status,bytes:valid?bytes:0,
