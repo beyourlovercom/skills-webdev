@@ -23,7 +23,7 @@
     "windows_device": "windows",
     "local_origin": "http://localdev.basworldy.com",
     "local_role": "Windows Local",
-    "local_runtime_status": "LOCALWP_RUNNING_HTTP_VERIFIED",
+    "local_runtime_status": "LOCALWP_WORDPRESS_THEME_ACTIVE",
     "online_dev_origin": "https://dev.basworldy.com",
     "online_dev_role": "Online Dev/UAT",
     "online_dev_runtime_status": "DNS_UNRESOLVED_FROM_WINDOWS_2026-11-02",
@@ -32,7 +32,11 @@
     "future_www_runtime_status": "UNVERIFIED",
     "local_wp_path": "D:\\ai\\basworldy-local",
     "local_catalog_url": "http://localdev.basworldy.com/catalog-pilot/index.html",
-    "local_home_redirect_url": "http://localdev.basworldy.com/catalog-pilot/index.html"
+    "local_home_redirect_url": "http://localdev.basworldy.com/catalog-pilot/index.html",
+    "local_theme": "basworldy-local",
+    "local_theme_version": "0.2.1",
+    "local_home_url": "http://localdev.basworldy.com/",
+    "local_visual_review_url": "http://localdev.basworldy.com/review-local/"
   },
   "scope": {
     "mode": "fixture-only",
@@ -53,7 +57,10 @@
     "seo": "HOLD",
     "local_catalog_http": "PASS",
     "local_host_browser": "PASS",
-    "local_home_redirect": "PASS"
+    "local_home_redirect": "SUPERSEDED_BY_WORDPRESS",
+    "local_core_pages": "PASS",
+    "owner_visual_review": "OPEN",
+    "local_wordpress_templates": "PASS"
   },
   "evidence": {
     "unit_checks": 37,
@@ -82,7 +89,31 @@
     "local_home_final_http_status": 200,
     "local_home_redirect_adapter": "wp-content/mu-plugins/basworldy-local-home.php",
     "local_wp_secret_acl": "Administrator, SYSTEM, Administrators only",
-    "online_dev_dns_probe": "UNRESOLVED_FROM_WINDOWS"
+    "online_dev_dns_probe": "UNRESOLVED_FROM_WINDOWS",
+    "real_windows_browser_checks_core": 51,
+    "core_desktop_width": 1440,
+    "core_mobile_width": 375,
+    "core_screenshot_count": 11,
+    "core_screenshot_location": "C:\\Users\\Administrator\\Documents\\catalog-local-archive-pilot-20261102\\core-pages-review-20261102",
+    "core_pages": [
+      "/",
+      "/vehicles/",
+      "/vehicles/atlas-hx-520/",
+      "/about-us/",
+      "/how-to-buy/",
+      "/transport-export/",
+      "/contact/",
+      "/insights/",
+      "/understanding-axle-configurations/"
+    ],
+    "core_php_lint_pass": 11,
+    "synthetic_vehicle_posts": 4,
+    "synthetic_blog_posts": 3,
+    "core_external_domain_requests": 0,
+    "core_browser_js_exceptions": 0,
+    "previous_local_home_mu_redirect": "DISABLED_AND_ARCHIVED",
+    "wordpress_blog_public": 0,
+    "core_owner_visual_signoff": "OPEN"
   },
   "governance": {
     "no_automatic_deploy": true,
