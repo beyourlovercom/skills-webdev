@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "project_id": "basworldy",
+  "source_origin": "https://www.basworld.com",
+  "gate": "OWNER_VISUAL_PASS",
+  "status": "AWAITING_OWNER_REVIEW",
+  "owner_explicit_pass": false,
+  "approval_recorded_at": null,
+  "owner_message_reference": null,
+  "review_baseline_id": null,
+  "approved_template_urls": [],
+  "notes": "TEMPLATE ONLY. Do not set PASS without explicit Owner signoff of first-page Local visual screenshot baseline. Private evidence only."
+}
