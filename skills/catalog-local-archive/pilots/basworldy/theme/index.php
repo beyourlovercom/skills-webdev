@@ -1,0 +1,1 @@
+<?php get_header(); ?><section class="section shell"><h1>Explore BASWORLDY</h1><p>Browse our prototype vehicle inventory and editorial pages.</p><a class="btn btn-dark" href="<?php echo esc_url(get_post_type_archive_link('vehicle')); ?>">View vehicles ↗</a></section><?php get_footer(); ?>
