@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "project_id": "site-project-id",
+  "phase": "PILOT_FIRST_PAGE",
+  "source_origin": "https://www.example.com",
+  "local_origin": "http://local.example.test",
+  "first_round_page_types": [
+    {
+      "type": "home",
+      "source_url": "https://www.example.com/",
+      "local_url": null,
+      "page_number": 1
+    },
+    {
+      "type": "catalog_listing",
+      "source_url": "https://www.example.com/stock/truck",
+      "local_url": null,
+      "page_number": 1,
+      "required_full_page_images": true
+    },
+    {
+      "type": "representative_product_detail",
+      "source_url": null,
+      "local_url": null,
+      "selected_from_listing_page": 1,
+      "required_full_gallery": true
+    },
+    {
+      "type": "information_page",
+      "source_url": null,
+      "local_url": null,
+      "page_number": 1
+    },
+    {
+      "type": "blog_listing",
+      "source_url": null,
+      "local_url": null,
+      "page_number": 1,
+      "if_in_scope": true
+    }
+  ],
+  "pagination_policy": {
+    "first_round_max_page": 1,
+    "allow_next_page_crawl": false,
+    "allow_infinite_scroll_more": false,
+    "allow_cursor": false,
+    "allow_bulk_detail": false
+  },
+  "first_page_media_requirements": [
+    "original_desktop_mobile_logos",
+    "all_home_banners",
+    "all_first_page_product_cards",
+    "all_lazyload_and_srcset_images",
+    "CSS_background_images",
+    "CSS_and_website_fonts",
+    "selected_sample_full_gallery_and_thumbnails"
+  ],
+  "visual_review": {
+    "target": "100_PERCENT_SOURCE_VISUAL_FIDELITY",
+    "source_screenshots": null,
+    "local_screenshots": null,
+    "desktop_width": 1440,
+    "mobile_width": 375,
+    "owner_visual_status": "AWAITING_OWNER_REVIEW",
+    "owner_approval_ref": null
+  },
+  "expansion_gate": "BLOCKED_UNTIL_EXPLICIT_OWNER_VISUAL_PASS",
+  "note": "TEMPLATE. Complete real source URLs on private Windows, never claim 100% visual without Owner review."
+}
