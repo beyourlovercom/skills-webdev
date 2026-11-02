@@ -1,0 +1,15 @@
+<?php get_header();while(have_posts()):the_post();$v=bwy_vehicle_data(get_the_ID()); ?>
+<div class="shell detail-page"><div class="bread"><a href="<?php echo esc_url(home_url('/')); ?>">Home</a> / <a href="<?php echo esc_url(get_post_type_archive_link('vehicle')); ?>">Vehicles</a> / <?php the_title(); ?></div>
+<div class="detail-head"><div><div class="overline">VEHICLE DETAILS / <?php echo esc_html($v['reference']); ?></div><h1><?php the_title(); ?></h1><p><span class="status-circle"></span><?php echo esc_html($v['condition']); ?> · local sample vehicle · specifications for template QA only</p></div><a class="text-link" href="<?php echo esc_url(get_post_type_archive_link('vehicle')); ?>">← Back to all vehicles</a></div>
+<div class="detail-layout"><div><div class="detail-hero-image"><?php echo bwy_vehicle_image('detail-svg'); ?><span>01 / 01 &nbsp; ORIGINAL ILLUSTRATION</span></div><div class="thumb-row"><div><?php echo bwy_vehicle_image('thumb-img'); ?></div><div class="thumb-placeholder">More images<br><small>coming in data phase</small></div><div class="thumb-placeholder">Inspection<br><small>data not available</small></div></div>
+<div class="specification-panel"><div class="section-heading small"><div><div class="overline">TECHNICAL INFORMATION</div><h2>Vehicle <em>specifications.</em></h2></div></div>
+<div class="spec-table">
+<?php foreach(['Make'=>'brand','Model'=>'model','Reference'=>'reference','Vehicle type'=>'category','Model year'=>'year','Mileage'=>'mileage','Axle configuration'=>'axle','Transmission'=>'transmission','Emission standard'=>'emission','Condition'=>'condition'] as $name=>$key): ?>
+<div><span><?php echo esc_html($name); ?></span><strong><?php echo esc_html($v[$key]); ?><?php echo $key==='mileage'?' km':''; ?></strong></div>
+<?php endforeach; ?></div></div></div>
+<aside class="detail-sidebar"><div class="purchase-panel"><div class="eyebrow-label">SAMPLE LIST PRICE</div><div class="purchase-price"><?php echo esc_html(bwy_money($v['price'])); ?></div><div class="purchase-meta">Illustrative amount only · not an offer</div><div class="separator"></div><div class="purchase-ref"><span>Stock reference</span><strong><?php echo esc_html($v['reference']); ?></strong></div><div class="purchase-ref"><span>Availability</span><strong>Prototype only</strong></div>
+<a class="btn btn-accent btn-full" href="<?php echo esc_url(home_url('/contact/')); ?>">Enquiry template ↗</a>
+<p class="purchase-disclaimer">Form submissions are disabled in this local design environment.</p></div>
+<div class="seller-note"><b>Before buying</b><p>Confirm identity, inspected condition, ownership, export paperwork and final delivery costs independently.</p><a href="<?php echo esc_url(home_url('/how-to-buy/')); ?>">View buying guide →</a></div></aside></div>
+<section class="detail-bottom"><div class="overline">LOCAL TEST VEHICLE</div><h2>About this listing</h2><div class="prose"><?php the_content(); ?></div></section></div>
+<?php endwhile;get_footer(); ?>
