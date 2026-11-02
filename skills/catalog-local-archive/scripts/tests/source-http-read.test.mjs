@@ -33,3 +33,24 @@ test('rejects unbounded file sizes',()=>{
  const r=invoke({...valid,max_bytes:999999999});
  assert.equal(r.status,2);assert.match(r.stderr,/max_bytes/);
 });
+
+test('first-round blocks page=2 even on exact allowlist before HTTP',()=>{
+ const u='https://www.basworld.com/stock/truck?page=2';
+ const r=invoke({...valid,source_url:u,allowed_exact_urls:[u]});
+ assert.equal(r.status,2);assert.match(r.stderr,/OWNER_VISUAL_GATE_BLOCKED/);
+});
+test('first-round blocks /page-2 path before HTTP',()=>{
+ const u='https://www.basworld.com/stock/truck/page-2';
+ const r=invoke({...valid,source_url:u,allowed_exact_urls:[u]});
+ assert.equal(r.status,2);assert.match(r.stderr,/OWNER_VISUAL_GATE_BLOCKED/);
+});
+test('first-round blocks cursor even when allowlisted',()=>{
+ const u='https://www.basworld.com/stock/truck?cursor=next';
+ const r=invoke({...valid,source_url:u,allowed_exact_urls:[u]});
+ assert.equal(r.status,2);assert.match(r.stderr,/OWNER_VISUAL_GATE_BLOCKED/);
+});
+test('first-round blocks unspecified representative detail',()=>{
+ const u='https://www.basworld.com/vehicles/used/truck-example-123';
+ const r=invoke({...valid,source_url:u,allowed_exact_urls:[u]});
+ assert.equal(r.status,2);assert.match(r.stderr,/OWNER_VISUAL_GATE_BLOCKED/);
+});
