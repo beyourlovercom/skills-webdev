@@ -73,7 +73,15 @@ if(manifest2){
 const csp='<meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data:; script-src &#39;self&#39;; img-src &#39;self&#39; data:; style-src &#39;self&#39; &#39;unsafe-inline&#39;; font-src &#39;self&#39; data:; connect-src &#39;none&#39;; form-action &#39;none&#39;; frame-src &#39;none&#39;; object-src &#39;none&#39;">';
 const meta='<meta name="robots" content="noindex,nofollow"><meta name="bwy-snapshot" content="PARTIAL_STATIC_READ_ONLY">';
 const enableUI=arg('ui-adapter')==='true';
-if(enableUI){for(const f of ['bwy-first-page-ui.js','bwy-first-page-ui.css'])fs.copyFileSync(path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/,m=>m.slice(1))),f),path.join(out,f));}
+if(enableUI){
+ const scriptsDir=path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/,m=>m.slice(1)));
+ for(const file of ['bwy-first-page-ui.js','bwy-first-page-ui.css','bwy-listing-ui.js','bwy-listing-ui.css','bwy-detail-ui.js','bwy-detail-ui.css'])
+   fs.copyFileSync(path.join(scriptsDir,file),path.join(out,file));
+ const p=manifest.source_detail_products[0];
+ const exact={sku:String(p.sku),name:p.name,price:Number(p.price),currency:p.currency,year:p.year,
+  brand:p.brand,axle:p.axle,transmission:p.transmission};
+ fs.writeFileSync(path.join(out,'bwy-detail-data.js'),'window.__bwyDetailSource='+JSON.stringify(exact)+';\n','utf8');
+}
 const fileReports=[];
 let videoPostersSubstituted=0;
 for(const [rel,raw] of Object.entries(htmlSources)){
@@ -100,8 +108,17 @@ for(const [rel,raw] of Object.entries(htmlSources)){
   html=html.split('href="'+src+'"').join('href="'+dst+'"').split("href='"+src+"'").join("href='"+dst+"'");
  }
  html=html.replace(/<link\b[^>]*rel=["'](?:preload|preconnect|dns-prefetch)["'][^>]*href=["']https?:\/\/[^"']+["'][^>]*>/gi,'');
- html=html.replace(/<head>/i,'<head>'+csp+meta+(enableUI&&rel==='index.html'?'<link rel="stylesheet" href="/source-mirror/bwy-first-page-ui.css">':''));
- if(enableUI&&rel==='index.html')html=html.replace(/<\/body>/i,'<script defer src="/source-mirror/bwy-first-page-ui.js"></script></body>');
+ const styleLink=!enableUI?'':rel==='index.html'?'/source-mirror/bwy-first-page-ui.css':
+  rel==='stock/truck/index.html'?'/source-mirror/bwy-listing-ui.css':
+  rel===detailCanonical+'/index.html'?'/source-mirror/bwy-detail-ui.css':null;
+ html=html.replace(/<head>/i,'<head>'+csp+meta+(styleLink?'<link rel="stylesheet" href="'+styleLink+'">':''));
+
+ if(enableUI){
+ const runtime=rel==='index.html'?'<script defer src="/source-mirror/bwy-first-page-ui.js"></script>':
+ rel==='stock/truck/index.html'?'<script defer src="/source-mirror/bwy-listing-ui.js"></script>':
+ rel===detailCanonical+'/index.html'?'<script defer src="/source-mirror/bwy-detail-data.js"></script><script defer src="/source-mirror/bwy-detail-ui.js"></script>':'';
+ if(runtime)html=html.replace(/<\/body>/i,runtime+'</body>');
+ }
  const dest=path.join(out,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,html,'utf8');
  fileReports.push({path:rel,bytes:Buffer.byteLength(html),authentic_html_sha256:crypto.createHash('sha256').update(raw).digest('hex')});
 }
