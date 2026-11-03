@@ -36,5 +36,6 @@ jobs:
         with:
           node-version: '22'
       - run: node --test tests/*.test.mjs
+      - run: python3 -m unittest discover -s tests -p 'test_duplicate_site_v2_*.py' -v
       - run: node scripts/skill-registry.mjs --validate
       - run: if node skills/site-builder-local/scripts/s2-handoff-validate.mjs --manifest skills/site-builder-local/templates/s2-handoff.example.json --gate www > /dev/null; then exit 1; else test "$?" -eq 2; fi
