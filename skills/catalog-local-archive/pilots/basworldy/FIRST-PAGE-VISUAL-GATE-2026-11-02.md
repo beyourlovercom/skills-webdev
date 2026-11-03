@@ -55,3 +55,15 @@ Owner inspected Local homepage and rejected the visual: blank regions, Trustpilo
 **Correct next actions:** do not expand to page 2; obtain authentic rendered browser DOM/Network/screenshot reference for *first page* using authorized normal Chrome or source frontend build. Recover banner/carousel/header/review layout either as safe, locally replayed runtime + mock API or as actual hydrated DOM + small local UI adapters. Then compare viewport and full-page screenshots against source; resolve page-height overgrowth and remaining external/skeleton resources before requesting Owner visual PASS.
 
 Feature branch: `feat/catalog-local-archive-pilot-20261102`; global reusable policy draft PR #15. Nothing merged or deployed.
+
+## 2026-11-03 — Owner visual review opened; whole-page audit revisions
+
+A complete screenshot suite was added to the Windows Local review board: `http://localdev.basworldy.com/source-mirror/review/`. Six **viewport** screenshots and six **whole-page** screenshots (desktop 1440 and mobile 375) are available. Listing page-1 mobile height is 20,395px and **must not** be truncated to 13,000px for visual sign-off. Pages: actual source homepage snapshot, Truck list page 1, and Volvo SKU 70320127 detail. No source page 2 was visited.
+
+Whole-page review revealed two defects missed by image/JS/network checks:
+1. Truck desktop below fold: **7 giant SVGs** from the source's unhydrated `AnimatedOverlay_hiddenTop` sorting menu (Font Awesome xmark/circle, ~1,425px each). This blocked merchandise cards. Fixed in `bwy-listing-ui.css` by hiding SSR-marked inactive overlays and constraining inline Font Awesome icons. DOM verification: **0 oversized SVGs**, listing cards unobstructed.
+2. Volvo below fold: unresolved `.cds--skeleton__text` and `.button-skeleton` from original unhydrated `PDPSpecification`. Fixed in `bwy-detail-ui.js/.css` by rendering six actual values from the source highlighted specifications and replacing only empty live-only controls with clearly worded offline notices; no invented inspection/shipping data. Chrome verification: **0 visible raw skeletons**, `sourceSpecCount=6`, and gallery next/previous PASS.
+
+Latest Windows isolated Chrome results: **6/6 page/viewport checks**, `dynamic_components_pass=true`, `js_exceptions=0`, `external_attempts=0`, `oversized_icon_count=0`, and no reported broken image elements. All six whole-page capture statuses **CAPTURED**. The review screenshots were refreshed in the LocalWP review center on 2026-11-03. HTTP review board and PDP full screenshot returned 200. No existing normal Chrome sessions restarted.
+
+**Critical distinction:** This is **TECHNICAL VISUAL REVIEW READY**, not verified pixel-exact parity with a live source render. A same-viewport, whole-page source-vs-local pixel-diff baseline was not obtained; original Next.js data-backed functions like inspection, transport and purchase remain intentionally offline, with explicit labels. **Owner visual PASS remains OPEN**. Only the owner's explicit approval can unlock further pagination and bulk products. No Production/Dev/main mutation.
