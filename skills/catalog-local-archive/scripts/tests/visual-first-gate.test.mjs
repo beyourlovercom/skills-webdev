@@ -12,7 +12,7 @@ test('detail requires explicit first-page product URL',()=>assert.throws(()=>enf
 test('detail from page 1 allowed',()=>{const u='https://www.basworld.com/vehicles/used/a';assert.equal(enforceVisualFirst({mode:'details',limit:1,pilotUrl:u,knownFirstPageUrls:[u]}).stage,'PILOT_FIRST_PAGE');});
 test('media bulk blocked first round',()=>assert.throws(()=>enforceVisualFirst({mode:'media'}),/bulk media/));
 test('expansion requires recorded approval',()=>assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:null}),/Owner visual PASS/));
-test('fabricated incomplete approval rejected',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({status:'PASS'}));assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:p}),/requires verified/);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
+test('fabricated incomplete approval rejected',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({status:'PASS'}));assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',moduleId:'catalog-listings',approvalFile:p}),/requires module-specific/);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
 
 const exampleApproval=(moduleId='catalog-listings',scope_mode='FULL_NONBLOG')=>({
  schema_version:2,project_id:'basworldy',source_origin:'https://www.basworld.com',
