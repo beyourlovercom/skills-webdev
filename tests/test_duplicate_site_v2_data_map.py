@@ -86,6 +86,15 @@ class MappingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"unknown slot"):
             mapping.render(self.file,data,{"h2:123:text:0":"X"})
 
+    def test_private_scratch_only_under_existing_uat(self):
+        ledger_file=self.root/"uat"/"template-candidates.json"
+        ledger_file.write_text(json.dumps(self.ledger),encoding="utf-8")
+        mapping.require_private_scratch(ledger_file,self.scratch)
+        for bad in (self.mirror,self.root):
+            with self.subTest(path=str(bad)):
+                with self.assertRaisesRegex(ValueError,"private UAT"):
+                    mapping.require_private_scratch(ledger_file,bad)
+
     def test_out_of_scope_html_and_unapproved_user_refused(self):
         self.ledger["templates"][0]["owner_visual_pass"]=False
         with self.assertRaisesRegex(ValueError,"approval missing"):
