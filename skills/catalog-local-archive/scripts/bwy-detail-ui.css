@@ -17,3 +17,10 @@
 .imageGalleryWrapperV1.bwy-gallery-ready .slidesWrapper>.galleryImage.bwy-gallery-visible{display:block!important}
 .imageGalleryWrapperV1.bwy-gallery-ready .arrowLeftContainer,.imageGalleryWrapperV1.bwy-gallery-ready .arrowRightContainer{cursor:pointer;z-index:3}
 @media(max-width:767px){.bwy-offline-section{padding:15px;margin:10px 0}}
+
+/* Replace invalid CDS specification skeleton with authenticated highlighted fields. */
+.bwy-real-specs{display:grid;grid-template-columns:minmax(150px,.9fr) minmax(0,1.1fr);gap:0 16px;margin:0;padding:4px 0 10px}
+.bwy-real-spec-label,.bwy-real-spec-value{padding:10px 0;border-bottom:1px solid #edf0f2;line-height:1.45;font-size:14px}
+.bwy-real-spec-label{color:#66747a}
+.bwy-real-spec-value{margin:0;font-weight:650;color:#25323b;overflow-wrap:anywhere}
+@media(max-width:767px){.bwy-real-specs{grid-template-columns:minmax(100px,.8fr) minmax(0,1.2fr);gap:0 10px}.bwy-real-spec-label,.bwy-real-spec-value{font-size:13px}}
