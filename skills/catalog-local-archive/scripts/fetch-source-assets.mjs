@@ -51,7 +51,7 @@ const selected=records.filter(x=>role==='all'||x.role===role).slice(start,start+
 const reports=[];
 fs.mkdirSync(out,{recursive:true});
 for(const entry of selected){
- let url,ext;try{url=new URL(entry.url);ext=path.extname(url.pathname).toLowerCase();if(!format[ext] && ['cms.media.basworld.com','media.basworld.com'].includes(url.hostname)){ext=url.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}}catch{throw Error('Invalid asset URL');}
+ let url,ext;try{url=new URL(entry.url);ext=path.extname(url.pathname).toLowerCase();if(!format[ext] && ['cms.media.basworld.com','media.basworld.com'].includes(url.hostname)){ext=url.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}else if(!format[ext]&&url.hostname==='basgroup.a.bigcontent.io'){ext='.png';}}catch{throw Error('Invalid asset URL');}
  if(url.protocol!=='https:'||!allowHosts.includes(url.hostname)||!format[ext]||entry.url.length>2048)throw Error('Asset outside allowlist '+entry.url);
  if(seen.has(url.href))continue;seen.add(url.href);
  const id=crypto.createHash('sha256').update(url.href).digest('hex').slice(0,20);
