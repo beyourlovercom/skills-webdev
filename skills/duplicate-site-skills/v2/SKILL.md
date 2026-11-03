@@ -132,3 +132,17 @@ Before generating any same-type queue, audit the real PR #15 gate through:
 The CLI verifies three approved route-to-template mappings, the immutable on-disk reference SHA for each, and imports **PR #15's existing `backup-48h-gate.mjs`**. It never clones/crawls, writes new pages, or creates a queue. It must currently return `OWNER_REFERENCE_PASS__BATCH_STILL_BLOCKED`, because reusable template data mappings, measured route/media manifests, automatic QA and module-sequencing gates are not fully complete. No fake `template_sha256`, fabricated asset count or auto-trigger of full-site batches is permitted.
 
 Detailed evidence: [`docs/reviews/duplicate-site-v2-owner-pass-pr15-handoff-20261103.md`](../../../docs/reviews/duplicate-site-v2-owner-pass-pr15-handoff-20261103.md). PR #15 and PR #16 remain Draft pending separate exact-head merge authorization.
+
+
+## Data-only same-template reuse (2026-11-03; existing approved samples)
+
+After Owner approved the three existing RapidDirect representative pages, the V2 mirror-first pilot gained a **read-only field inventory** and scratch-only renderer, without writing to the frozen pages:
+
+- `scripts/template-data-map.py inspect`: requires the exact already-approved local representative path, Owner visual PASS in private ledger, unchanged source SHA-256 and `--scratch-root` under project `uat/`. It inventories text slots and selected meta/image/link attributes by exact offsets, saving mapping only when `--execute` is explicit.
+- `scripts/template-data-map.py render`: requires that same SHA and the private mapping + explicit slot updates; escapes new content, rejects unknown fields, rejects external/new routes or unaudited `srcset`, and verifies structural fingerprint before saving **a separate non-overwriting file under project private `uat/` only**. Default dry-run. It cannot edit the source mirror or live site.
+- Windows evidence: three representatives yielded **1,935 candidate slots** (522 home / 329 services / 1,084 CNC). **Two synthetic data variations per template, 6/6 structure-preserving outputs, 24 data-field edits, 0 source writes**; three CLI render outputs were byte-identical to corresponding in-memory proofs. Python V2 tests **13/13 PASS**, including rejection of an attempted output under `mirror/`.
+- Cross-sample shell audit: same 433-header-node normalized shape across all three real page types (1.00000); footer normalized structural ratio 0.9912–0.99705, not raw HTML identity.
+
+**Do not claim real same-template batch readiness:** those are synthetic inputs on each original page's structure. Cards with different counts, galleries, script-driven content, or another genuine same-template URL still need a tested semantic data adapter, route/asset inventory, browser UAT, and the existing PR #15 Owner/module sequencing gate. PR #15 read-only handoff still returns **BLOCKED 3/3**; the V2 script must never invent a generalized template SHA or bypass this result. Neither source HTML nor private data maps belong in GitHub.
+
+Audit: [`docs/reviews/duplicate-site-v2-data-mapping-smoke-20261103.md`](../../../docs/reviews/duplicate-site-v2-data-mapping-smoke-20261103.md).
