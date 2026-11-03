@@ -79,7 +79,7 @@
     }
   }
 
-  for(const placeholder of document.querySelectorAll('[class*=PDPSpecification] .button-skeleton')){
+  for(const placeholder of document.querySelectorAll('.button-skeleton')){
     const note=make('p','bwy-offline-inline-note','Additional specifications are unavailable in this offline preview.');
     placeholder.replaceWith(note);
   }
