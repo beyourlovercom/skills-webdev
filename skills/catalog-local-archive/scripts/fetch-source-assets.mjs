@@ -86,6 +86,22 @@ for(const entry of selected){
  let finalOK=false;try{finalOK=allowHosts.includes(new URL(final).hostname)}catch{}
  const valid=proc.status===0&&(status===200||(status===201&&['.jpg','.jpeg','.png','.webp'].includes(ext)))&&finalOK&&bytes>0&&bytes<=maxSize&&
  ((mime||'').toLowerCase().startsWith(format[ext])||(['.jpg','.jpeg'].includes(ext)&&/^image\/jpg(?:\s*;|$)/i.test(mime||''))||(['.woff','.woff2','.ttf','.otf','.eot'].includes(ext)&&/(font|octet-stream|vnd.ms-fontobject)/i.test(mime||'')))&&magicOK(ext,fs.readFileSync(dest));
+ if(!valid && ext==='.png' && status===200 && fs.existsSync(dest)){
+  const bytesOnDisk=fs.readFileSync(dest);
+  if(bytesOnDisk.length>12 && /^image\/webp(?:\s*;|$)/i.test(mime||'') &&
+     magicOK('.webp',bytesOnDisk)){
+    const newRel=path.join('assets',entry.role,id+'.webp');
+    const newDest=path.join(out,newRel);
+    fs.renameSync(dest,newDest);
+    const recovered={role:entry.role,sku:entry.item_sku??null,order:entry.order??null,
+      source_url:entry.url,status:'SAVED',http:status,bytes:bytesOnDisk.length,
+      local_path:newRel.replaceAll('\\','/'),sha256:crypto.createHash('sha256').update(bytesOnDisk).digest('hex'),
+      content_type:'image/webp',error:null,source_extension_mismatch:'.png URL returned image/webp'};
+    reports.push(recovered);
+    console.log(JSON.stringify({role:entry.role,status:'SAVED_SOURCE_FORMAT_WEBP',http:status,bytes:bytesOnDisk.length,url:entry.url.slice(0,120)}));
+    await new Promise(r=>setTimeout(r,450));continue;
+  }
+ }
  if(!valid&&fs.existsSync(dest))fs.renameSync(dest,dest+'.invalid');
  const item={role:entry.role,sku:entry.item_sku??null,order:entry.order??null,source_url:entry.url,
  status:valid?'SAVED':'FAILED',http:status,bytes:valid?bytes:0,
@@ -94,6 +110,7 @@ for(const entry of selected){
  content_type:mime??null,error:(proc.stderr||'').trim().slice(0,250)};
  reports.push(item);
  console.log(JSON.stringify({role:item.role,status:item.status,http:status,bytes:item.bytes,order:item.order,url:entry.url.slice(0,120)}));
+ if(status===403 || status===429){console.log('ACCESS_BLOCK_STOP '+status+' '+url.href.slice(0,120));break;}
  await new Promise(r=>setTimeout(r,450));
 }
 const summary={status:reports.every(x=>x.status==='SAVED')?'ASSET_SAMPLE_PASS':'ASSET_PARTIAL',
