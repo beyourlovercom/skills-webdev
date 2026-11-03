@@ -27,6 +27,19 @@ class ThreePageCanaryTests(unittest.TestCase):
             with self.subTest(url=url,method=method):
                 self.assertFalse(visual.secure_local_request(url,method))
 
+    def test_source_is_public_get_only_and_first_party(self):
+        self.assertTrue(visual.secure_source_request("https://www.rapiddirect.com/services/","GET"))
+        self.assertTrue(visual.secure_source_request("https://static.rapiddirect.com/a.css","HEAD"))
+        for url,method in [
+            ("https://www.rapiddirect.com/wp-admin/","POST"),
+            ("https://www.rapiddirect.com/api/quote","DELETE"),
+            ("https://tracker.example.com/pixel","GET"),
+            ("http://www.rapiddirect.com/","GET"),
+            ("https://not-rapiddirect.com/","GET"),
+        ]:
+            with self.subTest(url=url,method=method):
+                self.assertFalse(visual.secure_source_request(url,method))
+
     def test_capture_needs_explicit_live_read(self):
         self.assertTrue(visual.SOURCE.startswith("https://"))
         self.assertEqual(visual.LOCAL,"http://127.0.0.1:8766")
