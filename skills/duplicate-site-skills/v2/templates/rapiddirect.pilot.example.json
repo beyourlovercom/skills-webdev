@@ -23,11 +23,6 @@
         "id": "cnc",
         "path": "/services/cnc-machining/",
         "module": "service"
-      },
-      {
-        "id": "injection",
-        "path": "/services/injection-molding/",
-        "module": "service"
       }
     ]
   },
