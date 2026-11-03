@@ -42,7 +42,11 @@ try {
      (!Array.isArray(policy.pilot_representative_detail_urls) || !policy.pilot_representative_detail_urls.includes(u.href)))
        fail('OWNER_VISUAL_GATE_BLOCKED: detail must be explicitly selected as first-page representative');
  } else {
-   enforceVisualFirst({phase:stage,approvalFile:policy.visual_approval_file,moduleId:policy.module_id,mode:'inventory',from:2,limit:2});
+   const sourceMode=policy.module_id==='catalog-listings'?'inventory':
+     policy.module_id==='product-details'?'details':'media';
+   enforceVisualFirst({phase:stage,approvalFile:policy.visual_approval_file,
+     moduleId:policy.module_id,mode:sourceMode,from:sourceMode==='details'?1:2,
+     limit:sourceMode==='details'?1:2,pilotUrl:u.href,seedManifestCount:0});
  }
 } catch(e) {fail(e.message);}
 
