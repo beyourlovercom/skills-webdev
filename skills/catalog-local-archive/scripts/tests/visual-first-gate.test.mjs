@@ -13,4 +13,46 @@ test('detail from page 1 allowed',()=>{const u='https://www.basworld.com/vehicle
 test('media bulk blocked first round',()=>assert.throws(()=>enforceVisualFirst({mode:'media'}),/bulk media/));
 test('expansion requires recorded approval',()=>assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:null}),/Owner visual PASS/));
 test('fabricated incomplete approval rejected',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({status:'PASS'}));assert.throws(()=>enforceVisualFirst({mode:'inventory',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:p}),/requires verified/);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
-test('properly recorded review PASS enables explicit expansion',()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));try{const p=path.join(dir,'pass.json');fs.writeFileSync(p,JSON.stringify({schema_version:1,project_id:'basworldy',source_origin:'https://www.basworld.com',gate:'OWNER_VISUAL_PASS',status:'PASS',owner_explicit_pass:true,approval_recorded_at:'2026-11-02',owner_message_reference:'conversation approval turn 123',review_baseline_id:'review-local-snapshots-sha256',approved_template_urls:['https://www.basworld.com/stock/truck']}));assert.equal(enforceVisualFirst({mode:'inventory',from:4,limit:30,phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:p}).approved,true);}finally{fs.rmSync(dir,{recursive:true,force:true})}});
+
+const exampleApproval=(moduleId='catalog-listings',scope_mode='FULL_NONBLOG')=>({
+ schema_version:2,project_id:'basworldy',source_origin:'https://www.basworld.com',
+ module_id:moduleId,gate:'OWNER_MODULE_VISUAL_PASS',status:'PASS',owner_explicit_pass:true,
+ approval_recorded_at:'2026-11-03T10:36:00+08:00',
+ owner_message_reference:'USER_CONVERSATION_MODULE_VISUAL_PASS_MSG',
+ scope_mode,template_sha256:'a'.repeat(64),
+ approved_template_urls:['https://www.basworld.com/stock/truck'],
+ approved_representative_detail_urls:['https://www.basworld.com/vehicles/used/truck-volvo-123']
+});
+const approvalFile=(value,fn)=>{
+ const d=fs.mkdtempSync(path.join(os.tmpdir(),'visual-gate-'));
+ try{const file=path.join(d,'approval.json');fs.writeFileSync(file,JSON.stringify(value));fn(file)}
+ finally{fs.rmSync(d,{recursive:true,force:true})}
+};
+test('module-specific listing PASS permits expansion in FULL_NONBLOG mode',()=>{
+ approvalFile(exampleApproval(),file=>
+ assert.equal(enforceVisualFirst({mode:'inventory',from:4,limit:30,moduleId:'catalog-listings',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file}).approved,true));
+});
+test('homeowner homepage PASS does not unlock listing template',()=>{
+ approvalFile(exampleApproval('shared-shell'),file=>
+ assert.throws(()=>enforceVisualFirst({mode:'inventory',from:1,limit:1,moduleId:'catalog-listings',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file}),/module-specific|requires/));
+});
+test('catalog listing PASS cannot unlock product detail batch',()=>{
+ approvalFile(exampleApproval(),file=>
+ assert.throws(()=>enforceVisualFirst({mode:'details',from:1,limit:1,moduleId:'product-details',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file,pilotUrl:'https://www.basworld.com/vehicles/used/truck-volvo-123'}),/module-specific|requires/));
+});
+test('FIRST_PAGE_CATALOG listing PASS still blocks page two',()=>{
+ approvalFile(exampleApproval('catalog-listings','FIRST_PAGE_CATALOG'),file=>
+ assert.throws(()=>enforceVisualFirst({mode:'inventory',from:2,limit:1,moduleId:'catalog-listings',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file}),/never permits list page 2/));
+});
+test('FIRST_PAGE_CATALOG product detail PASS only allows listed representative URL',()=>{
+ approvalFile(exampleApproval('product-details','FIRST_PAGE_CATALOG'),file=>{
+  assert.equal(enforceVisualFirst({mode:'details',from:1,limit:1,moduleId:'product-details',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file,pilotUrl:'https://www.basworld.com/vehicles/used/truck-volvo-123'}).approved,true);
+  assert.throws(()=>enforceVisualFirst({mode:'details',from:1,limit:2,moduleId:'product-details',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file,pilotUrl:'https://www.basworld.com/vehicles/used/truck-volvo-123'}),/representative URL/);
+ });
+});
+test('incomplete pass, generic continue and missing module id never unlock',()=>{
+ approvalFile({...exampleApproval(),owner_message_reference:'continue'},file=>
+ assert.throws(()=>enforceVisualFirst({mode:'inventory',from:2,limit:2,moduleId:'catalog-listings',phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file}),/module-specific|requires/));
+ approvalFile(exampleApproval(),file=>
+ assert.throws(()=>enforceVisualFirst({mode:'inventory',from:2,limit:2,phase:'EXPANSION_AFTER_OWNER_PASS',approvalFile:file}),/moduleId/));
+});
