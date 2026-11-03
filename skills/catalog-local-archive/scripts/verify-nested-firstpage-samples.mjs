@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {spawn} from 'node:child_process';
+const chrome='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',host='http://localdev.basworldy.com';
+const out='D:\\ai\\basworldy-source-archive\\page1-batch\\uat\\nested';fs.mkdirSync(out,{recursive:true});
+const profile=fs.mkdtempSync(path.join(os.tmpdir(),'bwy-source-chrome-'));
+const child=spawn(chrome,['--headless=new','--disable-gpu','--disable-extensions','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],{windowsHide:true,stdio:'ignore'});
+const delay=ms=>new Promise(r=>setTimeout(r,ms));let ws,seq=0,errs=[],remotes=[],externalResponses=[],results=[],pending=new Map();
+async function rpc(method,params={}){const id=++seq;const promise=new Promise((resolve,reject)=>pending.set(id,{resolve,reject}));ws.send(JSON.stringify({id,method,params}));const reply=await promise;if(reply.error)throw Error(method+JSON.stringify(reply.error));return reply.result;}
+async function evaluate(expression){const value=await rpc('Runtime.evaluate',{expression,returnByValue:true});return value.result.value;}
+async function visit(route,name){await rpc('Page.navigate',{url:host+route});for(let j=0;j<70;j++){await delay(110);if(await evaluate("document.readyState==='complete' && location.pathname==="+JSON.stringify(new URL(host+route).pathname)).catch(()=>false))break;}await delay(800);
+const scrolled=await rpc('Runtime.evaluate',{expression:"(async()=>{const h=Math.min(24000,document.documentElement.scrollHeight);let count=0;for(let y=0;y<h;y+=750){scrollTo(0,y);await new Promise(r=>setTimeout(r,110));count++;}scrollTo(0,0);await new Promise(r=>setTimeout(r,450));return {steps:count,scroll_height:document.documentElement.scrollHeight};})()",awaitPromise:true,returnByValue:true});
+const expr="JSON.stringify({title:document.title,url:location.href,h1:document.querySelector('h1')?.innerText?.slice(0,100),scroll_width:document.documentElement.scrollWidth,image_count:document.images.length,loaded_images:[...document.images].filter(i=>i.complete&&i.naturalWidth>0).length,local_real_images:[...document.images].filter(i=>i.src.includes('/source-mirror/assets/')&&i.complete&&i.naturalWidth>0).length,local_css:[...document.styleSheets].filter(s=>s.href?.includes('/source-mirror/assets/css/')).length,broken_images:[...document.images].filter(i=>i.complete&&i.naturalWidth===0&&i.currentSrc).slice(0,20).map(i=>i.currentSrc),fonts_status:document.fonts.status,viewport_width:innerWidth,ui_ready:document.documentElement.dataset.bwyLocalUiReady==='true',sliders:[...document.querySelectorAll('.slick-slider')].map(x=>({ready:x.dataset.bwyLocalReady==='true',slides:Number(x.dataset.bwySlides||0),visible:x.querySelectorAll('.slick-slide.bwy-visible').length,height:Math.round(x.getBoundingClientRect().height)})),hidden_hero_count:[...document.querySelectorAll('[class*=HeroBannerWithVideo_title],[class*=SimpleCTA_simpleCta],[class*=SplitBlockBanner_SplitBlockBanner]')].filter(x=>getComputedStyle(x).opacity==='0').length,oversized_icon_count:[...document.querySelectorAll('svg.svg-inline--fa')].filter(x=>{const r=x.getBoundingClientRect();return r.width>128||r.height>128}).length,remaining_skeletons:[...document.querySelectorAll('.blinkAnimation')].filter(x=>x.getBoundingClientRect().height>0).slice(0,18).map(x=>({parent:x.parentElement?.className?.toString().slice(0,70),height:Math.round(x.getBoundingClientRect().height)}))})";
+const d=JSON.parse(await evaluate(expr));
+let interaction=null;
+if(route==='/source-mirror/'){
+ interaction=JSON.parse(await evaluate("JSON.stringify((()=>{const s=document.querySelector('.slick-slider');const before=s?.querySelector('.slick-current')?.getAttribute('data-index');s?.querySelector('.slick-next')?.click();const after=s?.querySelector('.slick-current')?.getAttribute('data-index');return {type:'homepage-slider',before,after,pass:!!before&&before!==after};})())"));
+}else if(route.startsWith('/source-mirror/stock/')&&d.viewport_width<500){
+ interaction=JSON.parse(await evaluate("JSON.stringify((()=>{const p=document.querySelector('[class*=Stock_filtersDesktop]');const b=document.querySelector('[class*=QuickFilterBar_allFiltersButton]');const initiallyHidden=!!p&&getComputedStyle(p).display==='none';b?.click();const opened=document.body.classList.contains('bwy-local-filters-open');document.querySelector('.bwy-filter-close')?.click();const closed=!document.body.classList.contains('bwy-local-filters-open');return {type:'mobile-filter-drawer',initiallyHidden,opened,closed,pass:initiallyHidden&&opened&&closed};})())"));
+}else if(route.includes('/vehicles/')){
+ interaction=JSON.parse(await evaluate("JSON.stringify((()=>{const g=document.querySelector('.imageGalleryWrapperV1');const before=g?.dataset.bwyGalleryIndex;g?.querySelector('.arrowRightContainer')?.click();const after=g?.dataset.bwyGalleryIndex;g?.querySelector('.arrowLeftContainer')?.click();const restored=g?.dataset.bwyGalleryIndex;const zeroSkeletons=[...document.querySelectorAll('.blinkAnimation,.cds--skeleton__text,.button-skeleton')].filter(x=>x.getBoundingClientRect().height>0).length===0;const sourceSpecCount=Number(document.documentElement.dataset.bwySourceSpecs||0);return {type:'source-backed-pdp',title:document.querySelector('.bwy-pdp-h1')?.innerText,price:document.querySelector('.bwy-price-value')?.innerText,gallery_arrow_advanced:before!==after,gallery_arrow_restored:before===restored,zeroSkeletons,sourceSpecCount,pass:document.documentElement.dataset.bwyDetailUiReady==='true'&&!!document.querySelector('.bwy-pdp-h1')&&!!document.querySelector('.bwy-price-value')&&before!==after&&before===restored&&zeroSkeletons&&sourceSpecCount>=5};})())"));
+}
+const shot=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+fs.writeFileSync(path.join(out,name),Buffer.from(shot.data,'base64'));
+const layout=await rpc('Page.getLayoutMetrics');
+const pageHeight=Math.ceil(layout.cssContentSize?.height||850);
+let fullStatus='NOT_NEEDED';
+if(name==='construction_equipment-desktop.png'||name==='combination-desktop.png'||name==='tractorhead-mobile.png'){
+ try{const full=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:Math.ceil(Math.min(1600,layout.cssContentSize?.width||1440)),height:Math.min(25000,pageHeight),scale:1}});
+ fs.writeFileSync(path.join(out,name.replace('.png','-full.png')),Buffer.from(full.data,'base64'));fullStatus='CAPTURED'}
+ catch(e){fullStatus='ERROR:'+String(e).slice(0,100)}
+}
+results.push({route,...d,interaction,scrolled:scrolled.result.value,screenshot:name,full_screenshot:name.replace('.png','-full.png'),full_screenshot_height:pageHeight,full_screenshot_status:fullStatus});}
+async function main(){
+ let port;for(let i=0;i<90;i++){const fp=path.join(profile,'DevToolsActivePort');if(fs.existsSync(fp)){port=fs.readFileSync(fp,'utf8').split(/\r?\n/)[0];break;}await delay(100);}if(!port)throw Error('Chrome CDP missing');
+ const tabs=await(await fetch('http://127.0.0.1:'+port+'/json')).json();ws=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);
+ await new Promise((res,rej)=>{ws.addEventListener('open',res,{once:true});ws.addEventListener('error',rej,{once:true});});
+ ws.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){pending.get(m.id).resolve(m);pending.delete(m.id);}if(m.method==='Runtime.exceptionThrown')errs.push(m.params.exceptionDetails?.text);if(m.method==='Network.requestWillBeSent'){try{const u=new URL(m.params.request.url);if(['http:','https:'].includes(u.protocol)&&u.hostname!=='localdev.basworldy.com')remotes.push(u.href.slice(0,170));}catch{}}if(m.method==='Network.responseReceived'){try{const u=new URL(m.params.response.url);if(['http:','https:'].includes(u.protocol)&&u.hostname!=='localdev.basworldy.com')externalResponses.push({url:u.href.slice(0,160),status:m.params.response.status});}catch{}}});
+ await rpc('Page.enable');await rpc('Runtime.enable');await rpc('Network.enable');await rpc('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+const db=JSON.parse(fs.readFileSync('D:/ai/basworldy-source-archive/page1-batch/nested/nested-listing-index.json','utf8'));
+const groups=new Map();
+for(const x of db.records.filter(x=>x.status==='SAVED')){
+ const cat=x.source_path.split('/')[2];if(!groups.has(cat))groups.set(cat,[]);
+ groups.get(cat).push(x);
+}
+const selected=[];
+for(const [cat,rows] of groups){
+ rows.sort((a,b)=>a.source_path.localeCompare(b.source_path));
+ for(const x of [rows[0],rows[Math.floor(rows.length/2)],rows[rows.length-1]]){
+   if(x && !selected.some(y=>y.source_path===x.source_path))selected.push(x);
+ }
+}
+for(const x of selected){
+ const n=x.source_path.replace(/[^a-z0-9_-]/gi,'_').slice(-45);
+ await visit('/source-mirror'+encodeURI(x.source_path)+'/', 'nested-'+n+'-desktop.png');
+}
+await rpc('Emulation.setDeviceMetricsOverride',{width:375,height:812,deviceScaleFactor:1,mobile:true});
+for(const x of selected){
+ const n=x.source_path.replace(/[^a-z0-9_-]/gi,'_').slice(-45);
+ await visit('/source-mirror'+encodeURI(x.source_path)+'/', 'nested-'+n+'-mobile.png');
+}
+ const report={status:'NESTED_FIRSTPAGE_SAMPLE_TECHNICAL_UAT_NOT_OWNER_ACCEPTANCE',pages:results,full_page_lazyload_scrolled:true,source_comparison_screenshot_verified:false,dynamic_components_pass:results.every(x=>!x.interaction||x.interaction.pass),external_attempts:remotes.length,external_success_responses:externalResponses.length,external_success_sample:externalResponses.slice(0,3),external_sample:remotes.slice(0,3),js_exceptions:errs.length,exceptions:errs.slice(0,3),evidence_dir:out,proxy:'SYSTEM_DEFAULT'};
+ fs.writeFileSync(path.join(out,'nested-sample-browser-report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
+}
+try{await main()}finally{ws?.close();child.kill();await delay(200);try{fs.rmSync(profile,{recursive:true,force:true})}catch{}}
