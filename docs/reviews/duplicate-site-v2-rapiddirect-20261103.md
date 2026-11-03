@@ -94,3 +94,17 @@ All numbers below come from BYL DC on the authorized Windows device; they are no
 | GitHub main, Dev, WWW | BLOCKED |
 
 **No recommendation to merge PR #16 or PR #15 yet.** First close the real offline image/style asset failures, then obtain honest PWC capture/build evidence and submit real screenshot pairs for Owner visual review.
+
+## Final media-completion + offline visual readback (same Canary, no expanded scope)
+
+- Missing-asset plan: 278 absent candidates / 469 unique referenced assets. Bounded same-origin completion finished with **277 downloads, 1 HTTP 404**, no remaining work under the 300-request cap. The single unavailable asset was `/wp-content/plugins/ultimate-elementor/assets/lib/particles/particles.min.js`; no bypass attempted.
+- Final Windows mirror: **563 files, 38.03 MiB**, including SiteOne's original 286 files, plus 277 explicitly downloaded missing files; source assets are stored only in the private Windows project.
+- After network-blocked local Playwright rerun, all 3 routes still HTTP 200 at desktop 1440 and mobile 375. Final local heights closely match source: home 10526/10526 (desktop) and 16347 vs 16294 (mobile); services 4108/4108 and 9682 vs 9602; CNC 14761 vs 14759 and 17453 vs 17451.
+- Broken image comparisons (source → local, browser inspector includes original lazy images): home desktop 12→13, home mobile 13→14; services desktop/mobile 9→10; CNC desktop 15→16, mobile 13→14. This is much improved, but **not zero** and one source-side resource remains unavailable.
+- **Final PWC screenshot SSIM** (threshold 0.97): home desktop **0.9068 FAIL**, mobile **0.5689 FAIL**; services desktop **0.9502 FAIL**, mobile **0.6659 FAIL**; CNC desktop **0.9750 automated PASS**, mobile **0.8670 FAIL**. **Visual gate overall: 1/6 automated PASS, Owner visual acceptance 0/3 modules.**
+- PWC's duplicated-fingerprint algorithm was corrected locally with the original file preserved and a pinned-SHA reversible script in the V2 branch. Strict offline re-evaluation of **all 3 saved real source attempts** produced **3/3 structural capture integrity PASS, zero issues**. This does *not* assert successful new live PWC capture or completion of React authoring.
+- A fresh PWC live capture encountered `net::ERR_CONNECTION_CLOSED` and was not retried aggressively. Static localhost mirror UAT and offline PWC source integrity tests are separate from live PWC capture/plan/assemble/build.
+- Owner can inspect private screenshot pairs under `C:\\ai\\site-mirror\\rapiddirect-v2\\uat`, `visual-uat.json`, and `pwc-scores-after-media.json`. SiteOne reports and media SHA receipts stay under the same local root.
+- Result: **LOCAL_MIRROR_3_ROUTES_READY_FOR_VISUAL_REPAIR**; PWC complete agent clone **OPEN**; Mobile visual fidelity **FAIL**; Owner template acceptance **PENDING**; same-template batch and full non-Blog mode **BLOCKED**.
+
+Do not confuse a pixel score threshold crossing for one desktop page with owner approval or full 3-page visual fidelity. The next bounded repairs must target mobile styles/widgets and the one missing resource, then rerun desktop/mobile comparison without altering accepted frozen sections.
