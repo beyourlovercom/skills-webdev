@@ -1,13 +1,18 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "project_id": "basworldy",
   "source_origin": "https://www.basworld.com",
-  "gate": "OWNER_VISUAL_PASS",
+  "module_id": "catalog-listings",
+  "gate": "OWNER_MODULE_VISUAL_PASS",
   "status": "AWAITING_OWNER_REVIEW",
   "owner_explicit_pass": false,
-  "approval_recorded_at": null,
   "owner_message_reference": null,
-  "review_baseline_id": null,
-  "approved_template_urls": [],
-  "notes": "TEMPLATE ONLY. Do not set PASS without explicit Owner signoff of first-page Local visual screenshot baseline. Private evidence only."
+  "approval_recorded_at": null,
+  "scope_mode": "FIRST_PAGE_CATALOG",
+  "template_sha256": null,
+  "approved_template_urls": [
+    "https://www.basworld.com/stock/truck"
+  ],
+  "approved_representative_detail_urls": [],
+  "note": "PRIVATE approval template only; never set PASS automatically. Homepage has an independent PASS and does NOT unlock catalog or product batch. Owner must approve each specific module and an operator must cross-check the actual conversation message before writing PASS."
 }
