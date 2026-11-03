@@ -60,3 +60,37 @@ Blog/news, account, instant quoting, CAD uploads, checkout, orders, third-party 
 **Pending Owner visual/architecture review**. This PR may be approved to install the two official upstream tools and run the three-page Windows Local canary; it must not be interpreted as approval to merge main or deploy any website.
 
 Suggested review response: “pass V2 architecture, authorize Windows Local three-page canary only. No main merge, Dev or WWW.”
+
+## Real execution addendum — 2026-11-03 Windows Local
+
+All numbers below come from BYL DC on the authorized Windows device; they are not sample/illustrative.
+
+- Isolated project root: C:\\ai\\site-mirror\\rapiddirect-v2. No Dev, WWW, GitHub main, customer, quote backend, or live payment changes.
+- Installed: SiteOne Crawler v2.5.1.20260627 from official Windows release (ZIP SHA256 `6B6758DAA866DF99D9BD7A020B51EAECA2D5F52F3172EC5270F9F96B964C16DB`); PWC v3.0.0 isolated Python venv; pinned official Playwright 1.61.0 with existing Chromium 1228 (browser version 149.0.7827.55). Chrome was not restarted.
+- All 3 source URLs returned HTTP 200: /, /services/, /services/cnc-machining/.
+- SiteOne command from V2 adapter completed with exit=0. Initial mirror had 286 files, 90 images, 17.88 MiB, 5 HTML files representing 3 distinct routes (redirect/index aliases). HTML report and JSON report stored privately under project root. The SiteOne log includes 33 404 lines, requiring a residual review.
+- A true localhost preview served all 3 routes with HTTP 200 on 127.0.0.1:8765. Playwright exercised desktop 1440 and mobile 375 widths with external network requests blocked. Screenshots and a machine-readable UAT log were saved under `uat/`; the source originals remain private (not in this public repository).
+- **Pre-media-completion PWC SSIM scores** (required 0.97) all failed: home desktop 0.6057, mobile 0.2911; services desktop 0.4916, mobile 0.2549; CNC desktop 0.5006, mobile 0.5999. There were missing images and material viewport height differences, especially mobile. A successful SiteOne export alone is NOT VISUAL PASS.
+- Offline absolute-asset fix: 417 same-origin /wp-content/ references rewritten in 3 HTML files, with original backups. This reduced CNC desktop local height from 19,193px to 14,566px vs source 14,759px, but still left missing local assets.
+- Media gap detector discovered 278 missing URL-referenced same-origin /wp-content/ assets from 469 unique candidates. Bounded downloader stage is separate; its result must be read from private `media-completion-report.json` before declaring final coverage.
+- Initial PWC extraction hit `AssetInfo.url=None` in inline scripts. A backed-up, exact-source local fix filtered only missing download URLs; no whole-site claim followed.
+- All three PWC initial live extracts then reported `capture_integrity_failed` due duplicate Elementor/heading semantic fingerprints. Inspection of captured raw and normalized structures proved the original last-wins dictionary mismatched duplicate regions. A backed-up local matching patch now pairs same-fingerprint occurrences in DOM order **without changing thresholds**. Reassessment of the saved real homepage capture returned `passed`, zero issues. This is a structural-gate regression result, NOT a new successful live extract.
+- An attempted fresh PWC live extract later encountered `net::ERR_CONNECTION_CLOSED`. No bot-block bypass or concurrency escalation was authorized. Actual complete PWC Agent author/build/visual acceptance remains **OPEN**.
+- V2 scripted unit test baseline expanded to 13/13 PASS for asset plan/localizer/PWC null compatibility and existing pilot safety gates; new duplicate-fingerprint patch also has its own tests. These are **unit tests only**, not browser PASS.
+
+### Owner gate at this point
+
+| Gate | Evidence status |
+|---|---|
+| Tool installation and isolated CLI | PASS |
+| 3-route SiteOne export | PASS, with missing assets |
+| 3-route localhost HTTP and browser screenshots | PASS for routing/screenshots only |
+| Full offline asset integrity | FAIL/OPEN |
+| PWC live extraction integrity | FAIL/OPEN (offline structural recheck now passes) |
+| PWC AI authored React clone / interactions | NOT RUN |
+| Desktop/mobile visual threshold 0.97 | FAIL (0/6) |
+| Owner per-module visual PASS | PENDING |
+| Full site/non-Blog batch | BLOCKED |
+| GitHub main, Dev, WWW | BLOCKED |
+
+**No recommendation to merge PR #16 or PR #15 yet.** First close the real offline image/style asset failures, then obtain honest PWC capture/build evidence and submit real screenshot pairs for Owner visual review.
