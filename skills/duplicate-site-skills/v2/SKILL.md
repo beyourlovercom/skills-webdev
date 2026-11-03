@@ -109,3 +109,14 @@ See [the detailed final Canary roadmap](../../../docs/reviews/duplicate-site-v2-
 Real canary: home mobile latest source-vs-direct-mirror SSIM **0.8997**, moving homepage article cards and source-side 10px overflow; CNC desktop **0.6824**, carousel/video dynamic capture state. The local PWC bridge itself has artificial iframe viewport effects. Neither low score alone confirms underlying template redevelopment is needed. Reopen only for confirmed new visual/interactive template defects, not content churn or unstable screenshots.
 
 **Existing factory:** reuse PR #15 backup-48h-gate.mjs and prepare-module-batch.mjs. PR #15 factory unit tests passed **27/27** on isolated Windows Local; this validates policy and queue planning only, NOT actual bulk page generation. Do not implement a duplicate factory inside PR #16. Private 3-class candidate inventory is at C:/ai/site-mirror/rapiddirect-v2/uat/template-candidates.json, with every class pending module-specific Owner visual PASS and bulk disabled. No new source routes were crawled.
+
+
+### Mirror-first local read-only safeguard
+
+When SiteOne static HTML is the primary local preview, apply the dedicated three-route guard before anyone clicks source-site links or quote forms. This is defense in depth, distinct from Playwright request interception:
+
+    node skills/duplicate-site-skills/v2/scripts/guard-direct-mirror.mjs --workspace=C:/ai/site-mirror/rapiddirect-v2 --manifest=skills/duplicate-site-skills/v2/templates/rapiddirect.pilot.example.json
+
+Only with existing rights/scope and after reviewing the dry-run, add `--execute`. The command preflights all three existing mirror HTML files, saves originals under `uat/pre-direct-mirror-guard/`, adds local CSP `connect-src 'self'; form-action 'none'`, traps out-of-scope links and form submissions, and does not touch the source or any new URL. Keep browser-level request blocking enabled in automated UAT. The original and post-guard mirror HTML SHA receipts live only in the private candidate ledger.
+
+Verified on Windows Local: 6/6 browser runs (3 sample routes × desktop/mobile) had CSP/form blocking, menu and homepage FAQ checks PASS; zero external requests were attempted under the isolated network guard. Script default is read-only and idempotent. This is not an Owner visual PASS or batch authorization.
