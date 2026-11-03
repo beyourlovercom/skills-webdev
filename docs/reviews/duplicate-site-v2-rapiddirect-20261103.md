@@ -108,3 +108,36 @@ All numbers below come from BYL DC on the authorized Windows device; they are no
 - Result: **LOCAL_MIRROR_3_ROUTES_READY_FOR_VISUAL_REPAIR**; PWC complete agent clone **OPEN**; Mobile visual fidelity **FAIL**; Owner template acceptance **PENDING**; same-template batch and full non-Blog mode **BLOCKED**.
 
 Do not confuse a pixel score threshold crossing for one desktop page with owner approval or full 3-page visual fidelity. The next bounded repairs must target mobile styles/widgets and the one missing resource, then rerun desktop/mobile comparison without altering accepted frozen sections.
+
+## Owner-requested mobile repair + PWC build/interaction phase (2026-11-03)
+
+**Scope still locked:** 3 pages only, Windows Local only, PR #16 remains Draft; main, Dev, WWW, customer data and production quote/payment APIs unchanged.
+
+### Local implementation and verification
+
+- An isolated **PWC-generated React/Vite skeleton** was obtained by running actual `pwc clone http://127.0.0.1:8765/`. Its real source extraction and integrity check PASS, plan PASS, but automatic assembly reported a missing React section. The generated structure was therefore completed using a clearly identified **SiteOne static-archive bridge component**, not independent handwritten React equivalents of all website sections. Do not claim an independent PWC clone.
+- Separate build root: `C:\\ai\\site-mirror\\rapiddirect-v2\\pwc-build\\review-app`; archive source bytes remain private on the approved Windows Local. The first `npm.cmd install` succeeded, and repeated `npm.cmd run build` / Vite 5.4.21 runs exited 0; 32 transformed modules, production `dist` generated. Local preview binds **127.0.0.1:8766** only.
+- Copying offline pages into `/snapshots/*.html` initially broke **relative JS/CSS/image URLs** and consequently the hamburger menu / FAQ / lazy-loaded media. Corrected the three local snapshot copies with a `<base href="/">` and saved originals. After rebuild, mobile menus opened **3/3** and the home FAQ expanded; none of the original SiteOne source files were overwritten.
+- The offline bridge only allows the three approved route families and recognizes SiteOne's `.html` and `/index.html` aliases. Browser navigation from home/service content into the CNC sample passed in both desktop/mobile (**4/4**). Form submission prevented (**2/2**), quote click showed explicit disabled notice (**6/6** previously observed), and no POST/PUT/DELETE requests were observed during audited flows. Any other route is blocked locally.
+- Browser-generated screenshot evidence exists for three pages at 1440px and 375px, and JSON interaction/route reports are under `C:\\ai\\site-mirror\\rapiddirect-v2\\uat`.
+- The **standalone** `pwc build` invocation failed with `RuntimeError: No sandbox exists` because upstream `get_sandbox()` resolves an in-memory sandbox registry that a fresh CLI process does not restore. This is not reported as PWC CLI PASS. The assembled Vite React project **does build** via npm and serves the compiled bundle.
+- Mobile baseline quality: one renewed source scroll/capture showed the service listing static mirror and source **SSIM 0.9991**. Services mobile stable built-frame vs local static mirror **1.0000**; CNC mobile built-frame vs local static mirror **0.999999**. The home bridge still exhibits changing mid-page widget geometry against a separately captured local screenshot (**0.557**), even when its first fold aligns. Source homepage also varied between captures (image count, page height). **Homepage full-page/mobile visual gate stays OPEN**, as does CNC vs the original, time-varying source capture. These comparisons do not confer Owner visual PASS.
+- Because full-page screenshot width and height can differ between browser modes, the review retains both the unaltered screenshot score and a separately labeled viewport-aligned comparison; the original data is never cropped in place or hidden.
+- **Owner-only local dashboard**, confirmed HTTP 200 with image HTTP 200: `http://127.0.0.1:8766/uat/owner-visual-review-v2.html`; on-disk source `C:\\ai\\site-mirror\\rapiddirect-v2\\uat\\owner-visual-review-v2.html`. The URL only works on that Windows machine while its local Vite preview runs. The dashboard includes original/refreshed source, SiteOne local, and built preview screenshots plus interactions and score receipts.
+
+### Current gate
+
+| Deliverable | Status |
+|---|---|
+| SiteOne three-route offline assets | PASS with one source-side 404 residual from earlier capture |
+| PWC real local extraction and plan | PASS |
+| Vite assembled skeleton + review bridge production build | PASS |
+| PWC independent authored full React sections | OPEN |
+| Standalone `pwc build` CLI read-back | FAIL (upstream process-local sandbox state) |
+| Mobile menu 3/3, homepage FAQ, internal route links, safe CTA/forms | PASS for tested flows |
+| Stable service-list mobile and CNC bridge-vs-static mirror visual checks | Automated PASS against stated baselines only |
+| Home dynamic long-page fidelity + CNC vs moving source | OPEN |
+| Owner **per-module** visual acceptance | PENDING — no auto-batching |
+| PR #16 main merge / Dev / WWW release | BLOCKED |
+
+**Next:** Owner reviews the local dashboard, calls out visible differences per module, then repair only those discrepancies without broadening capture. Do not treat module screenshots, React skeleton build, or route HTTP 200 as approval to merge PR #16 or batch the rest of the site.
