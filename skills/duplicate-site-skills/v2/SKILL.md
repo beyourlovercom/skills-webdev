@@ -88,3 +88,15 @@ Visual replay is local-only by default; it reads the public source only with exp
 **Actual last checked state:** Windows local Node 21/21, Python original 4/4, registry 16, Vite build PASS, latest browser interactions 12/12, true viewport 6/6, screenshot capture 6/6. Matched mirror↔PWC SSIM passed 3/6; homepage desktop/mobile and CNC desktop remain OPEN. Assets 563 files, 38.03 MiB with one known source 404. The React layer is a **static-mirror bridge**, NOT an independently authored full site.
 
 See [the detailed final Canary roadmap](../../../docs/reviews/duplicate-site-v2-rapiddirect-final-roadmap-20261103.md) (repository-root location `docs/reviews/duplicate-site-v2-rapiddirect-final-roadmap-20261103.md`). Owner must approve outstanding visual differences before same-template batch. PR #15 and PR #16 remain Draft; no main merge or Dev/WWW release from these steps.
+
+## Owner 冻结原则：模板只开发一次
+
+**2026-11-03 已由 Owner 明确冻结：一个模板研发一次，同类页面全部自动复用。只有发现新的视觉或交互问题，才重新进入模板研发。**
+
+这是 V2 后续开发的强制设计约束。默认以 SiteOne 的静态镜像为主、PWC 按需修复；**不得强制每个同类 URL 重新规划、编码或转换成 React**。
+
+操作顺序：**按页面结构分组 → 每类 1 个代表页 → Owner PC/移动视觉 PASS → 冻结模板哈希与数据映射 → 同类页面仅批量替换数据/资源 → 自动 QA 与断点续跑 → 只有新视觉/交互 Bug 才重新打开对应模板研发**。资源缺失、404 和数据错误先局部纠正，不重开全部模板。
+
+模板冻结不跳过安全、内容授权、交易操作或正式发布审批；缺少 Owner 模板 PASS 时一律 `BLOCKED_BATCH`。对应完整状态、异常类型和效率验收合同：[`references/template-reuse-frozen-policy.md`](references/template-reuse-frozen-policy.md)。
+
+**特别注意：** 这是已确认的架构与研发原则，**不是**批量复制执行引擎已经完成，也不是 RapidDirect 三页已有最终 Owner 视觉 PASS。当前 PR #15/#16 Draft 状态不变。
