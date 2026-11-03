@@ -1,0 +1,9 @@
+/* Local sample PDP: replacing Next SSR skeleton placeholder with real JSON-LD content. */
+.bwy-pdp-title{padding:12px 0 20px;max-width:1100px}
+.bwy-pdp-h1{font-size:28px!important;font-weight:700!important;line-height:1.25;margin:0 0 8px!important;color:#1d1d1b!important}
+.bwy-pdp-subheading{color:#606b71;font-size:14px;line-height:1.5;margin:0}
+.bwy-pdp-price{padding:20px;margin:0 0 18px;background:#f7f8f8;border-radius:5px;display:flex;gap:4px;flex-direction:column}
+.bwy-price-label{font-size:13px;color:#58646b}.bwy-price-value{font-size:30px;color:#152b36;font-weight:800;line-height:1.15}
+.bwy-facts{display:grid;grid-template-columns:minmax(120px,.85fr) 1.15fr;gap:10px 15px;margin:0;padding:4px 0;font-size:14px}
+.bwy-facts-key{color:#6d7980}.bwy-facts-value{margin:0;font-weight:600;overflow-wrap:anywhere}
+@media(max-width:767px){.bwy-pdp-h1{font-size:22px!important}.bwy-pdp-price{padding:14px;margin:10px 0}.bwy-price-value{font-size:25px}}
