@@ -25,8 +25,8 @@ const blank={schema_version:1,source_origin:sourceOrigin,started_at:new Date().t
 let db=fs.existsSync(indexPath)?JSON.parse(fs.readFileSync(indexPath,'utf8')):blank;
 const stage=a('stage')||'PILOT_FIRST_PAGE';
 const pilotUrl=a('pilot-url');
-enforceVisualFirst({
- phase:stage,approvalFile:a('visual-approval'),mode,from:start,limit,
+const moduleGate=enforceVisualFirst({
+ phase:stage,moduleId:mode==='inventory'?'catalog-listings':'product-details',approvalFile:a('visual-approval'),mode,from:start,limit,
  category:'truck',
  seedManifestCount:all('seed-manifest').length,
  pilotUrl,
@@ -86,7 +86,7 @@ async function details(){
  let count=0;
  const done=new Set(db.product_details.map(p=>p.source_url));
  for(const url of db.listing_urls){
-  if(stage==='PILOT_FIRST_PAGE' && url!==pilotUrl)continue;
+  if((stage==='PILOT_FIRST_PAGE'||moduleGate.scope_mode==='FIRST_PAGE_CATALOG')&&url!==pilotUrl)continue;
   if(done.has(url))continue;
   if(count>=limit)break;
   const h=sha(url).slice(0,24);
