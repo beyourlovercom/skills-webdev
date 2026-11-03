@@ -25,6 +25,11 @@ function inside(root,target){
 }
 function putIfChanged(filepath,content,backupRoot,root,apply){
   if(!inside(root,filepath))throw Error('Write outside workspace refused: '+filepath);
+  // Reject symlinked files or parents that resolve outside the isolated workspace.
+  const existing=fs.existsSync(filepath)?fs.realpathSync(filepath):null;
+  const existingParent=fs.realpathSync(path.dirname(filepath));
+  if((existing&&!inside(root,existing)) || (!inside(root,existingParent)&&existingParent!==root))
+    throw Error('Symlink escape outside workspace refused: '+filepath);
   const before=fs.existsSync(filepath)?fs.readFileSync(filepath,'utf8'):null;
   if(before===content)return {changed:false,action:'UNCHANGED'};
   if(apply){
@@ -53,15 +58,18 @@ export function prepareReview({workspace,manifest,apply=false}){
   const component=path.join(app,'src','components','sections','section-12','Section12Section.jsx');
   const backup=path.join(root,'uat','pre-v2-guard-originals');
   if(!fs.existsSync(path.join(app,'package.json')))throw new Error('PWC React scaffold not available');
-  let patches=[];
-  for(const n of names){
-    const file=path.join(publicDir,n+'.html');
-    if(!fs.existsSync(file))throw new Error('Missing existing authorized snapshot: '+n);
-    patches.push({id:n,...putIfChanged(file,addOfflineGuards(fs.readFileSync(file,'utf8')),backup,root,apply)});
+  // Preflight every input before making the first local write. A missing third
+  // sample must not leave the first two snapshots partially patched.
+  const files=names.map(n=>({id:n,file:path.join(publicDir,n+'.html')}));
+  for(const item of files){
+    if(!fs.existsSync(item.file))throw new Error('Missing existing authorized snapshot: '+item.id);
+    if(!inside(root,fs.realpathSync(item.file)))throw Error('Symlink escape outside workspace refused: '+item.id);
   }
   if(!fs.existsSync(TEMPLATE))throw new Error('Review bridge template missing');
   const jsx=fs.readFileSync(TEMPLATE,'utf8');
   if(!jsx.includes('snapshot')||!jsx.includes('preventDefault')||!jsx.includes('allow-same-origin'))throw Error('Review bridge template fails safety precheck');
+  const prepared=files.map(item=>({id:item.id,file:item.file,content:addOfflineGuards(fs.readFileSync(item.file,'utf8'))}));
+  const patches=prepared.map(item=>({id:item.id,...putIfChanged(item.file,item.content,backup,root,apply)}));
   const bridge=putIfChanged(component,jsx,backup,root,apply);
   return {status:apply?'LOCAL_GUARDED':'DRY_RUN',workspace:root,snapshots:patches,
     component:bridge,production_write:false,bulk:false,
