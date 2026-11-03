@@ -61,3 +61,31 @@ test('pilot scope/approval fail closed',()=>{
   assert.throws(()=>prepareReview({workspace:x.root,manifest:x.manifest,apply:true}),/Exactly three/);
  }finally{fs.rmSync(x.root,{recursive:true,force:true})}
 });
+
+
+test('preflight refuses partial writes when the third sample is missing',()=>{
+ const x=fixture();try{
+  const snapshot=path.join(x.app,'public','snapshots','home.html');
+  const original=fs.readFileSync(snapshot,'utf8');
+  fs.unlinkSync(path.join(x.app,'public','snapshots','cnc.html'));
+  assert.throws(()=>prepareReview({workspace:x.root,manifest:x.manifest,apply:true}),/Missing existing authorized snapshot: cnc/);
+  assert.equal(fs.readFileSync(snapshot,'utf8'),original);
+  assert.equal(fs.existsSync(path.join(x.root,'uat','pre-v2-guard-originals')),false);
+ }finally{fs.rmSync(x.root,{recursive:true,force:true})}
+});
+test('symlinked source snapshots cannot point outside isolated workspace',()=>{
+ const x=fixture();const outside=fs.mkdtempSync(path.join(os.tmpdir(),'site-v2-outside-'));
+ try{
+  const content=path.join(outside,'untrusted.html');
+  fs.writeFileSync(content,'<html><head></head><body></body></html>');
+  const link=path.join(x.app,'public','snapshots','cnc.html');
+  fs.unlinkSync(link);
+  fs.symlinkSync(content,link);
+  const before=fs.readFileSync(content,'utf8');
+  assert.throws(()=>prepareReview({workspace:x.root,manifest:x.manifest,apply:true}),/Symlink escape/);
+  assert.equal(fs.readFileSync(content,'utf8'),before);
+ }finally{
+  fs.rmSync(x.root,{recursive:true,force:true});
+  fs.rmSync(outside,{recursive:true,force:true});
+ }
+});
