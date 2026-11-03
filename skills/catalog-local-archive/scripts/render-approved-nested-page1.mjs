@@ -29,7 +29,7 @@ for(const [name,digest] of Object.entries(baselines)){
  if(!fs.existsSync(f)||sha(fs.readFileSync(f))!==digest)throw Error('Frozen Owner-approved baseline drift: '+name);
 }
 const allRecords=[...(base.media_assets||[]),...(base.css_dependencies||[]).map(url=>({url,role:'css'})),
- ...(graph.media_assets||[]),...(first.media_assets||[]),...(nm.media_assets||[])];
+ ...(graph.media_assets||[]),...(first.media_assets||[]),...(nm.media_assets||[]),...(nm.css_dependencies||[]).map(url=>({url,role:'css'}))];
 const mapping=new Map(),missing=[],copied=[];
 for(const entry of allRecords){
  let url;try{url=new URL(entry.url)}catch{continue}
