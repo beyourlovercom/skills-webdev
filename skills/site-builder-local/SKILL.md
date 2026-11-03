@@ -3,7 +3,7 @@ name: site-builder-local
 description: S2-A — 在已授权 Windows Local 进行网站最小差异研发、独立浏览器 UAT 和精准 Dev 交接；不代表任何 Dev/WWW 发布授权。
 ---
 
-# S2-A · Windows Local 研发 Skill V1.1
+# S2-A · Windows Local 研发 Skill V1.2.1
 
 ## 🔒 高保真复制专线：视觉审批优先
 当任务涉及原站复刻/本地备份/模板复制时，第一轮**只**取首页、各模板列表的第 1 页、来源于第 1 页的代表性商品详情和基础 Pages；所有带分页的地方不允许访问第 2 页以上、cursor、下一屏或批量采集。先保存这些页面真实使用的全部 Logo、Banner、字体、CSS、原图及完整样本图库，在 Windows Local 达到尽可能 100% 的视觉保真，并由 Owner 审核。**没有明确 Owner 视觉 `pass`，不进行全站产品清点、后续分页或批量图库下载**。普通“继续”、测试 PASS、HTML 200 均不能解锁。以 [Visual-first gate](../duplicate-site-skills/references/06-first-page-visual-gate.md) 为标准；独立发布权限不受视觉签字代替。
@@ -15,6 +15,11 @@ description: S2-A — 在已授权 Windows Local 进行网站最小差异研发�
 - S1 的来源明确的报告、关键词→URL / 内容计划、真实需求优先级。缺少真实证据时把方案标注为假设，不虚构 GA4/GSC/Ads/Semrush 数据。
 - [S2 环境、审批和验收契约](../site-dev-uat/references/s2-runtime-gates.md)。
 - [S2 离线交接模板](templates/s2-handoff.example.json)、[门禁验证器](scripts/s2-handoff-validate.mjs)。模板都是虚构示例，绝不能当已验收站点。
+
+## 48h 站点本地化专线（高保真复制优先于常规研发工作流）
+执行 `duplicate-site-skills` [07 模块工厂](../duplicate-site-skills/references/07-48h-module-factory.md)。每种页面类型只读取一个代表性原站样本和真实图片 → 独立 Local 还原 → PC/Mobile 原站/Local 对照 → 自动 UAT → 等 Owner 对**该模块**明确视觉 pass → 批量套用已经冻结的模板与样式、替换真实页面数据和媒体 → 本模块 100% 范围完整率/网络隔离/链接校验 → 下一模块。**不重复开发已签字通过的 Header、Footer、Logo、CSS；不为同类型的上百个页面重复做视觉设计。** 模块顺序：首页共享外壳 → 列表 → 产品详情 → 基础页面 → 交互 → 最终离线打包和审计。任何不同结构的新页面类型，需另取一个样本独立审核。
+
+48h 为基于页面与素材实际吞吐的**活跃工作目标**。脚本 `../duplicate-site-skills/scripts/backup-48h-gate.mjs` 需要模块专属审批、真实样本、SHA 和每批完整率；无 Owner PASS 不允许批量。同一源站若明确“各商品列表仅第一页、不做全部商品”则不得私自读取第二页或全量详情；该结果应标为`SCOPED_LOCAL_ARCHIVE`，不得标为完整非 Blog 全站。变更最小化，真实 Local 的截图和功能证据必须记录。未独立批准不发布 Dev/WWW。
 
 ## 开发执行 S2-A
 1. **只读预检：** 通过正式自建 DC 选中 Owner 授权的 Windows Local（必要时可用 007windows，但绝不推断默认账号）。核对 Local 实例、GitHub HEAD、PHP/Node/WP/Woo/DB、目录隔离、端口、浏览器已登录状态和项目最新 UAT。READY 设备不重启，不反复打开 Chrome 窗口、不影响其他 Local 项目。
