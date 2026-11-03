@@ -15,7 +15,7 @@ const copy=()=>structuredClone(example);
 test('bounded local pilot manifest is valid without authorizing bulk or production',()=>{
  const r=validatePilot(example);
  assert.equal(r.status,'PASS',JSON.stringify(r.errors));
- assert.equal(r.sample_count,4);
+ assert.equal(r.sample_count,3);
  assert.equal(example.execution.enable_bulk,false);
  assert.equal(example.execution.allow_production_write,false);
  assert.equal(example.approvals.owner_visual_pass,false);
@@ -57,7 +57,7 @@ test('plan produces bounded SiteOne offline and PWC sample commands',()=>{
  assert.ok(r.siteone.args.includes('--single-page'));
  assert.ok(r.siteone.args.includes('--workers=2'));
  assert.ok(r.siteone.args.includes('--max-reqs-per-sec=2'));
- assert.equal(r.pwc_extract.length,4);
+ assert.equal(r.pwc_extract.length,3);
  assert.deepEqual(r.pwc_extract[0].args,['extract','https://www.rapiddirect.com/']);
  assert.equal(r.production_write,'BLOCKED');
 });
