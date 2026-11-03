@@ -55,6 +55,30 @@
    }
   }
 
+
+  // Source SSR includes an empty "CDS contained-list" skeleton that never
+  // hydrates offline. The highlighted-spec cards already carry real, rendered
+  // vehicle values; reuse those values without guessing missing attributes.
+  const specRoot=document.querySelector('[class*=PDPSpecification_specificationsInfo]');
+  if(specRoot&&specRoot.querySelector('.cds--skeleton__text')){
+    const facts=[...document.querySelectorAll('[class*=PDPHighlightedSpecs_specCard]')]
+      .map(card=>[
+        card.querySelector('[class*=PDPHighlightedSpecs_specLabel]')?.textContent?.trim(),
+        card.querySelector('[class*=PDPHighlightedSpecs_specValue]')?.textContent?.trim()
+      ]).filter(([label,value])=>label&&value);
+    if(facts.length){
+      const info=make('dl','bwy-real-specs');
+      for(const [label,value] of facts){
+        info.append(make('dt','bwy-real-spec-label',label),make('dd','bwy-real-spec-value',value));
+      }
+      specRoot.replaceChildren(info);
+      if(specRoot.parentElement)specRoot.parentElement.style.height='auto';
+      const h=specRoot.parentElement?.querySelector('[class*=PDPSpecification_specTitleWrap] h2');
+      if(h)h.textContent='Technical specifications';
+      document.documentElement.dataset.bwySourceSpecs=String(facts.length);
+    }
+  }
+
   // Remaining source placeholders represent live data that is absent from the
   // immutable HTML snapshot. Never fabricate an inspection or transport quote.
   const dynamicUnavailable=[
