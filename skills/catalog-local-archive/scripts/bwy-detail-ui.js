@@ -54,6 +54,50 @@
     }
    }
   }
+
+  // Remaining source placeholders represent live data that is absent from the
+  // immutable HTML snapshot. Never fabricate an inspection or transport quote.
+  const dynamicUnavailable=[
+   ['Vehicle inspection','The live inspection report is not included in this local first-page preview.'],
+   ['How to buy','The original purchase workflow is not connected to this offline copy.'],
+   ['Transport & export','Live shipping rates are not available in this local copy.'],
+   ['More vehicles','Additional products will only be restored after the first-page visual approval.']
+  ];
+  const pending=[...document.querySelectorAll('.blinkAnimation')].filter(e=>e.getBoundingClientRect().height>0);
+  let idx=0;
+  for(const element of pending){
+    if(idx>=dynamicUnavailable.length)break;
+    const [heading,note]=dynamicUnavailable[idx++];
+    const section=make('section','bwy-offline-section');
+    section.append(make('h3','bwy-offline-heading',heading),make('p','bwy-offline-note',note));
+    section.setAttribute('data-bwy-pending-live-module',heading);
+    element.replaceWith(section);
+  }
+  // Basic local-only photo navigation (no video player, remote fetch or stock API).
+  document.querySelectorAll('.imageGalleryWrapperV1').forEach(gallery=>{
+    const strip=gallery.querySelector('.slidesWrapper');
+    if(!strip)return;
+    const slides=[...strip.children].filter(x=>x.classList.contains('galleryImage'));
+    if(slides.length<2)return;
+    let index=0;
+    function show(){
+      slides.forEach((slide,i)=>{slide.classList.toggle('bwy-gallery-visible',i===index);});
+      gallery.dataset.bwyGalleryIndex=String(index);
+      gallery.dataset.bwyGalleryCount=String(slides.length);
+      gallery.classList.add('bwy-gallery-ready');
+    }
+    const left=gallery.querySelector('.arrowLeftContainer');
+    const right=gallery.querySelector('.arrowRightContainer');
+    function move(delta){index=(index+delta+slides.length)%slides.length;show();}
+    for(const [button,delta] of [[left,-1],[right,1]]){
+      if(!button)continue;
+      button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();move(delta);},true);
+      button.setAttribute('role','button');
+      button.setAttribute('tabindex','0');
+      button.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();move(delta);}});
+    }
+    show();
+  });
   document.documentElement.dataset.bwyDetailUiReady='true';
   document.documentElement.dataset.bwyDetailSku=String(d.sku);
  };
