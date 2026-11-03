@@ -9,7 +9,7 @@ Owner visual PASS is recorded for `/`, `/services/`, `/services/cnc-machining/`.
 ## New implementation in PR #16
 
 - `skills/duplicate-site-skills/v2/scripts/template-data-map.py`: pure Python standard library. Reads only an already-approved local sample identified in the private ledger; checks page path, Owner visual PASS and source SHA-256; inventories text node slots and selected metadata, image and link attributes using exact source offsets without altering HTML layout.
-- `inspect` writes a private field inventory **only with explicit `--execute`**, under a caller-designated private scratch directory. The default action is a no-write dry run.
+- `inspect` writes a private field inventory **only with explicit `--execute`**, under a caller-designated project-private `uat/` scratch directory. The default action is a no-write dry run.
 - `render` accepts explicit field-ID → new-value changes. It preserves original tags/attributes outside exact allowed data spans; escapes HTML, checks source SHA and structural fingerprint, and writes a new private scratch output without touching the existing mirror. Unknown fields, drift, unauthorized source, output outside scratch, external media URLs, unapproved links and unparsed `srcset` replacement fail closed.
 - This is **data substitution**, not a second batch queue. Real same-template URL batches must go through **PR #15** and its Owner approval, site scope and QA gates.
 
@@ -37,7 +37,7 @@ This is evidence to reuse common shell templates rather than re-developing heade
 
 ## Actual tests and independent batch gate
 
-- On Windows Local, `python -m unittest discover -s tests -p 'test_duplicate_site_v2_*.py' -v`: **12/12 PASS** after adding six data-map cases. The cases cover safe rendering, same structural fingerprint, HTML escaping, frozen SHA drift, restricted three-route links and rejecting unverified `srcset` conversion.
+- On Windows Local, `python -m unittest discover -s tests -p 'test_duplicate_site_v2_*.py' -v`: **13/13 PASS** after adding six data-map cases. The cases cover safe rendering, same structural fingerprint, HTML escaping, frozen SHA drift, restricted three-route links and rejecting unverified `srcset` conversion.
 - Private proof: `C:/ai/site-mirror/rapiddirect-v2/uat/data-mapping-smoke/final-mapping-summary.json` and `synthetic-render-proof.json`. Sample field inventories and output HTML remain local only. **No proprietary source HTML, images, fonts or extracted page content committed to GitHub.**
 - Re-ran `audit-pr15-handoff.mjs` against the existing PR #15 real `backup-48h-gate.mjs`: frozen reference SHA **3/3**, actual gate called, and all **3/3 remain BLOCKED**. `generalized_templates_ready=0`, `source_requests=0`, `site_writes=0`.
 
@@ -59,3 +59,7 @@ python skills/duplicate-site-skills/v2/scripts/template-data-map.py inspect --sa
 ```
 
 The command above is dry-run. `--execute` can write the private scratch inventory on first creation; it deliberately refuses overwrites. Render requires `--mapping`, `--changes`, a new isolated `--output`, and an approved source; it never writes into the mirrored website itself.
+
+## Final fail-closed regression
+
+The latest real Windows run verified **13/13 Python unit tests PASS**. An explicit negative CLI call used `--scratch-root=<project>/mirror` and `--output=<project>/mirror/unauthorized-render.html`: the command returned nonzero with `scratch root must be inside the project's private UAT directory`; the mirror output file did not exist. This protects the previously approved direct SiteOne mirror from accidental local proof writes.
