@@ -57,3 +57,15 @@ https://github.com/ericshang98/perfect-web-clone-skill
 | CNC machining | OPEN | OPEN | OPEN | OPEN | PENDING |
 
 Do not invent percentage similarity or a 48-hour delivery guarantee. Declare coverage as measured numerator/denominator for routes, assets, and visible sections. Highlight missing functionality even when screenshot scores look high.
+
+## Owner-frozen template reuse contract (2026-11-03)
+
+**Mandatory:** develop/fix **one representative per template**; after explicit Owner desktop/mobile visual PASS, freeze immutable template SHA and field mapping. Every other URL of the same type uses **automatic data/asset injection with this frozen template**. Do not re-author each URL as React or restart analysis per URL.
+
+**When to reopen template development:** only a newly evidenced visual or interactive difference requiring a template fix. Missing data, broken image paths, one-off 404 or a single source field error are local data/asset QA exceptions; repair these without redesigning the template. Template SHA drift blocks propagation until reviewed. Safety, rights and production release gates always remain separate and blocking.
+
+Required sequence: `TEMPLATE_CLASSIFIED` → `REPRESENTATIVE_UAT` → `OWNER_VISUAL_PASS` → `TEMPLATE_FROZEN` → `SAME_TYPE_BATCH` → `BATCH_QA_COMPLETE`. Without the explicit representative page PASS, keep `BLOCKED_BATCH`. A new visual/interaction issue transitions only that affected class to `TEMPLATE_REOPEN_FOR_VISUAL_OR_INTERACTION`, after which it must receive a new PASS and frozen SHA before further propagation.
+
+**Current implementation caveat:** this contract is approved, but the full same-type batch/resume engine belongs to separately reviewed PR #15; the current PR #16 three-page pilot still does not authorize executing bulk work. Do not mark automated batching as already operational solely because this contract exists.
+
+Full frozen rule: [template-reuse-frozen-policy.md](template-reuse-frozen-policy.md).
