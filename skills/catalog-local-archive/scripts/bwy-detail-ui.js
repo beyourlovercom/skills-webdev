@@ -79,6 +79,11 @@
     }
   }
 
+  for(const placeholder of document.querySelectorAll('[class*=PDPSpecification] .button-skeleton')){
+    const note=make('p','bwy-offline-inline-note','Additional specifications are unavailable in this offline preview.');
+    placeholder.replaceWith(note);
+  }
+
   // Remaining source placeholders represent live data that is absent from the
   // immutable HTML snapshot. Never fabricate an inspection or transport quote.
   const dynamicUnavailable=[
