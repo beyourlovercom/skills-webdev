@@ -118,5 +118,7 @@ const summary={status:reports.every(x=>x.status==='SAVED')?'ASSET_SAMPLE_PASS':'
  downloaded_bytes:reports.reduce((n,x)=>n+x.bytes,0),source_media_count:manifest.media_assets.length,source_css_count:manifest.css_dependencies.length,
  assets:reports};
 const report=path.join(out,'asset-report-'+role+'-'+start+'-'+max+'.json');fs.writeFileSync(report,JSON.stringify(summary,null,2)+'\n');
+const privateAuditCopy=path.join(path.dirname(file),'asset-report-'+role+'-'+start+'-'+max+'.json');
+if(path.resolve(privateAuditCopy)!==path.resolve(report))fs.writeFileSync(privateAuditCopy,JSON.stringify(summary,null,2)+'\n');
 console.log('SUMMARY '+JSON.stringify({status:summary.status,saved:summary.saved,requested:summary.requested,bytes:summary.downloaded_bytes,report}));
 process.exit(summary.status==='ASSET_SAMPLE_PASS'?0:3);
