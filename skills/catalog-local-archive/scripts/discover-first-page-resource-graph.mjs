@@ -5,7 +5,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 const a=n=>{const i=process.argv.indexOf('--'+n);return i<0?null:process.argv[i+1];};
-const home=a('home'),cssFolder=a('css'),out=a('out');
+const home=a('home'),cssFolder=a('css'),out=a('out'),pageKind=a('page-kind')||'home';
+if(!['home','listing','detail'].includes(pageKind))throw Error('Invalid page-kind');
 if(!home||!cssFolder||!out||!path.isAbsolute(out))throw Error('Require --home <original first page html> --css <captured CSS dir> --out <absolute>');
 const root='https://www.basworld.com/';
 const allowed=['www.basworld.com','static.basworld.com','cms.media.basworld.com','media.basworld.com','basgroup.a.bigcontent.io'];
@@ -17,11 +18,11 @@ function add(raw,source,kind) {
  let url;try{url=new URL(raw,root)}catch{denied.push({raw,source,reason:'BAD_URL'});return;}
  if(url.protocol!=='https:'||!allowed.includes(url.hostname)){denied.push({raw,source,reason:'OTHER_HOST'});return;}
  const ext=path.extname(url.pathname).toLowerCase();
- if(!/\.(woff2?|ttf|eot|otf|svg|png|jpg|jpeg|webp|gif|avif|ico)$/i.test(ext) && !url.hostname.startsWith('cms.')){
+ if(!/\.(woff2?|ttf|eot|otf|svg|png|jpg|jpeg|webp|gif|avif|ico)$/i.test(ext) && !url.hostname.startsWith('cms.') && url.hostname!=='basgroup.a.bigcontent.io'){
    denied.push({raw,source,reason:'NOT_MEDIA_FILE'});return;
  }
  if(seen.has(url.href))return;seen.add(url.href);
- media.push({url:url.href,role:'page_image',item_sku:null,source_page:'home',kind});
+ media.push({url:url.href,role:'page_image',item_sku:null,source_page:pageKind,kind});
 }
 const html=fs.readFileSync(home,'utf8');
 // Real first-page image tags and UI icons (not a catalog crawler).
@@ -41,7 +42,7 @@ for(const item of fs.readdirSync(cssFolder)){
  for(const m of text.matchAll(/url\(([^)]+)\)/gi))add(m[1],'css:'+item,'css-font-or-background');
 }
 const summary={schema_version:1,origin:'https://www.basworld.com',pilot_scope:'FIRST_PAGE',
- verified_first_page_assets:true,source_page_numbers:[1],owner_visual_pass:false,
+ verified_first_page_assets:true,source_page_numbers:[1],page_kind:pageKind,owner_visual_pass:false,
  source_html:home,source_css_files_examined:cssCount,media_assets:media,
  css_dependencies:[],discovered:media.length,denied_assets:denied,
  host_stats:Object.fromEntries(allowed.map(h=>[h,media.filter(m=>new URL(m.url).hostname===h).length])),
