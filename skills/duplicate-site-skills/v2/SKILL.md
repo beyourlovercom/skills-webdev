@@ -67,3 +67,24 @@ Actual Windows RapidDirect 3-page canary found two upstream PWC v3.0.0 defects a
 All compatibility files are standalone and must be invoked explicitly with the project's pilot manifest and isolated workspace. Do not auto-apply a PWC patch to unknown upstream SHA or relax capture integrity to force a PASS. Report any HTTP 404, non-working offline link, missing image, or screen-score failure as FAIL/OPEN.
 
 **UAT evidence:** docs/reviews/duplicate-site-v2-rapiddirect-20261103.md. Pilot SiteOne capture ran successfully for 3 routes; actual PC/mobile visual scores were below the upstream 0.97 gate, and the initial PWC live extracts failed before a complete React author/build could occur. Retest after repairs before claiming usable clone.
+
+## V2-R1–R5 controlled review path (2026-11-03)
+
+On the **existing** Windows Local 3-page PWC React/Vite sandbox, use the reusable bridge template and preview guard. These operations do not create or copy new source-site routes:
+
+    node skills/duplicate-site-skills/v2/scripts/prepare-owner-preview.mjs --workspace=C:/ai/site-mirror/rapiddirect-v2 --manifest=skills/duplicate-site-skills/v2/templates/rapiddirect.pilot.example.json
+
+Only after inspecting the dry-run, apply bounded **local** files with `--execute`, then run `npm.cmd run build` in `pwc-build/review-app`. A failed build is a hard stop. The template uses an iframe sandbox without `allow-top-navigation`, `allow-forms` or `allow-popups`; do not weaken these permissions.
+
+Run actual Playwright verification with the isolated Python venv:
+
+    python skills/duplicate-site-skills/v2/scripts/interaction-canary.py --workspace C:/ai/site-mirror/rapiddirect-v2
+    python skills/duplicate-site-skills/v2/scripts/visual-canary.py --workspace C:/ai/site-mirror/rapiddirect-v2
+
+Visual replay is local-only by default; it reads the public source only with explicit `--allow-live-read` and blocks non-GET or off-domain requests. The interaction gate checks three routes, menu/FAQ, content link navigation, quote/form blocking, actual snapshot CSP read-back and **true inner iframe viewport size**.
+
+**Visual UAT modes:** the review navigation now offers `真实视口模式` (1:1, inner iframe `100dvh`; independent scroll) and `整页模式` (expanded height for overview). The latter can alter `window.innerHeight` and create artificial `vh`/lazy-load differences, so always include the true viewport evidence before judging fidelity. Do not fabricate a high score by cropping or hiding content.
+
+**Actual last checked state:** Windows local Node 21/21, Python original 4/4, registry 16, Vite build PASS, latest browser interactions 12/12, true viewport 6/6, screenshot capture 6/6. Matched mirror↔PWC SSIM passed 3/6; homepage desktop/mobile and CNC desktop remain OPEN. Assets 563 files, 38.03 MiB with one known source 404. The React layer is a **static-mirror bridge**, NOT an independently authored full site.
+
+See [the detailed final Canary roadmap](../../docs/reviews/duplicate-site-v2-rapiddirect-final-roadmap-20261103.md) (repository-root location `docs/reviews/duplicate-site-v2-rapiddirect-final-roadmap-20261103.md`). Owner must approve outstanding visual differences before same-template batch. PR #15 and PR #16 remain Draft; no main merge or Dev/WWW release from these steps.
