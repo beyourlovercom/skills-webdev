@@ -48,3 +48,36 @@ Three representative page classes require separate desktop and mobile Owner visu
 
 ### Channel status during this edit
 Formal BYL DC calls temporarily returned connector errors, so no new on-device R1–R4 execute/verify claim is made after that interruption. Read-only Desktop Commander was used only to confirm the existing dashboard HTTP 200, not to mutate files.
+
+## Post-PASS continuation and revised roadmap (2026-11-03)
+
+Owner replied “pass; continue and review latest roadmap/hours”. Record this as acceptance of the current three-page review/continuation stage, NOT as automatic evidence that every PC/mobile view reached the 0.97 threshold, not permission for full-site batch, and not a PR main merge or any Dev/WWW deployment.
+
+### GitHub updates in this continuation
+
+- Committed reusable review bridge source, without proprietary RapidDirect HTML, images, or fonts.
+- Added dry-run preview preparation, all-three-sample preflight, reversible backups, symlink escape prevention and CSP/form controls, plus Node tests.
+- Added deterministic three-page desktop/mobile visual replay and local interactive gate tests; no live source write requests permitted.
+- Extended existing S2 Skills CI with Python safety tests alongside Node and Registry tests.
+- Verified exact commit 7f9c80d944b4b0b343cd22f85ffb6ff1dd30ce8e with two successful GitHub checks: S2 Local Dev WWW Skills CI (Node/Python/Registry all successful) and Public Skill Registry Check. GitHub CI is NOT Windows browser UAT.
+
+### Remaining critical path
+
+| Phase | Work | Estimated engineer-hours | Gate |
+|---|---|---:|---|
+| R1 | Code packaging, preflight safety and CI | DONE | GitHub tests green |
+| R2 | Home mobile carousel, video and lazy-image capture-state fidelity | 2–4h | No hidden/cropped content; deterministic comparison |
+| R3 | Apply latest scripts to isolated Windows preview; rebuild and run CSP, routing, menu/FAQ, form protection; clarify standalone PWC build limitation | 2–3h | Windows Vite build exit 0, target interactions green |
+| R4 | 3 pages × desktop/mobile browser replay and media integrity census | 2–3h | Exact denominators and residual failure list |
+| R5 | Owner visual delta review and module-by-module verdict | 1–2h | Explicit Owner decision, PR remains Draft until separately authorized |
+
+**Remaining three-page Canary work: approximately 7–12 engineer-hours**, excluding remote-access/source-site outages. This is work effort, not a promised background delivery time.
+
+### After Canary (new gate; not yet authorized for execution)
+
+- Integrate PR #15 sample → Owner PASS → template freeze → same-type batch/resume: 4–7h.
+- Verify one other authorized site and measure actual asset/route completeness and failure rates: 5–9h.
+- Compatibility, cross-platform docs and a separately approved exact-head main merge plan: 1–2h.
+- Additional after Canary: 10–18h; combined remaining through reusable V2 hardening: about 17–30h. Not a 48-hour guarantee for arbitrary websites; not a fully independent React reimplementation.
+
+**Holds:** Formal BYL DC connection was blocked during the continuation. No new Windows execution of latest scripts is asserted. PR #15 and #16 remain Draft; no main merge, no Dev/WWW, no new crawl or bulk mode. The only user acceptance claimed is the bounded current review stage.
