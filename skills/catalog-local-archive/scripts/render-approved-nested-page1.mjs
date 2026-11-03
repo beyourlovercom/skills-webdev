@@ -82,10 +82,14 @@ function linkRewrite(value,meta){
 }
 for(const row of nestedRoutes){
  const u=new URL(row.source_url);
- const normalizedRoute=u.pathname.replace(/^\/|\/$/g,'');
- if(!/^stock\/[a-z0-9_-]+\/[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/i.test(normalizedRoute))
-  throw Error('Unsafe/unsupported local nested path: '+normalizedRoute);
- if(!srcIndex.all_source_paths.includes(u.pathname))throw Error('Page was not present in original approved homepage');
+ const decodedPath=decodeURI(u.pathname);
+ const segments=decodedPath.split('/').filter(Boolean);
+ if(segments[0]!=='stock'||segments.length<3||
+    segments.some(v=>v==='.'||v==='..'||!/^[-_\p{L}\p{N}]+$/u.test(v)))
+   throw Error('Unsafe/unsupported local nested path: '+decodedPath);
+ const normalizedRoute=segments.join('/');
+ if(!srcIndex.all_source_paths.includes(decodedPath) &&
+    !srcIndex.all_source_paths.includes(u.pathname))throw Error('Page was not present in original approved homepage');
  const source=path.join(nested,row.file_path),buff=fs.readFileSync(source);
  if(sha(buff)!==row.sha256)throw Error('Source snapshot hash mismatch '+row.source_url);
  let html=buff.toString('utf8'),meta={excludedProducts:0,notArchivedCatalogLinks:0};
