@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "project_id": "example-owned-site",
+  "source_origin": "https://owned.example",
+  "local_origin": "http://local.owned.test",
+  "rights_verified": false,
+  "demo_only": true,
+  "scope": {
+    "mode": "FIRST_PAGE_CATALOG",
+    "blog_excluded": true,
+    "listing_max_page": 1,
+    "product_details": "representative",
+    "exclude_routes": [
+      "/blog/",
+      "/articles/",
+      "/insights/"
+    ],
+    "included_route_count": null,
+    "measured_route_count": 0,
+    "source_inventory_complete": false
+  },
+  "execution": {
+    "active_hours_spent": 0,
+    "owner_wait_hours": 0,
+    "target_active_hours": 48,
+    "wallclock_started_at": null,
+    "wallclock_elapsed_hours": 0,
+    "measured_pages_per_hour": null,
+    "measured_assets_per_hour": null,
+    "remaining_routes": null,
+    "remaining_assets": null,
+    "remaining_template_hours": null,
+    "remaining_qa_hours": null,
+    "buffer_hours": 4
+  },
+  "modules": [
+    {
+      "id": "shared-shell",
+      "state": "OWNER_REVIEW",
+      "sample": {
+        "source_url": "https://owned.example/",
+        "local_url": "http://local.owned.test/",
+        "analysis_ref": "PRIVATE/analysis-home.md",
+        "desktop_ref": "PRIVATE/home-desktop.png",
+        "mobile_ref": "PRIVATE/home-mobile.png",
+        "auto_uat": "PASS"
+      },
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": 1,
+        "archived": 1,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    },
+    {
+      "id": "catalog-listings",
+      "state": "NOT_STARTED",
+      "sample": null,
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": null,
+        "archived": 0,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    },
+    {
+      "id": "product-details",
+      "state": "NOT_STARTED",
+      "sample": null,
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": null,
+        "archived": 0,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    },
+    {
+      "id": "content-services",
+      "state": "NOT_STARTED",
+      "sample": null,
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": null,
+        "archived": 0,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    },
+    {
+      "id": "interactions",
+      "state": "NOT_STARTED",
+      "sample": null,
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": null,
+        "archived": 0,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    },
+    {
+      "id": "offline-acceptance",
+      "state": "NOT_STARTED",
+      "sample": null,
+      "approval": {
+        "status": "OPEN",
+        "owner_message_ref": null,
+        "approved_at": null,
+        "template_sha256": null
+      },
+      "batch": {
+        "expected": null,
+        "archived": 0,
+        "verified": 0,
+        "failed": 0,
+        "offline_qa": "OPEN"
+      }
+    }
+  ],
+  "final_owner_acceptance": {
+    "status": "OPEN",
+    "owner_message_ref": null
+  },
+  "final_offline_report": null,
+  "notes": "DEMO ONLY. Owner approvals must be actual, private, module-specific; no rights, release or backup completion is authorized."
+}
