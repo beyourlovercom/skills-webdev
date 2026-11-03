@@ -25,9 +25,12 @@ def check_interaction(page,kind):
         page.wait_for_timeout(600)
         target=page.locator("iframe")
         frame=target.element_handle().content_frame()
+        csp=frame.locator('meta[http-equiv="Content-Security-Policy"]')
+        csp_content=csp.first.get_attribute("content") if csp.count() else ""
         row={"page":name,"view":kind,
              "route_ok":page.url==PREVIEW+url,
              "iframe_loaded":frame.locator("body").count()==1,
+             "csp_offline":("form-action 'none'" in csp_content and "connect-src 'self'" in csp_content),
              "mobile_menu":"N/A","home_faq":"N/A",
              "form_blocked":False,"quote_blocked":False}
         if kind=="mobile":
@@ -111,7 +114,7 @@ def main():
         finally:browser.close()
     failed=[]
     for row in rows:
-        for key in ("route_ok","iframe_loaded","mobile_menu","home_faq","form_blocked","quote_blocked","pass"):
+        for key in ("route_ok","iframe_loaded","csp_offline","mobile_menu","home_faq","form_blocked","quote_blocked","pass"):
             if key in row and row[key] is False:
                 failed.append({"row":row,"gate":key})
     report={"created_at_utc":datetime.now(timezone.utc).isoformat(),"source_routes":"RAPIDDIRECT_3_ONLY",
