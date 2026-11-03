@@ -120,3 +120,15 @@ When SiteOne static HTML is the primary local preview, apply the dedicated three
 Only with existing rights/scope and after reviewing the dry-run, add `--execute`. The command preflights all three existing mirror HTML files, saves originals under `uat/pre-direct-mirror-guard/`, adds local CSP `connect-src 'self'; form-action 'none'`, traps out-of-scope links and form submissions, and does not touch the source or any new URL. Keep browser-level request blocking enabled in automated UAT. The original and post-guard mirror HTML SHA receipts live only in the private candidate ledger.
 
 Verified on Windows Local: 6/6 browser runs (3 sample routes × desktop/mobile) had CSP/form blocking, menu and homepage FAQ checks PASS; zero external requests were attempted under the isolated network guard. Script default is read-only and idempotent. This is not an Owner visual PASS or batch authorization.
+
+## Accepted 3-page visual reference and actual PR #15 handoff (2026-11-03)
+
+Owner replied `pass` immediately after the three representative template visual review request. Treat it as **visual PASS for exactly the displayed home, services index and CNC sample references**. Windows Local privately stores the approved references and SHA256 checksums in `uat/template-candidates.json` / `uat/frozen-reference-artifacts/`. Do **not** automatically upgrade an immutable representative HTML reference to a reusable parameterized template.
+
+Before generating any same-type queue, audit the real PR #15 gate through:
+
+    node skills/duplicate-site-skills/v2/scripts/audit-pr15-handoff.mjs --candidate=C:/ai/site-mirror/rapiddirect-v2/uat/template-candidates.json --factory-root=<absolute-PR15-checkout>
+
+The CLI verifies three approved route-to-template mappings, the immutable on-disk reference SHA for each, and imports **PR #15's existing `backup-48h-gate.mjs`**. It never clones/crawls, writes new pages, or creates a queue. It must currently return `OWNER_REFERENCE_PASS__BATCH_STILL_BLOCKED`, because reusable template data mappings, measured route/media manifests, automatic QA and module-sequencing gates are not fully complete. No fake `template_sha256`, fabricated asset count or auto-trigger of full-site batches is permitted.
+
+Detailed evidence: [`docs/reviews/duplicate-site-v2-owner-pass-pr15-handoff-20261103.md`](../../../docs/reviews/duplicate-site-v2-owner-pass-pr15-handoff-20261103.md). PR #15 and PR #16 remain Draft pending separate exact-head merge authorization.
