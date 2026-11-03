@@ -22,7 +22,7 @@ if(route==='/source-mirror/'){
 const shot=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,name),Buffer.from(shot.data,'base64'));
 const layout=await rpc('Page.getLayoutMetrics');
 const pageWidth=Math.ceil(Math.min(1800,layout.cssContentSize?.width||d.viewport_width||1440));
-const pageHeight=Math.ceil(Math.min(13000,layout.cssContentSize?.height||850));
+const pageHeight=Math.ceil(Math.min(26000,layout.cssContentSize?.height||850));
 let fullStatus='NOT_CAPTURED';
 try {
  const full=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:pageWidth,height:pageHeight,scale:1}});
