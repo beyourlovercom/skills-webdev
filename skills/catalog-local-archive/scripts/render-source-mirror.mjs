@@ -29,6 +29,7 @@ const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,..
 const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
+ if(mapped.has(a.url))continue;
  const u=new URL(a.url);
  let ext=path.extname(u.pathname).toLowerCase();
  if(!['.jpg','.jpeg','.png','.svg','.webp','.css','.gif','.ico','.avif','.woff','.woff2','.ttf','.otf','.eot'].includes(ext)&&['cms.media.basworld.com','media.basworld.com'].includes(u.hostname)){ext=u.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}else if(!ext && u.hostname==='basgroup.a.bigcontent.io'){ext='.png';}
@@ -74,6 +75,7 @@ const meta='<meta name="robots" content="noindex,nofollow"><meta name="bwy-snaps
 const enableUI=arg('ui-adapter')==='true';
 if(enableUI){for(const f of ['bwy-first-page-ui.js','bwy-first-page-ui.css'])fs.copyFileSync(path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/,m=>m.slice(1))),f),path.join(out,f));}
 const fileReports=[];
+let videoPostersSubstituted=0;
 for(const [rel,raw] of Object.entries(htmlSources)){
  let html=raw.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'')
  .replace(/\s+on(?:click|submit|load|error|change|input)=("[^"]*"|'[^']*')/gi,'')
@@ -83,6 +85,16 @@ for(const [rel,raw] of Object.entries(htmlSources)){
   html=html.split(url.replaceAll('&','&amp;')).join(local).split(url).join(local);
   const u=new URL(url);
   if(u.hostname==='www.basworld.com')html=html.split(u.pathname+u.search).join(local);
+ }
+ if(rel===detailCanonical+'/index.html'){
+   const first=manifest.source_detail_products[0].gallery.find(u=>u.includes('/world/1280/'))||manifest.source_detail_products[0].gallery[0];
+   const substitute=mapped.get(first);
+   if(substitute){
+     html=html.replace(/(<img\\b[^>]*?\\bsrc=["'])https:\\/\\/img\\.youtube\\.com\\/[^"']+(["'])/gi,(_all,left,right)=>{
+       videoPostersSubstituted++;
+       return left+substitute+right+' data-bwy-offline-video-poster="original-gallery-fallback"';
+     });
+   }
  }
  for(const [src,dst] of sourceRoutes){
   html=html.split('href="'+src+'"').join('href="'+dst+'"').split("href='"+src+"'").join("href='"+dst+"'");
@@ -96,6 +108,6 @@ for(const [rel,raw] of Object.entries(htmlSources)){
 const report={status:'PARTIAL_REAL_SOURCE_REPLAY',pages:fileReports,source_listed_vehicle_count:new Set([...manifest.listed_vehicle_urls,...(manifest2?.listed_vehicle_urls||[])]).size,
  source_product_skus:[manifest.source_detail_products[0].sku,...(manifest2?[manifest2.source_detail_products[0].sku]:[])],original_gallery_count:manifest.source_detail_products[0].gallery.length,
  locally_saved_asset_count:mapped.size,missing_manifest_assets:unavailable.length,missing_sample:unavailable.slice(0,5),
- scripts_executed:false,forms_enabled:false,remote_network_allowed:false,full_coverage_verified:false};
+ scripts_executed:enableUI,forms_enabled:false,remote_network_allowed:false,video_posters_substituted:videoPostersSubstituted,full_coverage_verified:false};
 fs.writeFileSync(path.join(out,'source-mirror-report.json'),JSON.stringify(report,null,2)+'\n','utf8');
 console.log(JSON.stringify({status:report.status,pages:fileReports.length,assets:mapped.size,missing:unavailable.length,output:out},null,2));
