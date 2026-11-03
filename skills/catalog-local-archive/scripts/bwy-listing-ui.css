@@ -1,0 +1,14 @@
+/* Desktop source untouched. Mobile first-page filters are opened from existing bottom control. */
+.bwy-filter-close{display:none}
+@media(max-width:767px){
+ body:not(.bwy-local-filters-open) [class*=Stock_filtersDesktop]{display:none!important}
+ body.bwy-local-filters-open [class*=Stock_filtersDesktop]{
+   display:block!important;position:fixed!important;z-index:200!important;
+   inset:50px 0 0 0!important;overflow:auto!important;
+   width:100%!important;max-width:100%!important;background:#fff!important;
+   padding:15px!important;box-sizing:border-box!important;
+   box-shadow:0 0 0 9999px rgba(0,0,0,.38)!important;
+ }
+ .bwy-filter-close{display:block;width:100%;border:1px solid #bbb;border-radius:4px;background:#f7f7f7;padding:12px;margin:0 0 18px;cursor:pointer}
+ [class*=QuickFilterBar_quickFilterBar]{z-index:120!important}
+}
