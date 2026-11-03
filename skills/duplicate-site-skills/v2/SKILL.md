@@ -20,7 +20,7 @@ description: Owner-review candidate: local website mirror and visual-fidelity wo
 | V2-0 | Rights/source class | Owner attestation / isolated project | NO source capture if absent |
 | V2-1 | Route taxonomy | Sitemap, normalized URL inventory | Unique denominator required |
 | V2-2 | Static capture | SiteOne files, report and asset hashes | CAPTURE_PASS |
-| V2-3 | Representative replica | pwc extract + Agent build/repair | Structure and interactions |
+| V2-3 | Representative mirror-first replica | SiteOne offline HTML/CSS/JS is authoritative; invoke PWC Agent repair only for confirmed visual/interaction bugs | Offline structure and interactions; no forced React rewrite |
 | V2-4 | Visual fidelity | Playwright desktop 1440 / mobile 375; pwc scoring | Owner visual PASS separately |
 | V2-5 | Same-template batch | PR #15 flow after approval | Frozen SHA + Owner module PASS |
 | V2-6 | Other modules and offline | Routes/asset integrity, no network dependencies | Local-only PASS |
@@ -51,7 +51,7 @@ To start a real source pilot **after Owner review** and official SiteOne/pwc ins
     node skills/duplicate-site-skills/v2/scripts/clone-v2.mjs capture --manifest=skills/duplicate-site-skills/v2/templates/rapiddirect.pilot.example.json --workspace=C:/ai/site-mirror/rapiddirect-v2 --execute
     node skills/duplicate-site-skills/v2/scripts/clone-v2.mjs extract --manifest=skills/duplicate-site-skills/v2/templates/rapiddirect.pilot.example.json --workspace=C:/ai/site-mirror/rapiddirect-v2 --id=home --execute
 
-Then the Agent carries out upstream pwc planning/authoring/build/scoring/repair, per sample, freezes approved components and records PC/mobile comparison. All untested gates remain OPEN.
+Then inspect the SiteOne local page directly. Use PWC planning/authoring/build/scoring/repair only if real visual/interaction issues remain; no forced per-page React conversion. Freeze the representative template only after Owner visual PASS, and use PR #15's existing queue/gates for same-type batch rather than writing another batch engine. All untested gates remain OPEN.
 
 See references/integration-contract.md, templates/rapiddirect.pilot.example.json, and tests/duplicate-site-v2.test.mjs.
 
@@ -100,3 +100,12 @@ See [the detailed final Canary roadmap](../../../docs/reviews/duplicate-site-v2-
 模板冻结不跳过安全、内容授权、交易操作或正式发布审批；缺少 Owner 模板 PASS 时一律 `BLOCKED_BATCH`。对应完整状态、异常类型和效率验收合同：[`references/template-reuse-frozen-policy.md`](references/template-reuse-frozen-policy.md)。
 
 **特别注意：** 这是已确认的架构与研发原则，**不是**批量复制执行引擎已经完成，也不是 RapidDirect 三页已有最终 Owner 视觉 PASS。当前 PR #15/#16 Draft 状态不变。
+
+
+## Mirror-first execution priority (Owner-frozen 2026-11-03)
+
+**Rule:** Source → SiteOne local mirror → PC/mobile/interaction UAT → Owner representative template PASS → frozen template SHA and data mapping → reuse PR #15 batch queue → failed-only corrections. Do **not** force SiteOne → PWC React rewrite for every route. V2 React/Vite bridge is a supplemental reviewer, not necessarily the production backup runtime.
+
+Real canary: home mobile latest source-vs-direct-mirror SSIM **0.8997**, moving homepage article cards and source-side 10px overflow; CNC desktop **0.6824**, carousel/video dynamic capture state. The local PWC bridge itself has artificial iframe viewport effects. Neither low score alone confirms underlying template redevelopment is needed. Reopen only for confirmed new visual/interactive template defects, not content churn or unstable screenshots.
+
+**Existing factory:** reuse PR #15 backup-48h-gate.mjs and prepare-module-batch.mjs. PR #15 factory unit tests passed **27/27** on isolated Windows Local; this validates policy and queue planning only, NOT actual bulk page generation. Do not implement a duplicate factory inside PR #16. Private 3-class candidate inventory is at C:/ai/site-mirror/rapiddirect-v2/uat/template-candidates.json, with every class pending module-specific Owner visual PASS and bulk disabled. No new source routes were crawled.
