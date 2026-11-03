@@ -26,13 +26,13 @@ def secure_local_request(url: str, method: str) -> bool:
         and method in ("GET", "HEAD")
     )
 
-def stabilize_page(page, scroll=True):
+def stabilize_page(page, clock, scroll_host, scroll=True):
     page.evaluate("document.fonts.ready")
     if scroll:
-        height = min(21000, page.evaluate("Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)"))
+        height = min(21000, scroll_host.evaluate("Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)"))
         for y in range(0, height, 500):
-            page.evaluate("(y) => window.scrollTo(0, y)", y)
-            page.wait_for_timeout(130)
+            scroll_host.evaluate("(y) => window.scrollTo(0, y)", y)
+            clock.wait_for_timeout(130)
     page.evaluate("""() => {
       document.querySelectorAll('video,audio').forEach(el => {
         try { el.pause(); } catch {}
@@ -49,7 +49,8 @@ def stabilize_page(page, scroll=True):
       }
       window.scrollTo(0,0);
     }""")
-    page.wait_for_timeout(750)
+    scroll_host.evaluate("window.scrollTo(0,0)")
+    clock.wait_for_timeout(750)
 
 def screenshot_browser(browser, page_id, url_path, kind, mode, out_dir, allow_live):
     width, height = SIZES[kind]
@@ -87,7 +88,7 @@ def screenshot_browser(browser, page_id, url_path, kind, mode, out_dir, allow_li
             doc_page = frame.element_handle().content_frame()
         if response is None or response.status!=200:
             raise RuntimeError("Page HTTP status not 200")
-        stabilize_page(doc_page)
+        stabilize_page(doc_page, page, page)
         if mode == "local":
             page.wait_for_timeout(700)
             file=out_dir / f"{page_id}.{kind}.built.png"
@@ -121,7 +122,6 @@ def main():
     parser.add_argument("--allow-live-read",action="store_true")
     args=parser.parse_args()
     root=Path(args.workspace).resolve()
-    manifest=root/"tools"/"skills-v2-r1"  # not a required dependency
     if not (root/"mirror"/"index.html").is_file():raise SystemExit("Pilot mirror not found")
     if not (root/"pwc-build"/"review-app"/"dist"/"index.html").is_file():raise SystemExit("Built local preview missing")
     output=root/"uat"/"v2-visual-replay"
