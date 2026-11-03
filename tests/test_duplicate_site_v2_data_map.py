@@ -106,6 +106,15 @@ class MappingTests(unittest.TestCase):
                     mapping.render(self.file,data,{"img:0:attr:src":bad})
         with self.assertRaisesRegex(ValueError,"media path"):
             mapping.render(self.file,data,{"img:0:attr:src":"/api/quote"})
+        with self.assertRaisesRegex(ValueError,"outside approved three routes"):
+            mapping.render(self.file,data,{"a:0:attr:href":"/unapproved/"})
+        with self.assertRaisesRegex(ValueError,"audited media parser"):
+            image_slot="img:0:attr:srcset"
+            original=self.file.read_text(encoding="utf-8")
+            self.file.write_text(original.replace('alt="CNC part"','srcset="/wp-content/a.jpg 1x" alt="CNC part"'),encoding="utf-8")
+            self.ledger["templates"][0]["representative_html_sha256"]=mapping.digest(self.file.read_bytes())
+            updated=mapping.inspect(self.file,"home",self.ledger)
+            mapping.render(self.file,updated,{image_slot:"/wp-content/a.jpg 1x, https://evil.example/b.jpg 2x"})
 
 if __name__=="__main__":
     unittest.main()
