@@ -62,6 +62,8 @@ const covered=new Set([...main,...nestedRoutes.map(x=>new URL(x.source_url).path
 let normalized=[];
 const localOut=[],issues=[];
 function linkRewrite(value,meta){
+ if(/^javascript:/i.test(value))return '#';
+ if(value.startsWith('#')||value.startsWith('?')||/^(?:mailto:|tel:)/i.test(value))return value;
  if(value.startsWith('/source-mirror/'))return value;
  let u;try{u=new URL(value.replaceAll('&amp;','&'),sourceOrigin)}catch{return value}
  if(u.origin!==sourceOrigin)return value;
