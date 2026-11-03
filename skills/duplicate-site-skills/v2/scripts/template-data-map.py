@@ -212,13 +212,20 @@ def render(source: Path, mapping: dict, changes: dict) -> str:
         if slot["kind"] == "attribute":
             key = slot["attr"]
             if key in {"href", "src", "srcset", "data-src"}:
-                # Pilot accepts only local paths; no new network dependencies.
+                # srcset needs a separate source-by-source density/width parser.
+                # A string starting with a local URL can otherwise smuggle a
+                # second remote URL after a comma.
+                if key == "srcset":
+                    raise ValueError("srcset editing requires an audited media parser")
                 if not next_value.startswith("/") or next_value.startswith("//") or \
-                   "\\" in next_value or ".." in next_value:
+                   "\\" in next_value or ".." in next_value or "%2e" in next_value.lower():
                     raise ValueError("external/unsafe replacement URL prohibited")
-                if key in {"src", "srcset", "data-src"} and \
+                if key in {"src", "data-src"} and \
                    not next_value.startswith(("/wp-content/", "/assets/")):
                     raise ValueError("media path outside isolated asset scope")
+                if key == "href" and next_value.split("#", 1)[0] not in \
+                   {"", "/", "/services/", "/services/cnc-machining/"}:
+                    raise ValueError("pilot hyperlink outside approved three routes")
             replacement = escape(next_value, quote=True)
         else:
             replacement = escape(next_value, quote=False)
