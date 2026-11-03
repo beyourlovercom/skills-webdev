@@ -27,7 +27,7 @@ https://github.com/ericshang98/perfect-web-clone-skill
 1. Invoke doctor (best-effort PATH probe only). Inspect prerequisite versions and Playwright separately.
 2. Invoke plan (read-only JSON), review sample URLs, output paths, SiteOne CLI arguments and PWC sample jobs.
 3. Execute capture on approved Windows Local; check exit code; verify SiteOne JSON/HTML report and offline asset/link audit. Preserve a read-only source snapshot with hash manifest in project-private storage.
-4. Execute extract for one representative page. Read PWC JSON, run its plan phase and author all sections using Agent coding. Assemble and build into local Vite/React output. Record screenshot/score/fingerprint/weight results and fix the worst failing component.
+4. **Mirror-first:** Open the SiteOne direct local page for the representative URL and run real desktop/mobile interaction and source-vs-mirror UAT. Invoke PWC extraction/planning/Agent authoring/React build **only when a confirmed visual or interaction defect cannot be solved by targeted mirror/asset repair**. Do not convert each template or URL to React by default. Record evidence and repair only the failing component.
 5. Compare desktop 1440 and mobile 375 with actual source screenshots. Verify header/navigation/footer, layout, assets/lazy-load, interactive menu/tabs/accordion, local routes, no unintended production actions.
 6. Present visual evidence to Owner. Only an explicit human module PASS allows the next same-type batch. PR #15 remains the source of truth for this gating flow until independently accepted.
 7. After each module, verify actual route denominator, SHA-locked template and media integrity. Continue next page class. Final offline browsing must work with external network blocked for expected static pages.
@@ -69,3 +69,11 @@ Required sequence: `TEMPLATE_CLASSIFIED` → `REPRESENTATIVE_UAT` → `OWNER_VIS
 **Current implementation caveat:** this contract is approved, but the full same-type batch/resume engine belongs to separately reviewed PR #15; the current PR #16 three-page pilot still does not authorize executing bulk work. Do not mark automated batching as already operational solely because this contract exists.
 
 Full frozen rule: [template-reuse-frozen-policy.md](template-reuse-frozen-policy.md).
+
+### Provenance and template-factory handoff
+
+RapidDirect Windows 2026-11-03: 3 SiteOne representatives (home, services index, CNC detail) and 563 local files, 38.03 MiB. PR #15's existing Owner gate/queue code independently passed 27/27 Windows tests and MUST be reused for same-type pages; PR #16 only supplies capture and repair adapters, not a second batch-engine implementation.
+
+Current pilot's isolated, private template candidate ledger: C:/ai/site-mirror/rapiddirect-v2/uat/template-candidates.json. It records three classes with the HTML snapshot checksum only (not frozen template code hash); Owner module-specific visual PASS=false for each. Never mislabel these candidates as frozen or auto-run the PR #15 queue. Any later scope and batch action must be independently approved.
+
+Recent source-vs-direct-local tests, not iframe PWC scores: home mobile 0.8997, CNC desktop 0.6824, both below 0.97. Manual diff shows moving homepage article content and CNC carousel/video state differences. No broad template rebuild is justified until an actual persistent layout/interaction defect is isolated. Excluded Blog pages remain excluded even if the homepage displays a content feed.
