@@ -3,10 +3,21 @@ name: catalog-local-archive
 description: Source-exact, owner-authorized offline website backup into isolated Windows Local. Preserve original logo, all source products, product galleries, images and URL paths; ingest owner's offline archive first instead of rebuilding mock templates.
 ---
 
-# catalog-local-archive V0.6 — 原站离线备份恢复
+# catalog-local-archive V0.7 — 48h 模块化原站离线备份
+
+## V0.7 最高优先级：48h 模块化 Local 备份工厂（覆盖下方 V0.6 旧全局放行描述）
+**原则：每次只建设一种模板，Owner 对该模板确认视觉 PASS，才批量恢复该类型的真实路由/素材；当前模块路由数、图像、导航、离线 UAT 核验 PASS 后，才进入下一模板模块。** 任何已获批准的共享 Header/Footer/Logo/字体/CSS 属于冻结共用组件，不得每批重复重画。仅做最小差异修复。批量通过原资源 URL + SHA256 + SKU/路由去重复用，已成功项目不重复抓取。
+
+**固定有序模块**：SHARED_SHELL（首页） → CATALOG_LISTINGS（各类列表） → PRODUCT_DETAILS（范围内真实详情） → CONTENT_SERVICES（About/Contact/FAQ/How to Buy 等） → INTERACTIONS（菜单、筛选、图库、本地安全表单） → OFFLINE_ACCEPTANCE（全体路由/素材/SHA/离线浏览验证）。每模块单独走 `真实样本读取 → 分析 → Local 原样制作 → PC/手机自动 UAT → Owner 视觉审核 → 同类型批量恢复 → 当前模块完整率 PASS`。如出现不同结构页面，要拆分新的单样本类，不因共享视觉模板 PASS 就强制套用。**“继续”不是 Owner 视觉 PASS；首页 PASS 不代表列表或详情 PASS。**
+
+**48h 是基于实际来源访问/吞吐的活跃研发小时上限目标，不是对任何体量站点的无条件完成承诺。** 时间盒：0–2h 来源与范围/实际速度 → 2–7h 共享外壳 → 7–15h 列表 → 15–27h 详情 → 27–34h 基础页 → 34–41h 交互与离线资源 → 41–48h 全站 QA + 缓冲。执行账本要记录活跃小时、Owner 审批等待、页面与媒体的真实分母/处理吞吐/成功率。超过剩余时预算立刻标记 `AT_RISK_48H`，申请合规导出、缩小实际 Scope 或延长工时；不能伪造 100% 结果。
+
+**范围分离**：`FULL_NONBLOG` 是包含所有获准公开非博客路由及其真实详情的真正全量 Local 备份；`FIRST_PAGE_CATALOG` 是项目明确要求的所有列表第一页 + 代表性详情 + 基础页面的**范围内完整归档**。BASWORLDY 当前仍是 `FIRST_PAGE_CATALOG`、Blog 排除、任何产品列表严禁翻第 2 页、不做全量产品详情。首页已获 Owner 视觉 PASS；列表、详情、基础页仍分别要 Owner 审核。旧的超前预抓数据冻结保留、不因为源文件存在就算审批通过。
+
+**实际脚本门禁：** `scripts/visual-first-gate.mjs` V0.7 使用 `moduleId`、`scope_mode`、Owner 批准引用、时间、SHA256、批准模板 URL 校验。列表抓取的批量阶段只接受 `catalog-listings` PASS；商品详情和图库只接受 `product-details` PASS；在 `FIRST_PAGE_CATALOG` 模式下，分类批量仍是每类 `--from 1 --limit 1`，商品只允许在批准样本清单内恢复。任何一次首页 PASS 均不能解除这两项。通用计时、队列和完整率规范在 `duplicate-site-skills/references/07-48h-module-factory.md`（尚在 Draft PR，**不能把 Draft 视为 main**）。
 
 ## 🔒 最高级执行门禁 V0.6：FIRST PAGE → OWNER VISUAL PASS → FULL INVENTORY
-**本节具有最高优先级，覆盖本 Skill 旧版 B0–B6、V0.3–V0.5 和任何要求在第一轮遍历全部分页/所有商品的文字或脚本示例。违背本节的旧步骤视为已废止。**
+**本节原为 V0.6 最高优先级，但现由上方 V0.7 模块化门禁覆盖；旧版描述只适用于该模块已审批且项目 scope 允许的操作，覆盖本 Skill 旧版 B0–B6、V0.3–V0.5 和任何要求在第一轮遍历全部分页/所有商品的文字或脚本示例。违背本节的旧步骤视为已废止。**
 
 ### 第一轮必须只做页面与视觉，不做全量数据
 1. **FIRST_PAGE_ONLY（硬编码）**：任何带分页的区域——产品列表、所有分类、博客文章列表、搜索结果、筛选结果、评论、品牌、图库分页及 API cursor——初次读取和复刻都**只准第一页**：`page=1` 或没有分页参数的首屏/首页。禁止抓取 `page=2`、`page>1`、`offset>0`、`cursor`/nextToken、无限滚动下一屏，禁止自动跟踪页面中的 `next` 链接。可读取/记录其存在，但**不能访问或下载后续页**。
@@ -14,7 +25,7 @@ description: Source-exact, owner-authorized offline website backup into isolated
 3. **FIRST_PAGE_ASSETS_EXACT**：把第一轮所选页面上**全部实际需要的** Logo 原文件/变体、字体、CSS、JS（只读离线安全版本）、首屏到页尾 Banner、分类图、第一页各商品卡片图、背景图、`srcset`/lazyload 资源保存到 Windows 私有本地；所选真实详情要把实际图库与缩略图按顺序完整保存。缺项要列出，不得拿原图 placeholder、模板、热链替代。
 4. **FIRST_PAGE_VISUAL_100_TARGET**：先在 Windows Local 将这几种核心页面**尽可能做到逐像素/布局高保真 100% 目标**：原始 Logo、Header/Footer、字体、间距、颜色、导航、商品卡片、图库、PC 和移动端。对照源站真实截图和 Local Chrome 截图，出逐页面缺陷报告；视觉上不符就修复或如实列为 OPEN，不能自称“100% PASS”。
 5. **OWNER_VISUAL_REVIEW（唯一阶段转换）**：将首页、列表第 1 页、单个详情、基础页面审核链接交给 Owner 直接看。即使程序 51/51 测试通过、图片 100%、HTML 200，也**不能**代替 Owner 明确回复 `pass` 或更具体的视觉审批。只有在私有审批记录内引用具体 Owner 消息、审核基线/页面/日期后才允许转下一阶段。普通“继续”**不等于**视觉 PASS。
-6. **AFTER_OWNER_VISUAL_PASS 才解锁**：先冻住已确认的页面视觉与 CSS，然后有序遍历所有分类分页 → 产品清单/详情 → 每件原图 → 完整率核验。以后遇到其他新模板/页面类型，仍先第一页+Owner 视觉签字。所有生产发布和 GitHub main 合并仍需**独立审批**。
+6. **每个模块的 OWNER_VISUAL_PASS 仅解锁同类型批量**：冻结获批模板，依项目 scope 批量恢复同类页面，当前模块资源和离线 QA 核验通过后才进入下一模块。列表第一页范围不允许访问任何 page2+，其他模板仍需独立视觉签字；正式发布/GitHub main 合并另行审批。
 7. **已有越界数据只存档、不算视觉 PASS**：BASWORLDY 之前因流程偏差预抓了 3 类、2,115 URL、195 详情等；保留原始哈希以免损失、不重复抓取，但标为 `LEGACY_PREMATURE_BULK_FROZEN`，**不能据此允许再抓页 2+，也不能把 R6 数据 PASS 当成 Owner 视觉 PASS**。
 
 ### 可执行门禁
