@@ -3,14 +3,25 @@ name: duplicate-site-skills
 description: Use for rights-cleared, auditable recreation or migration of an existing website into an independently owned target using GitHub and authorized Windows Local/Dev/WWW environments. Covers source inventories, local asset mapping, browser fidelity, WordPress MU adapters, forms, SEO, publication gates and rollback. Never assumes permission to copy third-party content or to publish a mirror.
 ---
 
-# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1.1)
+# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1.2)
 
 ## 🔒 最高优先级：第一轮绝不翻页，视觉先行（Visual-first）
 **本条覆盖本 Skill 旧版 D1–D8 中任何“先完成全站清单、全量产品采集”的解释。**
 
 第一阶段只读取主页、**每个所选列表/分类/博客模板自己的第一页**、一条来自该第一页的真实代表性商品详情以及必要的标准 Pages。任何分页/搜索/筛选/评论/品牌/无限滚动，仅允许 page=1 / offset=0；**禁止访问或自动抓取第 2 页以上、next cursor 和后续详情集合**。对**第一轮所选页面**，应先取得并本地保存实际使用的全部原素材（原 Logo、字体、CSS、背景、Banner、第一屏到 Footer 的所有懒加载/响应式图片、首列表每个真实卡片图、样本商品完整图库与缩略图），不用合成占位资源。
 
-只在 Windows Local 完成所选页面的原站 100% 视觉还原目标，用原站与 Local 的真实浏览器全页截图、PC/移动布局和资源清单逐页核对，发现差异先修复。**视觉是否 PASS 只由 Owner 亲自审查并明确回复 `pass` 决定**；HTTP 200、功能单测、素材下载成功、或用户普通“继续”都不能替代。只有先保存 Owner 明确审批的消息引用、日期、审核页面范围和视觉基线后，才允许进入第二阶段：遍历所有分页 → 全量产品详情 → 图片 → 全量完整率审计。Dev/WWW 和 GitHub main 仍需独立审批。更详细的门禁见 [06-first-page-visual-gate.md](references/06-first-page-visual-gate.md)。
+只在 Windows Local 完成所选页面的原站 100% 视觉还原目标，用原站与 Local 的真实浏览器全页截图、PC/移动布局和资源清单逐页核对，发现差异先修复。**视觉是否 PASS 只由 Owner 亲自审查并明确回复 `pass` 决定**；HTTP 200、功能单测、素材下载成功、或用户普通“继续”都不能替代。只有保存 Owner 对**该模板模块**的明确审批引用、日期、审核页面范围和视觉基线，才允许本模块批量归档；未批准的其他模板继续保持单样本门禁。分页深度和详情数量仍严格按项目 Owner 最新 scope 执行。Dev/WWW 和 GitHub main 仍需独立审批。更详细的门禁见 [06-first-page-visual-gate.md](references/06-first-page-visual-gate.md)。
+
+## V1.2｜48 小时模块工厂（最高优先级，覆盖旧版全站一次性门禁）
+**目标：** 有合法来源与实际访问条件时，争取在 **48 个活跃执行小时**内完成约定范围的 Windows Local 原站备份。使用 `FULL_NONBLOG`（真正覆盖全站所有非 Blog 内容，需所有商品详情）或 `FIRST_PAGE_CATALOG`（所有明确指定列表入口只存第一页、商品仅指定样本；属于范围内完整备份，不得自称全站全部产品）。单项目以其最新 Owner 范围为准；不能因为本 Skill 支持全站模式就扩大已批准范围。**Blog 全部排除**时应排除文章、博客目录、标签、评论、相关 RSS 和仅属于博客的图片。
+
+**不可变执行链：** `读取 1 个真实样本 → 分析 DOM/字体/Logo/CSS/图文/交互 → Windows Local 原样还原 → Chrome PC/移动自动 UAT → Owner 明确视觉 pass → 批量执行同类型路由/图片 → SHA/导航/离线完整率门禁 PASS → 下一模块`。按以下**有序模块**执行：①共享外壳（首页/Header/Footer），②商品/分类列表，③真实商品详情/图库，④基础内容/服务/Contact/FAQ，⑤交互（本地无副作用），⑥全站离线验收。确有不同的页面模板时先单独取一页样本、取得对应审批，不能强套既有模板。**每个模块有独立 Owner PASS**，首页 PASS 只冻结共享外壳，不能自动解锁列表或详情的批量采集。
+
+**防止反复研发：** 模板审过后冻结 Logo、Header、Footer、公共 CSS/token、组件结构、截图和 template SHA；批量阶段从同一个模板加载每页真实内容、URL 与图片，不重画设计、不反复打开新的浏览器会话、不从零重建。仅当复测证明共享组件回归失败时做最小差异修复，并只重审受影响模板。断点续跑：按 source URL → local route → 原媒体 SHA256 映射去重，`PASS` 不重复下载；失败项独立重试。
+
+**48h 预测门：** 先读取源站/官方导出、标出内容总数、唯一素材体量、模板数量，并实测页面/小时、资产/小时；每个模块都计算剩余活跃小时和 Owner 等待小时，按 `0–2h 启动 / 2–7h 外壳 / 7–15h 列表 / 15–27h 详情 / 27–34h 内容 / 34–41h 交互 / 41–48h UAT` 预算控进度。首次速度无法测量则 `UNMEASURED`，预测超 48h 就 `AT_RISK_48H`，不得牺牲真实内容与人工门禁冒充完成。若源站体量太大、403、原站后端不可导出或 Owner 审批等待过长，应如实记录瓶颈并提出合法导出、缩小范围或延长期限三种分支。
+
+**新必读：** [07-48h-module-factory.md](references/07-48h-module-factory.md)（详细顺序与预算）、[backup-48h-ledger.example.json](templates/backup-48h-ledger.example.json)（各模块 Owner 审批/进度账本）、[backup-48h-gate.mjs](scripts/backup-48h-gate.mjs)（离线硬门禁）。`node --test tests/backup-48h-gate.test.mjs` 验证禁止跳过人工验收。脚本不自动认证用户批准，也不能代替真实浏览器验收。此契约是 Windows Local 备份，不授权 Dev/WWW/GitHub main 发布。
 
 ## 目的与调用边界
 从 CentralXI 项目提炼可复用**流程与测试方法**，不是复制 CentralXI 的 802 页 HTML、品牌、代码资产或账号。采用先清点现状、只补差异、隔离开发、可观测验收、受控发布。这个 Skill 是 GitHub 中的操作规范；读取文件不等于原生安装、拥有 GitHub/DC/WordPress 登录态或得到生产授权。
