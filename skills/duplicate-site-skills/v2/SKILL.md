@@ -39,7 +39,7 @@ description: Owner-review candidate: local website mirror and visual-fidelity wo
 
 ## Pilot: RapidDirect
 
-Source: https://www.rapiddirect.com/ — Owner attested rights in conversation on 2026-11-03. Target: isolated Windows Local only (not a public website). Bounded pilot pages: home, services index, CNC machining, injection molding. No Blog.
+Source: https://www.rapiddirect.com/ — Owner attested rights in conversation on 2026-11-03. Target: isolated Windows Local only (not a public website). Bounded pilot pages: home, services index, one CNC service detail. Injection molding and other pages remain blocked pending module Owner visual PASS. No Blog.
 
 The actual commands below require Windows Node 20+:
 
