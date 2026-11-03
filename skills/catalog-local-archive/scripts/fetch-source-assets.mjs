@@ -21,7 +21,7 @@ if(stage==='PILOT_FIRST_PAGE'){
   if(manifest.source_page_numbers?.some(n=>n!==1))
     throw Error('OWNER_VISUAL_GATE_BLOCKED: media manifest references a later page');
 }else{
-  enforceVisualFirst({phase:stage,approvalFile:arg('visual-approval'),mode:'inventory',from:2,limit:2});
+  enforceVisualFirst({phase:stage,approvalFile:arg('visual-approval'),moduleId:arg('module'),mode:'media',from:2,limit:2});
 }
 const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const records=[...manifest.media_assets,...manifest.css_dependencies.map(url=>({url,role:'css',item_sku:null}))];
