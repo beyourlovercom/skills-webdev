@@ -8,7 +8,7 @@ const m=JSON.parse(fs.readFileSync(path.join(main,'category-page1-local-report.j
 const n=JSON.parse(fs.readFileSync(path.join(nested,'nested-local-report.json'),'utf8'));
 const i=JSON.parse(fs.readFileSync(path.join(nested,'nested-listing-index.json'),'utf8'));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const map=new Map(n.pages.map(x=>[x.path,x]));
+const map=new Map(n.pages.flatMap(x=>{let decoded=x.path;try{decoded=decodeURI(x.path)}catch{}return [[x.path,x],[decoded,x]]}));
 const mainRoutes=m.routes.map(x=>({path:'/stock/'+x.category,kind:'MAIN',local:'/source-mirror/stock/'+x.category+'/',status:x.status}));
 const nestedRoutes=i.all_source_paths.map(p=>{
  const stored=i.records.find(x=>x.source_path===p),local=map.get(p);
