@@ -6,7 +6,7 @@ SiteOne mirrors the accessible static surface and creates a local asset/HTML bas
 
 ## Source policy
 
-- Pilot manifest contains only four verified RapidDirect URLs; SiteOne receives --url-list and --single-page. It must not expand crawl depth from a homepage, read Blog or follow authenticated paths in the pilot.
+- Pilot manifest contains only three verified RapidDirect URLs; SiteOne receives --url-list and --single-page. It must not expand crawl depth from a homepage, read Blog or follow authenticated paths in the pilot.
 - Keep workers <= 2 and max requests/second <= 3; no bypass of robots, security or login gates.
 - Rights recorded as Owner's project-level statement, not an independently verified copyright certificate. Target remains local only.
 - Native external quotation/CAD upload, personal/customer data, third-party embedded widgets and remote writes are excluded.
@@ -55,6 +55,5 @@ https://github.com/ericshang98/perfect-web-clone-skill
 | Home | OPEN | OPEN | OPEN | OPEN | PENDING |
 | Services index | OPEN | OPEN | OPEN | OPEN | PENDING |
 | CNC machining | OPEN | OPEN | OPEN | OPEN | PENDING |
-| Injection molding | OPEN | OPEN | OPEN | OPEN | PENDING |
 
 Do not invent percentage similarity or a 48-hour delivery guarantee. Declare coverage as measured numerator/denominator for routes, assets, and visible sections. Highlight missing functionality even when screenshot scores look high.
