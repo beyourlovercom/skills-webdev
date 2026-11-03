@@ -67,8 +67,10 @@ if(manifest2){
  const short2=manifest2.listed_vehicle_urls.find(u=>u.includes(String(manifest2.source_detail_products[0].sku)));
  if(short2)sourceRoutes.push([new URL(short2).pathname,'/source-mirror/'+canonical2+'/']);
 }
-const csp='<meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data:; script-src &#39;none&#39;; img-src &#39;self&#39; data:; style-src &#39;self&#39; &#39;unsafe-inline&#39;; font-src &#39;self&#39; data:; connect-src &#39;none&#39;; form-action &#39;none&#39;; frame-src &#39;none&#39;; object-src &#39;none&#39;">';
+const csp='<meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data:; script-src &#39;self&#39;; img-src &#39;self&#39; data:; style-src &#39;self&#39; &#39;unsafe-inline&#39;; font-src &#39;self&#39; data:; connect-src &#39;none&#39;; form-action &#39;none&#39;; frame-src &#39;none&#39;; object-src &#39;none&#39;">';
 const meta='<meta name="robots" content="noindex,nofollow"><meta name="bwy-snapshot" content="PARTIAL_STATIC_READ_ONLY">';
+const enableUI=arg('ui-adapter')==='true';
+if(enableUI){for(const f of ['bwy-first-page-ui.js','bwy-first-page-ui.css'])fs.copyFileSync(path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/,m=>m.slice(1))),f),path.join(out,f));}
 const fileReports=[];
 for(const [rel,raw] of Object.entries(htmlSources)){
  let html=raw.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'')
@@ -84,7 +86,8 @@ for(const [rel,raw] of Object.entries(htmlSources)){
   html=html.split('href="'+src+'"').join('href="'+dst+'"').split("href='"+src+"'").join("href='"+dst+"'");
  }
  html=html.replace(/<link\b[^>]*rel=["'](?:preload|preconnect|dns-prefetch)["'][^>]*href=["']https?:\/\/[^"']+["'][^>]*>/gi,'');
- html=html.replace(/<head>/i,'<head>'+csp+meta);
+ html=html.replace(/<head>/i,'<head>'+csp+meta+(enableUI&&rel==='index.html'?'<link rel="stylesheet" href="/source-mirror/bwy-first-page-ui.css">':''));
+ if(enableUI&&rel==='index.html')html=html.replace(/<\/body>/i,'<script defer src="/source-mirror/bwy-first-page-ui.js"></script></body>');
  const dest=path.join(out,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,html,'utf8');
  fileReports.push({path:rel,bytes:Buffer.byteLength(html),authentic_html_sha256:crypto.createHash('sha256').update(raw).digest('hex')});
 }
