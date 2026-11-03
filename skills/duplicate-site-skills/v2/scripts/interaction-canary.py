@@ -18,13 +18,22 @@ def allowed_request(url, method):
     u=urlsplit(url)
     return u.scheme=="http" and u.netloc=="127.0.0.1:8766" and method in {"GET","HEAD"}
 
+def wait_for_snapshot(page):
+    """Wait for the actual embedded document, not a fixed 600ms guess."""
+    page.locator("iframe").wait_for(state="attached",timeout=15000)
+    page.wait_for_function("""() => {
+      const doc=document.querySelector('iframe')?.contentDocument;
+      return !!doc?.body && doc.readyState==='complete'
+         && doc.body.children.length>0;
+    }""",timeout=20000)
+    page.wait_for_timeout(300)
+    return page.locator("iframe").element_handle().content_frame()
+
 def check_interaction(page,kind):
     rows=[]
     for name,(url,label) in PAGES.items():
         page.get_by_role("button",name=label,exact=True).click(timeout=8000)
-        page.wait_for_timeout(600)
-        target=page.locator("iframe")
-        frame=target.element_handle().content_frame()
+        frame=wait_for_snapshot(page)
         csp=frame.locator('meta[http-equiv="Content-Security-Policy"]')
         csp_content=csp.first.get_attribute("content") if csp.count() else ""
         row={"page":name,"view":kind,
@@ -34,7 +43,7 @@ def check_interaction(page,kind):
              "mobile_menu":"N/A","home_faq":"N/A",
              "form_blocked":False,"quote_blocked":False}
         if kind=="mobile":
-            toggle=frame.locator(".rd-header__toggle")
+            toggle=frame.locator(".rd-header__toggle:visible")
             if toggle.count() and toggle.first.is_visible():
                 before=toggle.first.get_attribute("aria-expanded")
                 toggle.first.click(timeout=10000);page.wait_for_timeout(150)
@@ -43,7 +52,7 @@ def check_interaction(page,kind):
                 toggle.first.click(timeout=10000)
             else:row["mobile_menu"]=False
         if name=="home":
-            faq=frame.locator(".rd-solution-faq__trigger")
+            faq=frame.locator(".rd-solution-faq__trigger:visible")
             if faq.count() and faq.first.is_visible():
                 before=faq.first.get_attribute("aria-expanded")
                 faq.first.click(timeout=10000);page.wait_for_timeout(100)
@@ -73,8 +82,7 @@ def check_interaction(page,kind):
     # Test actual exported content links (vs only top-level review toolbar).
     for start in ("home","services"):
         page.get_by_role("button",name=PAGES[start][1],exact=True).click()
-        page.wait_for_timeout(600)
-        frame=page.locator("iframe").element_handle().content_frame()
+        frame=wait_for_snapshot(page)
         links=frame.locator('a[href*="services/cnc-machining/index.html"]')
         ok=False
         if links.count():
@@ -84,6 +92,14 @@ def check_interaction(page,kind):
             page.wait_for_timeout(280)
             ok=page.url==PREVIEW+PAGES["cnc"][0] and page.locator("iframe").get_attribute("src")=="/snapshots/cnc.html"
         rows.append({"view":kind,"navigation":start+"_to_cnc","pass":ok})
+    # 1:1 viewport mode prevents 16k-pixel iframe innerHeight from distorting
+    # viewport-relative scripts/styles while keeping the same-origin sandbox.
+    page.get_by_role("button",name="切换真实视口模式").click(timeout=8000)
+    page.wait_for_timeout(300)
+    native=wait_for_snapshot(page).evaluate("innerHeight")
+    rows.append({"view":kind,"native_viewport_height":native,
+                 "native_viewport_pass":abs(native-VIEWS[kind][1])<=2})
+    page.get_by_role("button",name="切换真实视口模式").click(timeout=8000)
     return rows
 
 def main():
@@ -114,7 +130,7 @@ def main():
         finally:browser.close()
     failed=[]
     for row in rows:
-        for key in ("route_ok","iframe_loaded","csp_offline","mobile_menu","home_faq","form_blocked","quote_blocked","pass"):
+        for key in ("route_ok","iframe_loaded","csp_offline","mobile_menu","home_faq","form_blocked","quote_blocked","native_viewport_pass","pass"):
             if key in row and row[key] is False:
                 failed.append({"row":row,"gate":key})
     report={"created_at_utc":datetime.now(timezone.utc).isoformat(),"source_routes":"RAPIDDIRECT_3_ONLY",
