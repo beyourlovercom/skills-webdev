@@ -54,3 +54,16 @@ To start a real source pilot **after Owner review** and official SiteOne/pwc ins
 Then the Agent carries out upstream pwc planning/authoring/build/scoring/repair, per sample, freezes approved components and records PC/mobile comparison. All untested gates remain OPEN.
 
 See references/integration-contract.md, templates/rapiddirect.pilot.example.json, and tests/duplicate-site-v2.test.mjs.
+
+## V2 Canary-informed compatibility layers (all isolated and reversible)
+
+Actual Windows RapidDirect 3-page canary found two upstream PWC v3.0.0 defects and SiteOne offline asset gaps. The following executable helpers are provided **only for audited local copies**, not as a claim of full site fidelity:
+
+- scripts/pwc-null-assets-compat.mjs — pinned-SHA source patch for PWC's null script URL AssetInfo error; only fixes a real empty resource URL, with original backup.
+- scripts/pwc-duplicate-fingerprint-compat.mjs — pinned-SHA source patch: pairs duplicate semantic fingerprints in DOM order rather than last-wins; does not change critical collapse threshold. Saved real homepage pre/post structure was rechecked and returned PASS (0 issues).
+- scripts/localize-siteone-assets.mjs — rewrites same-origin /wp-content/ absolute references in *already captured* HTML/CSS to local paths. Default dry-run; --apply saves original files to pre-localize outside the mirror.
+- scripts/complete-offline-media.mjs — discovers locally missing, actually referenced same-origin /wp-content/ resources, with a bounded no-bulk trial and max 2 requests/second; default dry-run. --execute downloads missing files and writes SHA receipts.
+
+All compatibility files are standalone and must be invoked explicitly with the project's pilot manifest and isolated workspace. Do not auto-apply a PWC patch to unknown upstream SHA or relax capture integrity to force a PASS. Report any HTTP 404, non-working offline link, missing image, or screen-score failure as FAIL/OPEN.
+
+**UAT evidence:** docs/reviews/duplicate-site-v2-rapiddirect-20261103.md. Pilot SiteOne capture ran successfully for 3 routes; actual PC/mobile visual scores were below the upstream 0.97 gate, and the initial PWC live extracts failed before a complete React author/build could occur. Retest after repairs before claiming usable clone.
