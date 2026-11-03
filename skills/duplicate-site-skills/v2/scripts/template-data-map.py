@@ -179,6 +179,17 @@ def inspect(html: Path, sample: str, ledger: dict) -> dict:
         "batch_authorized": False
     }
 
+def require_private_scratch(ledger_file: Path, scratch_root: Path):
+    # The only allowed local output area is the pre-existing project /uat/.
+    # Merely allowing a caller-chosen --scratch-root would otherwise permit
+    # writing NEW pages inside /mirror/ while pretending to be a smoke test.
+    evidence_root = ledger_file.resolve(strict=True).parent
+    if evidence_root.name.lower() != "uat" or not (
+        scratch_root.resolve() == evidence_root
+        or path_within(evidence_root, scratch_root)
+    ):
+        raise ValueError("scratch root must be inside the project's private UAT directory")
+
 def assert_scratch_output(out: Path, scratch_root: Path, sources=()):
     base = scratch_root.resolve()
     dest = out.resolve()
@@ -256,6 +267,7 @@ def main():
     approved_sample(ledger, args.sample, source)
     dest = Path(args.output)
     scratch = Path(args.scratch_root).resolve(strict=True)
+    require_private_scratch(Path(args.ledger), scratch)
     inputs = [source, Path(args.ledger)]
     if args.action == "inspect":
         result = inspect(source, args.sample, ledger)
