@@ -19,7 +19,17 @@ if(route==='/source-mirror/'){
 }else if(route.includes('/vehicles/')){
  interaction=JSON.parse(await evaluate("JSON.stringify((()=>{const g=document.querySelector('.imageGalleryWrapperV1');const before=g?.dataset.bwyGalleryIndex;g?.querySelector('.arrowRightContainer')?.click();const after=g?.dataset.bwyGalleryIndex;g?.querySelector('.arrowLeftContainer')?.click();const restored=g?.dataset.bwyGalleryIndex;const zeroSkeletons=[...document.querySelectorAll('.blinkAnimation')].filter(x=>x.getBoundingClientRect().height>0).length===0;return {type:'source-backed-pdp',title:document.querySelector('.bwy-pdp-h1')?.innerText,price:document.querySelector('.bwy-price-value')?.innerText,gallery_arrow_advanced:before!==after,gallery_arrow_restored:before===restored,zeroSkeletons,pass:document.documentElement.dataset.bwyDetailUiReady==='true'&&!!document.querySelector('.bwy-pdp-h1')&&!!document.querySelector('.bwy-price-value')&&before!==after&&before===restored&&zeroSkeletons};})())"));
 }
-const shot=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,name),Buffer.from(shot.data,'base64'));results.push({route,...d,interaction,scrolled:scrolled.result.value,screenshot:name});}
+const shot=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,name),Buffer.from(shot.data,'base64'));
+const layout=await rpc('Page.getLayoutMetrics');
+const pageWidth=Math.ceil(Math.min(1800,layout.cssContentSize?.width||d.viewport_width||1440));
+const pageHeight=Math.ceil(Math.min(13000,layout.cssContentSize?.height||850));
+let fullStatus='NOT_CAPTURED';
+try {
+ const full=await rpc('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{x:0,y:0,width:pageWidth,height:pageHeight,scale:1}});
+ fs.writeFileSync(path.join(out,name.replace('.png','-full.png')),Buffer.from(full.data,'base64'));
+ fullStatus='CAPTURED';
+} catch(e) {fullStatus='ERROR:'+String(e).slice(0,100);}
+results.push({route,...d,interaction,scrolled:scrolled.result.value,screenshot:name,full_screenshot:name.replace('.png','-full.png'),full_screenshot_height:pageHeight,full_screenshot_status:fullStatus});}
 async function main(){
  let port;for(let i=0;i<90;i++){const fp=path.join(profile,'DevToolsActivePort');if(fs.existsSync(fp)){port=fs.readFileSync(fp,'utf8').split(/\r?\n/)[0];break;}await delay(100);}if(!port)throw Error('Chrome CDP missing');
  const tabs=await(await fetch('http://127.0.0.1:'+port+'/json')).json();ws=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl);
