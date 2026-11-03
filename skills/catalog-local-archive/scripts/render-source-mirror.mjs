@@ -22,14 +22,16 @@ if(manifest2){canonical2=new URL(manifest2.source_detail_products[0].canonical_u
 }
 const extra=arg('resources')?JSON.parse(fs.readFileSync(arg('resources'),'utf8')).media_assets:[];
 const firstPageGraph=arg('first-page-resources')?JSON.parse(fs.readFileSync(arg('first-page-resources'),'utf8')):null;
-if(firstPageGraph&&(firstPageGraph.pilot_scope!=='FIRST_PAGE'||firstPageGraph.source_page_numbers?.some(x=>x!==1)))throw Error('First page asset graph must be scoped to page 1');
-const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,...(firstPageGraph?.media_assets||[]),...manifest.css_dependencies.map(url=>({url,role:'css'}))];
+const listingGraph=arg('listing-first-page-resources')?JSON.parse(fs.readFileSync(arg('listing-first-page-resources'),'utf8')):null;
+const detailGraph=arg('detail-first-page-resources')?JSON.parse(fs.readFileSync(arg('detail-first-page-resources'),'utf8')):null;
+for(const graph of [firstPageGraph,listingGraph,detailGraph])if(graph&&(graph.pilot_scope!=='FIRST_PAGE'||graph.source_page_numbers?.some(x=>x!==1)))throw Error('All resource graphs must only include page 1');
+const all=[...manifest.media_assets,...(manifest2?.media_assets||[]),...extra,...(firstPageGraph?.media_assets||[]),...(listingGraph?.media_assets||[]),...(detailGraph?.media_assets||[]),...manifest.css_dependencies.map(url=>({url,role:'css'}))];
 const mapped=new Map(),unavailable=[];
 fs.mkdirSync(out,{recursive:true});
 for(const a of all){
  const u=new URL(a.url);
  let ext=path.extname(u.pathname).toLowerCase();
- if(!['.jpg','.jpeg','.png','.svg','.webp','.css'].includes(ext)&&['cms.media.basworld.com','media.basworld.com'].includes(u.hostname)){ext=u.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}
+ if(!['.jpg','.jpeg','.png','.svg','.webp','.css','.gif','.ico','.avif','.woff','.woff2','.ttf','.otf','.eot'].includes(ext)&&['cms.media.basworld.com','media.basworld.com'].includes(u.hostname)){ext=u.searchParams.get('fmt')==='webp'?'.webp':'.jpg';}else if(!ext && u.hostname==='basgroup.a.bigcontent.io'){ext='.png';}
  const id=crypto.createHash('sha256').update(u.href).digest('hex').slice(0,20);
  const rel='assets/'+a.role+'/'+id+ext;
  const src=path.join(assetsPath,rel),dst=path.join(out,rel);
