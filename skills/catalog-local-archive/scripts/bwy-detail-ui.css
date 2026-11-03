@@ -7,3 +7,13 @@
 .bwy-facts{display:grid;grid-template-columns:minmax(120px,.85fr) 1.15fr;gap:10px 15px;margin:0;padding:4px 0;font-size:14px}
 .bwy-facts-key{color:#6d7980}.bwy-facts-value{margin:0;font-weight:600;overflow-wrap:anywhere}
 @media(max-width:767px){.bwy-pdp-h1{font-size:22px!important}.bwy-pdp-price{padding:14px;margin:10px 0}.bwy-price-value{font-size:25px}}
+
+/* Original PDP UI left the remote-only modules in permanent loading state. */
+.bwy-offline-section{background:#f7f9f9;border:1px solid #e4e9ea;border-radius:6px;padding:20px;margin:12px 0 20px;min-height:0!important;height:auto!important}
+.bwy-offline-heading{font-size:17px!important;font-weight:700!important;margin:0 0 7px!important;color:#1d2b34!important}
+.bwy-offline-note{color:#65757d;font-size:13px!important;line-height:1.5;margin:0!important}
+.imageGalleryWrapperV1.bwy-gallery-ready .slidesWrapper{transform:none!important;left:0!important}
+.imageGalleryWrapperV1.bwy-gallery-ready .slidesWrapper>.galleryImage{display:none!important}
+.imageGalleryWrapperV1.bwy-gallery-ready .slidesWrapper>.galleryImage.bwy-gallery-visible{display:block!important}
+.imageGalleryWrapperV1.bwy-gallery-ready .arrowLeftContainer,.imageGalleryWrapperV1.bwy-gallery-ready .arrowRightContainer{cursor:pointer;z-index:3}
+@media(max-width:767px){.bwy-offline-section{padding:15px;margin:10px 0}}
