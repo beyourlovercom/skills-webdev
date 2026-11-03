@@ -115,7 +115,19 @@
       "selected-authentic-product-detail",
       "basic-pages-as-scoped",
       "blog-listing-first-page-if_in_scope"
-    ]
+    ],
+    "revised_backup_goal": {
+      "requested_at": "2026-11-03",
+      "home_visual": "PASS",
+      "blog": "EXCLUDED",
+      "all_product_pages": "EXCLUDED",
+      "listing_pagination": "FIRST_PAGE_ONLY",
+      "top_level_listing_categories_identified": 9,
+      "homepage_linked_subcategory_filter_listing_routes_identified": 176,
+      "subtype_route_coverage": "TO_BE_COSTED_IN_SCOPE_OPTIONS",
+      "no_pagination_expansion": true,
+      "product_detail_policy": "REPRESENTATIVE_ONLY_UNTIL_SPECIFIC_FIRST_PAGE_CARD_REQUIREMENT"
+    }
   },
   "gates": {
     "local_fixture": "PASS",
@@ -129,7 +141,7 @@
     "local_host_browser": "PASS",
     "local_home_redirect": "SUPERSEDED_BY_WORDPRESS",
     "local_core_pages": "PASS",
-    "owner_visual_review": "OPEN_CANDIDATE_READY_FOR_OWNER_VISUAL_REVIEW",
+    "owner_visual_review": "PARTIAL_PASS_HOMEPAGE_ONLY",
     "local_wordpress_templates": "PASS",
     "owner_browser_readback": "OPEN",
     "logo_exact": "PASS_2_OF_2_CAPTURED_SOURCE_VARIANTS",
@@ -144,10 +156,13 @@
     "local_source_mirror": "R4_PARTIAL_272_AUTHENTIC_HTML_SNAPSHOTS",
     "offline_remote_dependencies": "FAIL_901_EXTERNAL_ATTEMPTS_0_RESPONSES",
     "visual_first_phase": "PILOT_FIRST_PAGE",
-    "after_visual_pass_full_scrape": "BLOCKED_PENDING_OWNER_VISUAL_PASS",
+    "after_visual_pass_full_scrape": "BLOCKED_NO_BULK_REQUESTED",
     "first_page_media_complete": "BROWSER_ZERO_BROKEN_AND_ZERO_OFFSITE;SOURCE_GRAPH_263_OF_265_VALID_TWO_SVG_SUFFIX_JS_EXCLUDED",
     "first_page_pixel_parity": "OPEN_NO_AUTHENTIC_SOURCE_BROWSER_SCREENSHOT",
-    "first_page_rendered_components": "TECH_QA_PASS_LOCAL_SLICK_ANIMATIONS_FILTER_DRAWER_GENUINE_PDP;LIVE_API_MODULES_EXPLICITLY_OFFLINE"
+    "first_page_rendered_components": "TECH_QA_PASS_LOCAL_SLICK_ANIMATIONS_FILTER_DRAWER_GENUINE_PDP;LIVE_API_MODULES_EXPLICITLY_OFFLINE",
+    "homepage_owner_visual": "PASS_OWNER_MESSAGE_2026_11_03",
+    "catalog_page1_owner_visual": "PENDING",
+    "representative_product_owner_visual": "PENDING"
   },
   "evidence": {
     "unit_checks": 37,
@@ -366,7 +381,8 @@
         "related_vehicle_live_api",
         "youtube_video_poster_substitution"
       ]
-    }
+    },
+    "owner_homepage_approval_message": "User: 首页视觉 pass"
   },
   "governance": {
     "no_automatic_deploy": true,
