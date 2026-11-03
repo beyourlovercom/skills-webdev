@@ -13,7 +13,7 @@ const index=JSON.parse(fs.readFileSync(path.join(nested,'nested-listing-index.js
 if(index.scope!=='NESTED_LISTING_FIRST_PAGE_ONLY')throw Error('Not a first-page nested index');
 const origin='https://www.basworld.com',hosts=new Set(['www.basworld.com','static.basworld.com','media.basworld.com','cms.media.basworld.com','basgroup.a.bigcontent.io']);
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
-const records=[],assets=new Map(),denied=[],invalid=[];
+const records=[],assets=new Map(),cssDependencies=new Set(),denied=[],invalid=[];
 function push(raw,sourcePath,kind){
  const trimmed=raw.trim().replaceAll('&amp;','&').replace(/^["']|["']$/g,'');
  if(!trimmed||/^(?:data:|blob:|javascript:|#)/.test(trimmed))return;
@@ -32,6 +32,9 @@ for(const item of index.records.filter(x=>x.status==='SAVED')){
  if(hash(buff)!==item.sha256){invalid.push(item.source_path);continue}
  const html=buff.toString('utf8');
  if(!html.includes('<html')){invalid.push(item.source_path);continue}
+ for(const m of html.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["']/gi)){
+  try{const u=new URL(m[1],origin);if(u.origin===origin&&/^\/_next\/static\/css\/[a-z0-9]+\.css$/i.test(u.pathname))cssDependencies.add(u.href)}catch{}
+ }
  for(const tag of html.match(/<(?:img|source|video|link)\b[^>]*>/gi)||[]){
   if(tag.startsWith('<link')&&!/rel=["'](?:icon|shortcut icon|apple-touch-icon|preload)["']/.test(tag))continue;
   for(const m of tag.matchAll(/\b(?:src|data-src|poster|href)=["']([^"']+)["']/gi))push(m[1],item.source_path,'element');
@@ -41,7 +44,7 @@ for(const item of index.records.filter(x=>x.status==='SAVED')){
  records.push(item);
 }
 const manifest={schema_version:1,origin,pilot_scope:'FIRST_PAGE',verified_first_page_assets:true,
- source_page_numbers:[1],page_kind:'nested_listings',media_assets:[...assets.values()],css_dependencies:[],
+ source_page_numbers:[1],page_kind:'nested_listings',media_assets:[...assets.values()],css_dependencies:[...cssDependencies],
  verified_source_routes:records,source_path_count:index.all_source_paths.length,
  source_saved_pages:records.length,source_invalid_pages:invalid,external_or_nonmedia:denied,
  source_originals_per_scope:'Only already captured first-page routes from source homepage',
@@ -49,4 +52,4 @@ const manifest={schema_version:1,origin,pilot_scope:'FIRST_PAGE',verified_first_
 fs.mkdirSync(out,{recursive:true});
 fs.writeFileSync(path.join(out,'nested-page1-media.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log(JSON.stringify({status:'NESTED_MEDIA_MANIFEST_READY',total_routes:index.all_source_paths.length,
- verified_pages:records.length,unique_assets:assets.size,invalid,excluded:denied.length}));
+ verified_pages:records.length,unique_assets:assets.size,css_dependencies:cssDependencies.size,invalid,excluded:denied.length}));
