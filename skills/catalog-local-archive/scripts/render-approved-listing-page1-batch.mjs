@@ -36,8 +36,21 @@ for(const entry of extras){
     ['cms.media.basworld.com','media.basworld.com'].includes(url.hostname))ext=url.searchParams.get('fmt')==='webp'?'.webp':'.jpg';
  else if(!ext&&url.hostname==='basgroup.a.bigcontent.io')ext='.png';
  if(!ext)continue;
- const id=sha(url.href).slice(0,20),rel='assets/'+entry.role+'/'+id+ext;
- const src=path.join(assets,rel),dest=path.join(out,rel);
+ const id=sha(url.href).slice(0,20);
+ let rel='assets/'+entry.role+'/'+id+ext;
+ let src=path.join(assets,rel);
+ // The source sometimes serves genuine WebP bytes behind a misleading .png URL.
+ // Only accept a .webp recovery file after separately verifying its RIFF/WEBP magic.
+ if(!fs.existsSync(src)&&ext==='.png'){
+   const alternative=path.join(assets,'assets',entry.role,id+'.webp');
+   if(fs.existsSync(alternative)){
+     const b=fs.readFileSync(alternative);
+     if(b.length>12&&b.toString('ascii',0,4)==='RIFF'&&b.toString('ascii',8,12)==='WEBP'){
+       rel='assets/'+entry.role+'/'+id+'.webp';src=alternative;
+     }
+   }
+ }
+ const dest=path.join(out,rel);
  if(!fs.existsSync(src)||fs.statSync(src).size===0){miss.push(url.href);continue}
  fs.mkdirSync(path.dirname(dest),{recursive:true});
  if(!fs.existsSync(dest)) {fs.copyFileSync(src,dest);copied.push(rel)}
