@@ -89,3 +89,12 @@ test('symlinked source snapshots cannot point outside isolated workspace',()=>{
   fs.rmSync(outside,{recursive:true,force:true});
  }
 });
+
+
+test('review bridge exposes a real iframe viewport without allowing unsandboxed navigation',()=>{
+ const tpl=fs.readFileSync(path.resolve(import.meta.dirname,'../skills/duplicate-site-skills/v2/templates/local-review-bridge/Section12Section.jsx'),'utf8');
+ assert.match(tpl,/nativeViewport\s*\?\s*"100dvh"\s*:\s*height/);
+ assert.match(tpl,/aria-label="切换真实视口模式"/);
+ assert.match(tpl,/sandbox="allow-same-origin allow-scripts"/);
+ assert.doesNotMatch(tpl,/allow-top-navigation|allow-forms|allow-popups/);
+});
