@@ -10,6 +10,9 @@ export default function Section12Section() {
   const [page, setPage] = useState(() => getPage(window.location.pathname));
   const [notice, setNotice] = useState("");
   const [height, setHeight] = useState("100vh");
+  // True viewport mode keeps the isolated iframe browser innerHeight equal to
+  // the device viewport; expanding to document height can distort vh scripts.
+  const [nativeViewport, setNativeViewport] = useState(false);
   const frameRef = useRef(null);
   const cleanupRef = useRef(null);
   useEffect(() => {
@@ -82,11 +85,12 @@ export default function Section12Section() {
       <button onClick={() => go("/")} aria-label="首页">首页</button>
       <button onClick={() => go("/services/")} aria-label="服务列表">服务列表</button>
       <button onClick={() => go("/services/cnc-machining/")} aria-label="CNC">CNC</button>
+      <button onClick={() => setNativeViewport(v => !v)} aria-label="切换真实视口模式">{nativeViewport ? "整页模式" : "真实视口模式"}</button>
       <span style={{marginLeft:"auto"}}>测试模式：禁止真实报价及外部写入</span>
     </nav>
     {notice && <div role="alert" style={{padding:12,background:"#fff3cd",color:"#673c00"}}>{notice} <button onClick={() => setNotice("")}>关闭</button></div>}
     <iframe key={page} ref={frameRef} src={SRC[page]}
       title={"RapidDirect "+page+" authorized local snapshot"} sandbox="allow-same-origin allow-scripts"
-      onLoad={attach} style={{display:"block",width:"100%",height,border:0}} />
+      onLoad={attach} style={{display:"block",width:"100%",height:nativeViewport ? "100dvh" : height,border:0}} />
   </main>;
 }
