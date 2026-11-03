@@ -1,0 +1,15 @@
+/* Local-only source Slick SSR geometry correction. Does not change original source HTML. */
+.slick-slider.bwy-static-slider{min-width:0!important;width:100%!important;overflow:hidden!important;}
+.slick-slider.bwy-static-slider>.slick-list{height:auto!important;overflow:hidden!important;width:100%!important;}
+.slick-slider.bwy-static-slider .slick-track{
+  width:100%!important;max-width:100%!important;left:0!important;transform:none!important;
+  display:grid!important;grid-template-columns:repeat(var(--bwy-visible,3),minmax(0,1fr))!important;
+  align-items:stretch!important;gap:16px!important;float:none!important;height:auto!important;
+}
+.slick-slider.bwy-static-slider .slick-track>.slick-slide{display:none!important;float:none!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;margin:0!important;}
+.slick-slider.bwy-static-slider .slick-track>.slick-slide.bwy-visible{display:block!important;}
+.slick-slider.bwy-static-slider .slick-track>.slick-slide>div{height:100%!important;}
+.slick-slider.bwy-static-slider .slick-prev,.slick-slider.bwy-static-slider .slick-next{cursor:pointer;z-index:3;}
+.slick-slider.bwy-static-slider .slick-disabled{opacity:.36;cursor:default!important;}
+@media(max-width:920px){.slick-slider.bwy-static-slider .slick-track{gap:12px!important;}}
+@media(max-width:600px){.slick-slider.bwy-static-slider .slick-track{gap:8px!important;}}
