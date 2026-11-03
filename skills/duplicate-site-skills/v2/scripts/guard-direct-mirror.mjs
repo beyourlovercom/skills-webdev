@@ -40,10 +40,10 @@ document.addEventListener('submit',function(e){e.preventDefault();e.stopImmediat
 export function guardHtml(html){
  if(typeof html!=='string'||!/<head\b[^>]*>/i.test(html))throw Error('HTML head missing');
  let result=html;
- if(!/<meta\s+http-equiv=["']Content-Security-Policy["']/i.test(result))
-  result=result.replace(/<head\b[^>]*>/i,m=>m+'\n'+META);
  if(!result.includes('data-v2-local-mirror-readonly'))
   result=result.replace(/<head\b[^>]*>/i,m=>m+'\n'+SCRIPT);
+ if(!/<meta\s+http-equiv=["']Content-Security-Policy["']/i.test(result))
+  result=result.replace(/<head\b[^>]*>/i,m=>m+'\n'+META);
  return result;
 }
 function inside(root,f){const x=path.relative(root,f);return !!x&&!x.startsWith('..'+path.sep)&&x!=='..'&&!path.isAbsolute(x)}
