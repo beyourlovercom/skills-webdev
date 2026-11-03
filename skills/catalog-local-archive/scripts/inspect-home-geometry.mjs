@@ -23,9 +23,9 @@ async function main(){
  await delay(1000);
  const expr=String.raw`JSON.stringify((()=>{
  const q=s=>document.querySelector(s);
- const dims=e=>{if(!e)return null;const b=e.getBoundingClientRect(),s=getComputedStyle(e);return {tag:e.tagName,class:e.className?.toString().slice(0,110),top:Math.round(b.top+scrollY),height:Math.round(b.height),width:Math.round(b.width),display:s.display,visibility:s.visibility,opacity:s.opacity,position:s.position,background:s.backgroundImage?.slice(0,155),font:s.fontFamily?.slice(0,80)}};
+ const dims=e=>{if(!e)return null;const b=e.getBoundingClientRect(),s=getComputedStyle(e);return {tag:e.tagName,class:e.className?.toString().slice(0,110),top:Math.round(b.top+scrollY),height:Math.round(b.height),width:Math.round(b.width),display:s.display,visibility:s.visibility,opacity:s.opacity,position:s.position,background:s.backgroundImage?.slice(0,155),font:s.fontFamily?.slice(0,80),color:s.color,bgColor:s.backgroundColor,fontSize:s.fontSize,fontWeight:s.fontWeight,transform:s.transform,animation:s.animationName,overflow:s.overflow,clipPath:s.clipPath,text:e.innerText?.slice(0,100)}};
  const huge=[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().height>2400).map(dims).sort((a,b)=>b.height-a.height).slice(0,25);
- const hero=[...document.querySelectorAll('[class*=Hero], [class*=Page_pageWrapper], [class*=ReviewCard], [class*=CategoryBar], [class*=CTAWithImage]')].slice(0,55).map(dims);
+ const hero=[...document.querySelectorAll('[class*=Hero], [class*=Page_pageWrapper], [class*=ReviewCard], [class*=CategoryBar], [class*=CTAWithImage], [class*=SimpleCTA]')].slice(0,55).map(dims);
  const h1=dims(q('h1'));const cats={body:dims(document.body),html:dims(document.documentElement),hero,title:dims(q('[class*=HeroBannerWithVideo_title]')),h1,review:dims(q('[class*=ReviewCardWrapper_reviewsWrapper]')),huge,css:document.styleSheets.length,cssLoaded:[...document.styleSheets].filter(s=>s.href).length,scrollheight:document.documentElement.scrollHeight,viewport:[innerWidth,innerHeight]};
  return cats;})())`;
  const data=JSON.parse(await evaluate(expr));fs.writeFileSync(path.join(out,'home-geometry.json'),JSON.stringify(data,null,2));
