@@ -27,7 +27,13 @@ function putIfChanged(filepath,content,backupRoot,root,apply){
   if(!inside(root,filepath))throw Error('Write outside workspace refused: '+filepath);
   // Reject symlinked files or parents that resolve outside the isolated workspace.
   const existing=fs.existsSync(filepath)?fs.realpathSync(filepath):null;
-  const existingParent=fs.realpathSync(path.dirname(filepath));
+  let parent=path.dirname(filepath);
+  while(!fs.existsSync(parent)){
+    const next=path.dirname(parent);
+    if(next===parent)throw Error('Unresolvable parent path: '+filepath);
+    parent=next;
+  }
+  const existingParent=fs.realpathSync(parent);
   if((existing&&!inside(root,existing)) || (!inside(root,existingParent)&&existingParent!==root))
     throw Error('Symlink escape outside workspace refused: '+filepath);
   const before=fs.existsSync(filepath)?fs.readFileSync(filepath,'utf8'):null;
