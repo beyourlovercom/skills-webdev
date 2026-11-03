@@ -19,6 +19,12 @@ SIZES = {"desktop": (1440, 900), "mobile": (375, 812)}
 SOURCE = "https://www.rapiddirect.com"
 LOCAL = "http://127.0.0.1:8766"
 
+def secure_source_request(url: str, method: str) -> bool:
+    target = urlsplit(url)
+    host = (target.hostname or "").lower()
+    return (target.scheme == "https" and method in ("GET", "HEAD")
+            and (host == "rapiddirect.com" or host.endswith(".rapiddirect.com")))
+
 def secure_local_request(url: str, method: str) -> bool:
     target = urlsplit(url)
     return (
@@ -70,6 +76,15 @@ def screenshot_browser(browser, page_id, url_path, kind, mode, out_dir, allow_li
         context.route("**/*", guard)
     elif not allow_live:
         raise RuntimeError("Live source capture requires explicit --allow-live-read")
+    else:
+        def source_guard(route):
+            req = route.request
+            if secure_source_request(req.url, req.method):
+                route.continue_()
+            else:
+                external.append({"url": req.url, "method": req.method})
+                route.abort()
+        context.route("**/*", source_guard)
     page = context.new_page()
     rec = {"id":page_id,"viewport":kind,"mode":mode,"url":None}
     try:
