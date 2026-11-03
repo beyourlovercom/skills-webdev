@@ -90,9 +90,9 @@ for(const [rel,raw] of Object.entries(htmlSources)){
    const first=manifest.source_detail_products[0].gallery.find(u=>u.includes('/world/1280/'))||manifest.source_detail_products[0].gallery[0];
    const substitute=mapped.get(first);
    if(substitute){
-     html=html.replace(/(<img\\b[^>]*?\\bsrc=["'])https:\\/\\/img\\.youtube\\.com\\/[^"']+(["'])/gi,(_all,left,right)=>{
+     html=html.replace(/https:\/\/img\.youtube\.com\/vi\/[^"'<>]+?\.jpg/gi,()=>{
        videoPostersSubstituted++;
-       return left+substitute+right+' data-bwy-offline-video-poster="original-gallery-fallback"';
+       return substitute;
      });
    }
  }
