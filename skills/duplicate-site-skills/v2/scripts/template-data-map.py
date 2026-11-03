@@ -45,7 +45,7 @@ class SlotScanner(HTMLParser):
         self.slots = []
         self.shape = []
 
-    def offset(self):
+    def absolute_pos(self):
         line, col = self.getpos()
         return self.line_starts[line - 1] + col
 
@@ -57,7 +57,7 @@ class SlotScanner(HTMLParser):
                      if key in attrs_dict}
         self.shape.append(["open", tag, sorted(attrs_dict), structure])
         raw = self.get_starttag_text() or ""
-        start = self.offset()
+        start = self.absolute_pos()
         attr_targets = {}
         if tag == "img":
             attr_targets = {"src", "alt", "data-src", "srcset"}
@@ -106,7 +106,7 @@ class SlotScanner(HTMLParser):
                        if item["tag"] in TEXT_TAGS), None)
         if not parent:
             return
-        start = self.offset()
+        start = self.absolute_pos()
         end = start + len(text)
         if self.source[start:end] != text:
             # A parser-normalized or entity-expanded fragment is not safely
