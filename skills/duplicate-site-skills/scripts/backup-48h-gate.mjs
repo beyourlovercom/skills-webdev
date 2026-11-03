@@ -14,14 +14,17 @@ const STATES=new Set(['NOT_STARTED','READING','ANALYZING','LOCAL_BUILD','AUTO_UA
 const ACTIONS=new Set(['status','sample','batch','next','complete']);
 const sha=v=>typeof v==='string'&&/^[0-9a-f]{64}$/i.test(v);
 const goodRef=v=>typeof v==='string'&&v.trim().length>=8;
+const ownerEvidenceRef=v=>typeof v==='string'&&v.trim().length>=16&&
+ !/^(?:continue|pass|approved|ok|done|继续|通过|首页视觉s*pass)$/i.test(v.trim());
+const approvalTimestamp=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(v)&&Number.isFinite(Date.parse(v));
 const positive=v=>typeof v==='number'&&Number.isFinite(v)&&v>0;
 const count=v=>Number.isSafeInteger(v)&&v>=0;
 const asObj=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const err=(code,...detail)=>({code,detail:detail.join(' ')});
 const validSource=v=>{try{let u=new URL(v);return ['http:','https:'].includes(u.protocol)&&!!u.hostname&&!u.username&&!u.password;}catch{return false}};
-const hasPass=m=>m?.approval?.status==='PASS' && goodRef(m.approval?.owner_message_ref) &&
+const hasPass=m=>m?.approval?.status==='PASS' && ownerEvidenceRef(m.approval?.owner_message_ref) &&
  validSource(m?.sample?.source_url) && validSource(m?.sample?.local_url) &&
- goodRef(m?.approval?.approved_at) && Number.isFinite(Date.parse(m.approval.approved_at)) &&
+ approvalTimestamp(m.approval?.approved_at) &&
  sha(m.approval?.template_sha256);
 const sampleReady=m=>validSource(m?.sample?.source_url)&&validSource(m?.sample?.local_url)&&
  goodRef(m?.sample?.analysis_ref)&&goodRef(m?.sample?.desktop_ref)&&
@@ -101,7 +104,7 @@ export function evaluateGate(doc,action='status',moduleId=null){
  }else if(action==='complete'){
   if(!ordered.every(m=>m.state==='MODULE_PASS'&&hasPass(m)&&sampleReady(m)&&batchReady(m)))
    blockers.push('SOME_MODULES_ARE_NOT_OWNER_APPROVED_AND_COMPLETE');
-  if(doc.final_owner_acceptance?.status!=='PASS'||!goodRef(doc.final_owner_acceptance.owner_message_ref))
+  if(doc.final_owner_acceptance?.status!=='PASS'||!ownerEvidenceRef(doc.final_owner_acceptance.owner_message_ref))
    blockers.push('FINAL_OWNER_LOCAL_ACCEPTANCE_MISSING');
   if(!goodRef(doc.final_offline_report))blockers.push('OFFLINE_REPORT_MISSING');
   if(!count(doc.scope?.included_route_count)||!count(doc.scope?.measured_route_count)||
