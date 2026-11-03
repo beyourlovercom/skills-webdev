@@ -50,3 +50,13 @@ Owner 决定：**每个模板只开发一次，得到单独视觉 PASS 后同类
 ## Hard Holds
 
 PR #15 和 PR #16 保持 Draft，main 不变；未获模板逐类视觉 PASS 前批量全部 BLOCKED。未访问博客详情、未修改生产站、无登录/报价/客户数据写入，私有截图和 HTML 不上传 GitHub。
+
+
+## Mirror-first local read-only guard — executed and verified
+
+- Added default-dry-run V2 script `scripts/guard-direct-mirror.mjs` under PR #16. Exactly the three existing authorized SiteOne mirror HTML files are patched with local CSP, click/navigation scope guard and form-submit prevention; originals backed up under `uat/pre-direct-mirror-guard/`. No source writes or new page crawls.
+- Windows Playwright UAT after apply: **6/6** (home, services, CNC × desktop/mobile) all HTTP 200, CSP present, form submissions prevented, mobile menu works, homepage FAQ works, no external requests under browser isolation. Direct mirror is therefore a safer local preview without forcing React reimplementation.
+- Private `uat/template-candidates.json` retains the original pre-guard HTML SHA256 and a separate guarded mirror HTML SHA256 for each class. Those are **not** frozen template code hashes; all three Owner visual states remain PENDING and batch is BLOCKED.
+- Owner local comparison dashboard, rebuilt and HTTP 200: `http://127.0.0.1:8766/uat/owner-template-freeze-review.html`; direct mirror `http://127.0.0.1:8765/`. Only the authorized Windows localhost session can open these.
+
+**Important:** HTTP 200 and a safe local click/FAQ are not evidence that the underlying dynamic video/carousel matches source. The source-vs-direct mirror SSIM home/mobile 0.8997 and CNC/desktop 0.6824 remain OPEN; do not falsify a visual PASS by masking differences.
