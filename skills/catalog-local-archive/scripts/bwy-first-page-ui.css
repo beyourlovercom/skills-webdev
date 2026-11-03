@@ -13,3 +13,18 @@
 .slick-slider.bwy-static-slider .slick-disabled{opacity:.36;cursor:default!important;}
 @media(max-width:920px){.slick-slider.bwy-static-slider .slick-track{gap:12px!important;}}
 @media(max-width:600px){.slick-slider.bwy-static-slider .slick-track{gap:8px!important;}}
+
+/* Source CSS starts animated sections at opacity:0 until Next.js hydration.
+   The static owner backup renders final settled appearance instead. */
+[class*="HeroBannerWithVideo_title__"],
+[class*="SimpleCTA_simpleCta__"],
+[class*="SplitBlockBanner_SplitBlockBanner__"],
+[class*="ContentCard_contentCardWrapper__"] {
+  opacity:1!important;
+  visibility:visible!important;
+}
+/* Ensure a missing source video cannot blank the real original-image fallback. */
+[class*="HeroBannerWithVideo_videoFallbackImg__"]{
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+}
