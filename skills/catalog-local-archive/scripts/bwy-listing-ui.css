@@ -12,3 +12,21 @@
  .bwy-filter-close{display:block;width:100%;border:1px solid #bbb;border-radius:4px;background:#f7f7f7;padding:12px;margin:0 0 18px;cursor:pointer}
  [class*=QuickFilterBar_quickFilterBar]{z-index:120!important}
 }
+/* Visual UAT fix: original Next.js sorting overlay is SSR-marked hiddenTop but
+   was displayed in the scriptless source replay. Never show it by default. */
+[class*="AnimatedOverlay_overlay"][class*="AnimatedOverlay_hiddenTop"] {
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+/* Original Font Awesome base styles were absent from captured CSS. Without
+   them, inline xmark/circle SVGs expand to block-sized, 1400px symbols. */
+svg.svg-inline--fa {
+  display:inline-block!important;
+  width:1em!important;
+  max-width:1em!important;
+  height:1em!important;
+  overflow:visible!important;
+  vertical-align:-.125em!important;
+  flex-shrink:0!important;
+}
