@@ -65,6 +65,22 @@ export async function planWithPr15({factoryRoot,pr15Ledger,routeList,moduleId,
    if(!dest.endsWith(".html"))throw Error("NON_HTML_OUTPUT_REFUSED");
    const assetCount=job.assets?.length||0;
    if(assetCount===0)throw Error("ASSET_DENOMINATOR_MISSING");
+   // PR15 validates manifest syntax, not actual bytes. The adapter must
+   // verify every referenced local asset against the recorded digest before
+   // rendering. Do not re-download or invent placeholder assets.
+   const assetRoot=path.resolve(workspace,"mirror");
+   for(const asset of job.assets){
+     const local=asset.local_path;
+     if(typeof local!=="string"||!local.startsWith("/")||local.startsWith("//")||
+         local.includes("..")||local.includes("\"))
+       throw Error("UNSAFE_ASSET_PATH");
+     const target=path.resolve(assetRoot,"."+local);
+     if(!target.startsWith(assetRoot+path.sep)||!fs.existsSync(target)||
+         !fs.realpathSync(target).startsWith(fs.realpathSync(assetRoot)+path.sep))
+       throw Error("ASSET_NOT_CACHED_OR_ESCAPE:"+local);
+     if(sha(fs.readFileSync(target))!==asset.sha256)
+       throw Error("ASSET_SHA_DRIFT:"+local);
+   }
    jobs.push({source_url:job.source_url,output:dest,
      action:job.action,asset_count:assetCount,
      changes,sha256_original:job.original_html_sha256});
