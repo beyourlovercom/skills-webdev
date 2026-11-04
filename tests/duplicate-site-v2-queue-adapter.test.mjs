@@ -13,6 +13,9 @@ const fake=()=>{
  const source=path.join(root,"uat","frozen.html");
  fs.writeFileSync(source,"<html><body><h1>Home</h1></body></html>");
  const digest=sha(fs.readFileSync(source));
+ const asset=path.join(root,"mirror","wp-content","a.webp");
+ fs.mkdirSync(path.dirname(asset),{recursive:true});
+ fs.writeFileSync(asset,"one-asset");
  const sha2=sha("approved-test-template-only");
  const ledger={schema_version:1,project_id:"rapiddirect-v2-pilot",source_origin:"https://www.rapiddirect.com",local_origin:"http://127.0.0.1:8765",
   rights_verified:true,demo_only:false,
@@ -48,7 +51,7 @@ function stub(x,allowed=true){
  fs.mkdirSync(dir,{recursive:true});
  const result=allowed?{
    status:"QUEUE_READY",module:"shared-shell",jobs:[{source_url:"https://www.rapiddirect.com/",local_path:"/sample.html",
-   content_type:"home",original_html_sha256:sha("sample"),assets:[{source_url:"https://www.rapiddirect.com/wp-content/a.webp",local_path:"/wp-content/a.webp",sha256:sha("a")}],
+   content_type:"home",original_html_sha256:sha("sample"),assets:[{source_url:"https://www.rapiddirect.com/wp-content/a.webp",local_path:"/wp-content/a.webp",sha256:sha("one-asset")}],
    action:"LOCALIZE_WITH_FROZEN_TEMPLATE"}],asset_urls_deduplicated:1,skipped_count:0
   }:{status:"BLOCKED",reasons:["PREVIOUS_MODULE_NOT_PASS"],jobs:[]};
  fs.writeFileSync(path.join(dir,"prepare-module-batch.mjs"),
@@ -99,5 +102,16 @@ test("wrong template SHA or new route outside explicit scope rejects early",asyn
   await assert.rejects(()=>planWithPr15(scoped(x)),/EXPLICIT_SCOPE_ALLOWLIST_REQUIRED/);
   x.urls=["https://www.rapiddirect.com/services/random/"];
   await assert.rejects(()=>planWithPr15(scoped(x)),/OUT_OF_APPROVED_URL_SCOPE/);
+ }finally{fs.rmSync(x.root,{recursive:true,force:true})}
+});
+
+
+test("a corrupted cached asset SHA stops queue execution before any local render",async()=>{
+ const x=fake();
+ try{
+  stub(x);
+  fs.writeFileSync(path.join(x.root,"mirror","wp-content","a.webp"),"tampered-bytes");
+  await assert.rejects(()=>planWithPr15(scoped(x)),/ASSET_SHA_DRIFT/);
+  assert.equal(fs.existsSync(path.join(x.root,"uat","r6-queue-preview")),false);
  }finally{fs.rmSync(x.root,{recursive:true,force:true})}
 });
