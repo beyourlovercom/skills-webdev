@@ -158,3 +158,15 @@ Audit: [`docs/reviews/duplicate-site-v2-data-mapping-smoke-20261103.md`](../../.
 - **R9:** after rewriting 193 same-origin media references, using previously approved cache, resolving two renamed CSS references and fetching the exact video asset, the genuine source-vs-local full-page PWC SSIM is desktop **0.997946** and mobile **0.999928** (both pass 0.97; masks 0). Controlled browser safe-interaction UAT 2/2 PASS. One unrequested source `particles.min.js` remains HTTP 404; 269/270 referenced static resources locally present. Owner manual visual PASS for this new page remains pending.
 
 Windows-only dashboard: `http://127.0.0.1:8767/_uat/owner-r8-r9-review.html`. Exact audit and boundary conditions: [`docs/reviews/duplicate-site-v2-r6-r9-single-page-canary-20261104.md`](../../../docs/reviews/duplicate-site-v2-r6-r9-single-page-canary-20261104.md). Do not share underlying licensed HTML, screenshots, video or fonts in GitHub. PR #15/#16 Draft; no main merge, WWW/Dev write, Blog crawl or new URL batch.
+
+## R10 second CNC service single-page performance and reusable blocks (2026-11-04)
+
+Continued **only the frozen template-once rule**. Windows Local SiteOne `--single-page` copied one more scoped source page `/services/cnc-turning/` in a **16.66 s SiteOne export** (151 files), reused 136 cached assets in 0.939 s, downloaded 17 missing assets and the exact runtime MP4, and localized 194 same-origin paths. Final static resource census 279/280 with the sole missing file a confirmed source HTTP 404; no retryable missing resource remains.
+
+Versus prior `/services/cnc-milling/`: normalized **Header 100%, Footer 100%, Main 90.047%**. Hero and Why Choose sections match **100% structural shape**, but other Main sections diverge markedly (0.05/0.735/0.0), so **reuse shared blocks/data, preserve page-specific DOM/variable sections**. Do not forcibly collapse the whole pair into one React or one data-only complete-page template.
+
+Controlled real source-vs-mirror full-page PWC SSIM after local-only read-only guard: desktop **0.991916**, mobile **0.999096** (threshold 0.97; no masks); desktop/mobile local-browser safe interaction **2/2 PASS**; live writes 0. Final source refresh encountered `ERR_CONNECTION_CLOSED`, so final score uses an earlier successful source screenshot from the same Canary as the baseline. Captured source and local broken-image/placeholder counts match under third-party blocking, not proof that every lazy image is loaded.
+
+**Owner visual review is still PENDING** for this additional route. Windows-only review `http://127.0.0.1:8768/_uat/owner-r10-review.html` and source evidence under `uat/r10-cnc-turning-candidate/`; private ledger retains `owner_visual_pass=false`, generalized `template_sha256=null`, `batch_enabled=false`. PR #15/#16 Draft; no main/Dev/WWW merge or whole-site batch.
+
+Full scope/provenance/limits: [`docs/reviews/duplicate-site-v2-r10-cnc-turning-20261104.md`](../../../docs/reviews/duplicate-site-v2-r10-cnc-turning-20261104.md).
