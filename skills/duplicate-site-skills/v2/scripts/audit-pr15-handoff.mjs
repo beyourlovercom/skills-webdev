@@ -84,6 +84,56 @@ export async function auditHandoff(doc,factoryRoot){
     factory_integrated:true,source_requests:0,site_writes:0,
     gates:gated,next:'Add verified data mappings + full scoped route/asset manifest, then obtain a separately authorized batch execution gate'};
 }
+
+/**
+ * Owner-approved automatic visual PASS: both complete, unmasked desktop/mobile
+ * SSIM >= 0.97 against real captured source + offline, with safe interaction
+ * and no runtime asset/network errors. This grants only a per-page visual PASS,
+ * not generalized template SHA, PR15 batch launch, GitHub merge or deployment.
+ */
+export function evaluateAutomatedVisualPass({scores,sourceRuns,localRuns,interaction,proofFiles}){
+  const deny=reason=>({status:'AUTO_VISUAL_BLOCKED',pass:false,reason,threshold:0.97});
+  const views=['desktop','mobile'];
+  if(!Array.isArray(scores)||scores.length!==2||!Array.isArray(sourceRuns)||
+    !Array.isArray(localRuns)||!interaction||!proofFiles)
+    return deny('EVIDENCE_INCOMPLETE');
+  if(interaction.pass_count!==2||interaction.failed_count!==0||
+     interaction.real_form_submissions!==0||interaction.production_writes!==0)
+    return deny('SAFE_INTERACTION_NOT_VERIFIED');
+  const per=[];
+  for(const view of views){
+    const a=scores.filter(s=>s.view===view);
+    const src=sourceRuns.filter(x=>x.viewport===view&&x.mode==='source');
+    const dst=localRuns.filter(x=>x.viewport===view&&x.mode==='offline');
+    if(a.length!==1||src.length!==1||dst.length!==1)
+      return deny('MISSING_OR_DUPLICATED_VIEW_'+view);
+    const s=a[0],x=src[0],y=dst[0];
+    if(typeof s.ssim!=='number'||!Number.isFinite(s.ssim)||
+      s.ssim<0.97||s.ssim>1||s.pass!==true||
+      s.masked!==0||s.threshold!==0.97)
+      return deny('SSIM_UNMASKED_THRESHOLD_FAIL_'+view);
+    if(x.http!==200||y.http!==200||!Array.isArray(x.image_size)||
+      JSON.stringify(x.image_size)!==JSON.stringify(y.image_size)||
+      x.image_size.length!==2||x.image_size[0]<300||x.image_size[1]<300||
+      x.image_count!==y.image_count||x.broken_images!==y.broken_images)
+      return deny('PAGE_GEOMETRY_OR_MEDIA_DIFFER_'+view);
+    if((y.http_failures||[]).length!==0||y.blocked_count!==0)
+      return deny('LOCAL_RUNTIME_FAILED_'+view);
+    for(const side of ['source','offline']){
+      const file=proofFiles[view]?.[side];
+      if(typeof file!=='string'||!file.endsWith('.png')||!fs.existsSync(file)||
+         fs.statSync(file).size<10000)
+        return deny('FULL_PAGE_SCREENSHOT_MISSING_'+view+'_'+side);
+    }
+    per.push({view,ssim:s.ssim,masked_fraction:0});
+  }
+  return {status:'AUTO_VISUAL_PASS',pass:true,threshold:0.97,per,
+    granted_scope:'EXACT_TESTED_PAGE_VISUAL_ONLY',
+    generalized_template_approved:false,
+    batch_execution_approved:false,main_merge_approved:false,
+    owner_review_required:false};
+}
+
 async function main(){
   const opts={};
   for(const arg of process.argv.slice(2)){
