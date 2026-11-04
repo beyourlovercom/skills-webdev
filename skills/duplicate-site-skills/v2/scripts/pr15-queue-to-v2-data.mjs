@@ -72,7 +72,7 @@ export async function planWithPr15({factoryRoot,pr15Ledger,routeList,moduleId,
    for(const asset of job.assets){
      const local=asset.local_path;
      if(typeof local!=="string"||!local.startsWith("/")||local.startsWith("//")||
-         local.includes("..")||local.includes("\"))
+         local.includes("..")||local.includes("\\"))
        throw Error("UNSAFE_ASSET_PATH");
      const target=path.resolve(assetRoot,"."+local);
      if(!target.startsWith(assetRoot+path.sep)||!fs.existsSync(target)||
