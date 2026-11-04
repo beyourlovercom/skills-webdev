@@ -170,3 +170,15 @@ Controlled real source-vs-mirror full-page PWC SSIM after local-only read-only g
 **Owner visual review is still PENDING** for this additional route. Windows-only review `http://127.0.0.1:8768/_uat/owner-r10-review.html` and source evidence under `uat/r10-cnc-turning-candidate/`; private ledger retains `owner_visual_pass=false`, generalized `template_sha256=null`, `batch_enabled=false`. PR #15/#16 Draft; no main/Dev/WWW merge or whole-site batch.
 
 Full scope/provenance/limits: [`docs/reviews/duplicate-site-v2-r10-cnc-turning-20261104.md`](../../../docs/reviews/duplicate-site-v2-r10-cnc-turning-20261104.md).
+
+## Owner-frozen automatic page visual PASS (2026-11-04)
+
+Owner explicitly authorized: **for each real page, when the source-vs-local complete desktop and mobile screenshot automated visual SSIM scores are both >=0.97, the page may be recorded as visual PASS without additional Owner manual review.** This supersedes earlier per-URL Owner visual approval holds for future page-level canaries, while retaining the earlier three manually approved samples and all source, security and publication gates.
+
+Automatic page visual acceptance must use **both viewports** of authentic source capture and local mirror under matching viewports, controlled static/dynamic state, no screenshot masks or crops, matching page sizes and image/load evidence, no local runtime 404 or outside network dependency, and successful relevant safe interactions (menus, forms, local navigation). If any evidence is missing, stale/invalid, or either SSIM is below **0.97**, the page is OPEN/FAILED and routes to only the relevant component repair; do not lower the threshold or silently normalize score.
+
+Implementation: existing `scripts/audit-pr15-handoff.mjs` now exports `evaluateAutomatedVisualPass` as a read-only policy gate. It checks dual viewport SSIM >=0.97 with zero masks, real screenshot files, original vs local geometry/media parity, local HTTP success and 2/2 isolated safe interaction PASS. The gate returns `AUTO_VISUAL_PASS` only for the **exact tested page**, not a generalized template SHA, all same-type pages, PR #15 batch queue permission, main merge, source-site form submission, Dev/WWW deployment, or unrestricted crawling.
+
+Owner's immediate **`pass`** for the prior CNC Turning Canary also explicitly accepts that previously presented sample. Its measured post-guard SSIM: 0.991916 desktop / 0.999096 mobile; safe interaction 2/2 PASS. When a later live source navigation temporarily returns `ERR_CONNECTION_CLOSED`, the evidence must identify the already captured source screenshot as an earlier valid baseline from the same UAT; no misleading claim of a simultaneous live refresh.
+
+Repeated page visits still use the frozen model: SiteOne single-page export → reuse shared assets/template modules → localize existing media references → source-vs-local desktop/mobile automated visual + safe interaction → auto PASS only after evidence is complete → failed-only fixes. No new foundational framework development.
