@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import {inspectCandidate,makeConservativePr15Ledger,auditHandoff} from '../skills/duplicate-site-skills/v2/scripts/audit-pr15-handoff.mjs';
+import {inspectCandidate,makeConservativePr15Ledger,auditHandoff,evaluateAutomatedVisualPass} from '../skills/duplicate-site-skills/v2/scripts/audit-pr15-handoff.mjs';
 
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 function fixture(){
@@ -75,5 +75,53 @@ test('duplicate, unknown or unapproved representative fails closed',()=>{
   x.doc.templates[2].owner_visual_pass=true;
   x.doc.bulk_enabled=true;
   assert.throws(()=>inspectCandidate(x.doc),/PILOT_SCOPE_OR_BATCH_GATE/);
+ }finally{fs.rmSync(x.root,{recursive:true,force:true})}
+});
+
+function autoFixture(){
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'v2-auto-visual-'));
+ const views=['desktop','mobile'];
+ const proofFiles={};
+ for(const view of views){
+  proofFiles[view]={};
+  for(const side of ['source','offline']){
+   const p=path.join(root,view+'.'+side+'.png');
+   fs.writeFileSync(p,Buffer.alloc(14000,0xa5));
+   proofFiles[view][side]=p;
+  }
+ }
+ return {root,evidence:{
+  scores:views.map(view=>({view,ssim:view==='desktop'?0.991916:0.999096,pass:true,masked:0,threshold:0.97})),
+  sourceRuns:views.map(view=>({viewport:view,mode:'source',http:200,image_size:view==='desktop'?[1440,11948]:[375,15112],image_count:117,broken_images:view==='desktop'?78:86})),
+  localRuns:views.map(view=>({viewport:view,mode:'offline',http:200,image_size:view==='desktop'?[1440,11948]:[375,15112],image_count:117,broken_images:view==='desktop'?78:86,http_failures:[],blocked_count:0})),
+  interaction:{pass_count:2,failed_count:0,real_form_submissions:0,production_writes:0},
+  proofFiles
+ }};
+}
+test('Owner automatic SSIM policy grants exact-page visual PASS after both full-page views and safe interactions',()=>{
+ const x=autoFixture();
+ try{
+  const v=evaluateAutomatedVisualPass(x.evidence);
+  assert.equal(v.status,'AUTO_VISUAL_PASS');
+  assert.equal(v.pass,true);
+  assert.equal(v.owner_review_required,false);
+  assert.equal(v.batch_execution_approved,false);
+  assert.equal(v.generalized_template_approved,false);
+ }finally{fs.rmSync(x.root,{recursive:true,force:true})}
+});
+test('auto visual pass refuses one low view, masks, bad interactions, missing images and absent screenshot',()=>{
+ const x=autoFixture();
+ try{
+  const clone=()=>structuredClone(x.evidence);
+  let bad=clone();bad.scores[1].ssim=0.9699;
+  assert.equal(evaluateAutomatedVisualPass(bad).pass,false);
+  bad=clone();bad.scores[0].masked=0.1;
+  assert.equal(evaluateAutomatedVisualPass(bad).pass,false);
+  bad=clone();bad.interaction.failed_count=1;
+  assert.equal(evaluateAutomatedVisualPass(bad).pass,false);
+  bad=clone();bad.localRuns[1].broken_images=87;
+  assert.equal(evaluateAutomatedVisualPass(bad).pass,false);
+  bad=clone();fs.unlinkSync(bad.proofFiles.desktop.offline);
+  assert.equal(evaluateAutomatedVisualPass(bad).pass,false);
  }finally{fs.rmSync(x.root,{recursive:true,force:true})}
 });
