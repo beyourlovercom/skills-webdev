@@ -39,3 +39,6 @@ Fixtures cover a valid mapping, missing compiled asset, path traversal, disallow
 - This is STATIC_PASS + OPEN_PERFORMANCE_REVIEW, not mobile visual or e-commerce PASS.
 
 No private source files or screenshots are committed.
+## R2–R4 executable extension (2026-11-05)
+
+The generic stage-2/3/4 implementation, private-local commands, real browser evidence and remaining gates are recorded in [WordPress Local R2–R4 implementation](wordpress-local-r2-r4.md). It extends this static inspector without replacing it. The WordPress sample reports 5/5 local route GET, 19/19 repeatable staged builds, and 10/10 PC/mobile local browser renders, but **real PR #15 batch remains blocked for missing Owner template pass and rights evidence**; the staged compiled assets were not applied to the running Local site. Existing PR #15/#16/R15–R16 are unchanged.
