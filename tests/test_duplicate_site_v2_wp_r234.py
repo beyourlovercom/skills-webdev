@@ -48,6 +48,16 @@ class WPTests(unittest.TestCase):
   self.assertFalse(proof["allow_batch"])
   self.assertEqual(proof["routes"][0]["template_sha256"],proof["routes"][1]["template_sha256"])
   self.assertNotEqual(proof["routes"][0]["data_sha256"],proof["routes"][1]["data_sha256"])
+ def test_r2_explicit_alternate_template_profile(self):
+  (self.theme/"alternate-product.php").write_text("<?php // alternate",encoding="utf-8")
+  with patch.object(r2,"build_opener",return_value=FakeOpener()):
+   proof=r2.plan(self.theme,"http://fixture.local",[{"path":"/products/item-a/","kind":"product"}],
+       {"product":["alternate-product.php","header.php"]})
+  self.assertEqual(proof["routes"][0]["template_files"][0],"alternate-product.php")
+ def test_r2_missing_mapping_fail_closed(self):
+  with patch.object(r2,"build_opener",return_value=FakeOpener()):
+   with self.assertRaisesRegex(ValueError,"TEMPLATE_CLASS_NOT_MAPPED"):
+    r2.plan(self.theme,"http://fixture.local",[{"path":"/products/item-a/","kind":"product"}],{})
  def test_r2_no_remote(self):
   with self.assertRaisesRegex(ValueError,"LOCAL_ORIGIN_REQUIRED"):
    r2.plan(self.theme,"https://shop.example.org",[{"path":"/","kind":"home"}])
