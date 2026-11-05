@@ -51,7 +51,9 @@ def route_kind(entry):
  if (kind=="home" and p!="/") or (kind=="listing" and p!="/shop/" and not p.startswith("/collections/")) or (kind=="product" and not p.startswith("/products/")) or (kind=="content" and not p.startswith("/pages/")):
   raise ValueError("ROUTE_KIND_MISMATCH")
  return p,kind
-def plan(theme,origin,rows):
+def plan(theme,origin,rows,template_map=None):
+ template_map=template_map if template_map is not None else TEMPLATES
+ if not isinstance(template_map,dict) or any(k not in TEMPLATES for k in template_map):raise ValueError("INVALID_TEMPLATE_MAP")
  theme=Path(theme).resolve()
  if not theme.is_dir():raise ValueError("THEME_NOT_FOUND")
  u=urlparse(origin)
@@ -65,10 +67,11 @@ def plan(theme,origin,rows):
   if path in seen:raise ValueError("DUPLICATE_ROUTE")
   seen.add(path)
   template_parts=[]
-  for filename in TEMPLATES[kind]:
+  for filename in template_map.get(kind,[]):
    f=(theme/filename).resolve()
    if not f.is_relative_to(theme) or not f.is_file():raise ValueError("MISSING_TEMPLATE:"+filename)
    template_parts.append(filename.encode()+b"\0"+f.read_bytes())
+  if not template_parts:raise ValueError("TEMPLATE_CLASS_NOT_MAPPED:"+kind)
   signature=digest(b"\n".join(template_parts))
   sha_by_kind[kind]=signature
   url=origin.rstrip("/")+path
@@ -83,7 +86,7 @@ def plan(theme,origin,rows):
     "image_sources":parser.images[:3],
     "link_count":parser.anchors,
     "image_count_first8":len(parser.images)}
-  checked.append({"path":path,"template_class":kind,"template_files":list(TEMPLATES[kind]),
+  checked.append({"path":path,"template_class":kind,"template_files":list(template_map[kind]),
      "template_sha256":signature,"data":field_data,"data_sha256":digest(json.dumps(field_data,sort_keys=True).encode()),
      "html_sha256":digest(body),"html_bytes":len(body),"h1_count":parser.h1_count,"status":"LOCAL_HTML_READ_OK"})
  groups={}
@@ -103,11 +106,12 @@ def plan(theme,origin,rows):
 def main():
  p=argparse.ArgumentParser()
  p.add_argument("--theme",required=True);p.add_argument("--origin",required=True)
- p.add_argument("--routes",required=True);p.add_argument("--out",required=True)
+ p.add_argument("--routes",required=True);p.add_argument("--template-map",required=True);p.add_argument("--out",required=True)
  a=p.parse_args()
  rows=json.loads(Path(a.routes).read_text(encoding="utf-8-sig"))
  if not isinstance(rows,list) or not rows or len(rows)>30:raise ValueError("ROUTES_MAX_30")
- result=plan(a.theme,a.origin,rows)
+ template_map=json.loads(Path(a.template_map).read_text(encoding="utf-8-sig"))
+ result=plan(a.theme,a.origin,rows,template_map)
  out=Path(a.out).resolve()
  if "_research" not in out.parts or out.exists():raise ValueError("PRIVATE_NEW_RESEARCH_OUTPUT_ONLY")
  out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding="utf-8")
