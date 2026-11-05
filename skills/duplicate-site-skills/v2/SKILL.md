@@ -13,6 +13,16 @@ description: Owner-review candidate: local website mirror and visual-fidelity wo
 - V1 D0–D8 still owns source rights, controlled Local→Dev→WWW release, SEO and leads.
 - Existing draft PR #15 owns the 48-hour sample → Owner Visual PASS → same-type batch → next-module gates. Do not reimplement or silently merge it.
 
+## Optional WordPress Local R2–R4 adapter (Draft PR #17)
+
+For an existing **authorized, isolated WordPress Local** copy, after the basic V2 representative inspection, use the optional tools below rather than creating another per-URL renderer:
+
+- **R2** `scripts/wp-template-data-contract.py`: read-only local GET / PHP-template SHA / per-route data contract; explicitly `owner_visual_pass=false` and `allow_batch=false`.
+- **R3** `scripts/wp-final-build.py`: installed offline esbuild only; final-stage CSS/JS scratch compilation, font URL rebasing, content-hashed dist manifest and repeatable source/dist SHA verification. Never writes to a running theme.
+- **R4** `scripts/wp-r4-browser-uat.py`: real PC/mobile local browser smoke, safe toggle interactions and requests blocked outside the approved .local host; `scripts/wp-r4-pr15-handoff.mjs` imports the **actual PR #15** `prepare-module-batch.mjs` gate. Missing source rights, per-module Owner visual PASS, frozen template SHA or validated asset manifest means **BLOCKED_BATCH**, even if synthetic fixture checks PASS.
+
+Follow [WordPress Local R2–R4](references/wordpress-local-r2-r4.md). This adapter is optional; existing SiteOne / PWC RapidDirect workflows and current R15–R16 work remain unchanged. `HTTP 200`, syntax tests and screenshots of a restored local site do **not** establish source-fidelity `>=0.97`, complete interactions, rights, or publication approval. No main / Dev / WWW changes are authorized by this Draft.
+
 ## Gates and handoff
 
 | Stage | Work | Evidence | Gate |
