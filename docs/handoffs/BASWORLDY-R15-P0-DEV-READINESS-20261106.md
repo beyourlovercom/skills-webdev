@@ -77,6 +77,7 @@ C:\Users\Administrator\Downloads\BASWORLDY-R15-DEV-ROOT-CANDIDATE-20261106.zip
 - 0 个资源请求失败。
 - 0 个外部网络请求。
 - 0 个横向溢出视图。
+- 与 R14 相同页面的 12 组 PC/手机截图对比全部通过 0.97 门槛；最低模糊灰度相似度 0.98011，最低逐像素一致率 99.64%。
 - Home UI ready，3 个 slider。
 - 列表页 Mobile 筛选抽屉打开/关闭均 PASS。
 - Contact、Trucks、Machinery、Sitemap 内容模板 PC/手机均 ready。
@@ -109,6 +110,7 @@ D:\ai\basworldy-source-archive\page1-batch\uat\
 - r15-dev-root-http-readback-v2-20261106.json
 - r15-p0-a-to-d-final-readback-20261106.json
 - r15-dev-root-candidate-20261106\browser-uat-v2\browser-regression-readback.json
+- r15-dev-root-candidate-20261106\browser-uat-v2\r14-r15-visual-diff.json
 - r15-dev-root-package-zip-readback-20261106.json
 
 **本轮 P0-A 候选生成没有回写 source-mirror；此前 R15 Canonical 修复对 32 个 HTML 仅做 Canonical 元数据修改，R14 CSS/JS 资产与页面视觉内容未改、没有修改 GitHub main、没有部署远端 Dev/Production。**
