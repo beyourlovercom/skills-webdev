@@ -6,7 +6,7 @@
 
 **P0-A PASS；P0-B Dev 技术配置 PASS（正式域名/Sitemap 与法律主体待确认）；P0-C 静态安全 PASS；P0-D 本地 UAT PASS，远端 Dev 部署待真实 Dev 主机参数。**
 
-未部署 Production，未写入远端 Dev，未合并 GitHub main。R14 已冻结源目录未被改动。
+未部署 Production，未写入远端 Dev，未合并 GitHub main。此前批准的 R15 Canonical 修复已对 32 个 HTML 仅修改 Canonical 标签；本轮 P0-A 候选生成没有回写 source-mirror，R14 CSS/JS 资产及页面视觉内容未改。
 
 ## P0-A · 根目录部署版本
 
@@ -111,7 +111,7 @@ D:\ai\basworldy-source-archive\page1-batch\uat\
 - r15-dev-root-candidate-20261106\browser-uat-v2\browser-regression-readback.json
 - r15-dev-root-package-zip-readback-20261106.json
 
-**本轮没有改动 Windows Local R14 冻结源目录、没有修改 GitHub main、没有部署远端 Dev/Production。**
+**本轮 P0-A 候选生成没有回写 source-mirror；此前 R15 Canonical 修复对 32 个 HTML 仅做 Canonical 元数据修改，R14 CSS/JS 资产与页面视觉内容未改、没有修改 GitHub main、没有部署远端 Dev/Production。**
 
 ## 当前 Roadmap 与剩余工时
 
