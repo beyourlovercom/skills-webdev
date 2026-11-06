@@ -161,3 +161,15 @@ S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从
 - 特殊网站若 Dev 就是最终站，必须由站点 `AGENTS.md` 明确特殊发布路径，不能用一般三阶段流程自动跳过 WWW 门禁。
 
 真实网站 Local/Dev/WWW 验收与三项 Skill 源码开发为**两件不同的事**。Skill 测试成功不代表已经为任何站点实际部署。
+
+
+## Andy Skills V2.0 Systemization (RC1 — Draft)
+
+The repository is being consolidated under a shared version, routing, evidence, device-execution, and release contract. This is an integration candidate, not a released V2.0 package.
+
+- [V2.0 architecture and release boundary](docs/skills-v2/README.md)
+- [Execution and device contract](docs/skills-v2/execution-contract.md)
+- [Shared evidence schema](docs/skills-v2/evidence-schema.md)
+- [V2.0 roadmap](docs/skills-v2/roadmap.md)
+
+Registry now records the system candidate version and independent Skill versions. `IN_MAIN` Skills are `1.0.0`; existing Draft Skills are `0.9.0-rc.1` candidates. A Draft version is not a released version. The snapshot date is 2026-11-06; verify PRs and refs before execution.

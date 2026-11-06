@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "beyourlovercom/skills-webdev",
   "default_branch": "main",
-  "snapshot_date": "2026-11-01",
+  "snapshot_date": "2026-11-06",
   "status_definitions": {
     "IN_MAIN": "已进入 GitHub main；不代表已经连接账户或自动执行。",
     "DRAFT_PR": "文件存在于公开开发分支，尚未合并 main；合并需 Owner 单独审批。",
@@ -21,7 +21,8 @@
       "source_ref": "main",
       "skill_path": "skills/rapid-webdev/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "1.0.0"
     },
     {
       "id": "duplicate-site-skills",
@@ -35,7 +36,8 @@
       "source_ref": "main",
       "skill_path": "skills/duplicate-site-skills/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "独立验证源内容复制/公开展示/索引授权；任何生产、索引和真实客户数据写入必须按项目批准"
+      "requires_authorized_access": "独立验证源内容复制/公开展示/索引授权；任何生产、索引和真实客户数据写入必须按项目批准",
+      "version": "1.0.0"
     },
     {
       "id": "site-skill-factory",
@@ -49,7 +51,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/site-skill-factory/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     },
     {
       "id": "site-intelligence",
@@ -63,7 +66,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/site-intelligence/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     },
     {
       "id": "ga4-site-intelligence",
@@ -77,7 +81,8 @@
       "source_ref": "main",
       "skill_path": "skills/ga4-site-intelligence/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "1.0.0"
     },
     {
       "id": "gsc-site-intelligence",
@@ -91,7 +96,8 @@
       "use_when_zh": "需要网站自然搜索趋势、查询词和页面机会、新站关键词-URL规划与搜索技术诊断。",
       "inputs_zh": "Owner 已打开且获授权的 GSC Chrome 标签页；或目标 GSC 只读 API；或已导出的官方 Web CSV 与 manifest。",
       "outputs_zh": "有来源类型和真实属性/日期标记的 GSC 只读证据、SEO 问题清单；完整 Word/Codex 报告按覆盖范围单独验收。",
-      "requires_authorized_access": "优先复用 Owner 已登录的合法 GSC 浏览器会话，不要求重新 OAuth；API 路径单独授权；已有 CSV 离线可用但来源未 API 复核。"
+      "requires_authorized_access": "优先复用 Owner 已登录的合法 GSC 浏览器会话，不要求重新 OAuth；API 路径单独授权；已有 CSV 离线可用但来源未 API 复核。",
+      "version": "1.0.0"
     },
     {
       "id": "google-ads-site-intelligence",
@@ -105,7 +111,8 @@
       "use_when_zh": "用户希望使用合法数据源研究网站流量、搜索、竞品与新站建设机会，保留逐源可信度和 Owner 发布门禁。",
       "inputs_zh": "目标 Ads 账号、币种、时区与合法 Windsor/Ads 只读结果",
       "outputs_zh": "私有 Ads 分析证据、Campaign 诊断、归因风险和建议，不等于有效询盘",
-      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。"
+      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。",
+      "version": "1.0.0"
     },
     {
       "id": "semrush-site-intelligence",
@@ -119,7 +126,8 @@
       "use_when_zh": "用户希望使用合法数据源研究网站流量、搜索、竞品与新站建设机会，保留逐源可信度和 Owner 发布门禁。",
       "inputs_zh": "目标域、国家数据库、Semrush 合法导出 CSV 与 manifest",
       "outputs_zh": "标明估算和截断局限的竞品/关键词证据；真实 API 验收保留 OPEN",
-      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。"
+      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。",
+      "version": "1.0.0"
     },
     {
       "id": "s1-cross-source",
@@ -133,7 +141,8 @@
       "use_when_zh": "用户希望使用合法数据源研究网站流量、搜索、竞品与新站建设机会，保留逐源可信度和 Owner 发布门禁。",
       "inputs_zh": "四源已有证据文件、目标域、明确 Ads 账户域名映射",
       "outputs_zh": "跨来源证据矩阵、缺失项、中文分析与 Codex Local→Dev→WWW 交接",
-      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。"
+      "requires_authorized_access": "仅只读合法既有数据；收费 API、Ads 调整、网站发布须 Owner 独立批准。",
+      "version": "1.0.0"
     },
     {
       "id": "site-builder-local",
@@ -147,7 +156,8 @@
       "source_ref": "main",
       "skill_path": "skills/site-builder-local/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "1.0.0"
     },
     {
       "id": "site-dev-uat",
@@ -161,7 +171,8 @@
       "source_ref": "main",
       "skill_path": "skills/site-dev-uat/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "1.0.0"
     },
     {
       "id": "site-www-release",
@@ -175,7 +186,8 @@
       "source_ref": "main",
       "skill_path": "skills/site-www-release/SKILL.md",
       "pr": null,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "1.0.0"
     },
     {
       "id": "analytics-live",
@@ -189,7 +201,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/analytics-live/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     },
     {
       "id": "seo-live",
@@ -203,7 +216,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/seo-live/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     },
     {
       "id": "content-migration",
@@ -217,7 +231,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/content-migration/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     },
     {
       "id": "content-automation",
@@ -231,7 +246,8 @@
       "source_ref": "feat/s0-site-skill-factory-20261030",
       "skill_path": "skills/content-automation/SKILL.md",
       "pr": 1,
-      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限"
+      "requires_authorized_access": "依工作项而定；Skill 文件本身不授予任何账户或设备权限",
+      "version": "0.9.0-rc.1"
     }
   ],
   "planned_skills": [],
@@ -256,5 +272,23 @@
     "Skill 只是执行说明；GitHub、Google API、自建 DC 必须分别获得授权。",
     "未经明确 Owner pass 不合并 PR、不正式发布、不修改真实付费广告/客户数据。",
     "不得将 OAuth、客户/订单/询盘、商业原始报表写入此 Public 仓库。"
-  ]
+  ],
+  "system_release": {
+    "name": "Andy Skills",
+    "version": "2.0.0-rc.1",
+    "status": "DRAFT_PR",
+    "release_branch": "feat/andy-skills-v2-systemization-20261106",
+    "release_note_path": "docs/skills-v2/README.md",
+    "execution_contract_path": "docs/skills-v2/execution-contract.md",
+    "evidence_schema_path": "docs/skills-v2/evidence-schema.md",
+    "roadmap_path": "docs/skills-v2/roadmap.md",
+    "note": "Integration candidate only. Not released to main; existing Skills retain their independent status."
+  },
+  "version_policy": {
+    "scheme": "SemVer",
+    "main_default": "1.0.0",
+    "draft_default": "0.9.0-rc.1",
+    "planned_default": null,
+    "rule": "Version and publication status are independent. Draft versions are candidates, not released versions. Verify exact PR/ref before resolving."
+  }
 }
