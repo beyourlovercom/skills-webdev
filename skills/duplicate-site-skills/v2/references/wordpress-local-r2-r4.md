@@ -47,3 +47,12 @@ Routes, source rights, private screenshots and extracted site data stay on Windo
 - For real same-template batch: obtain explicit representative Owner desktop/mobile visual PASS and exact frozen template SHA; verify source/asset license and route inventory; run PR #15 with real ledger. Do not substitute the synthetic test for authorization.
 - Before promoting staged build to Local runtime, test rendered diff/visuals against current version using rollbackable scoped canary. Not part of this isolated research implementation.
 - No SiteGround/WWW/Dev site, customers, payments, email or Cron touched.
+## 2026-11-06 R4 continuation
+
+- Added [final-only CSS/JS package lifecycle](final-asset-lifecycle.md). This rule applies to every Local website: build once at the end, not on every page. Interim --execute scratch builds are QA candidates only.
+- Added read-only [wp-r4-build-canary.py](../scripts/wp-r4-build-canary.py): it replaces old CSS/JS browser response bytes from the scratch package and checks per-viewport screenshots, network errors, and SHA-bound files without changing the running WordPress theme.
+- Added read-only [wp-r4-reference-visual.py](../scripts/wp-r4-reference-visual.py) and [wp-final-package-gate.py](../scripts/wp-final-package-gate.py). Visual references and reports stay private on Windows.
+- Re-verified 5 selected Local routes (1440px/375px): browser 10/10 and stage Canary 10/10 after the local-only About content fallback. Missing page content / H1 now blocks browser PASS.
+- Current reference homepage screenshot RGB visual similarity to Local is 0.796068 PC and 0.709832 mobile; it is below the 0.97 source gate, so cannot be marked Owner visual PASS. SiteGround reference browser screenshot could not be verified.
+- Actual final package verdict: **BLOCKED_FINAL_BATCH** due incomplete full inventory, missing Owner final acceptance, and source visual gap; no final compressed asset promotion or live-site asset write has occurred.
+- Complete anonymized [R4 review](../../../docs/reviews/duplicate-site-v2-wordpress-r4-20261106.md) should be read before discussing closure. WordPress-specific Local repair remains private and is not shipped in Skills.
