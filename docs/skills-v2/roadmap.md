@@ -9,7 +9,7 @@
 | S7-C | Evidence contract | shared PASS/FAIL/OPEN/BLOCKED schema | schema and propagation rules documented | In this PR |
 | S7-D | Device execution contract | BYL DC, READY device, readback, no bypass | safety/stop conditions documented | In this PR |
 | S7-E | Release/rollback contract | Local → Dev → Owner approval → WWW | no implied production authorization | In this PR |
-| S7-F | Regression/integration | registry tests, skill tests, PR #15/#16/#17 compatibility review | CI PASS + Owner review | Pending |
+| S7-F | Regression/integration | registry tests, skill tests, PR #15/#16/#17 compatibility review | CI PASS + Owner review | CI 4/4 PASS; PR compatibility review OPEN |
 | S7-G | Publish V2.0 | merge integration PR and tag/release | explicit Owner merge approval | Pending |
 
 ## Reuse / consolidation policy
