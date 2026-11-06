@@ -91,13 +91,14 @@ C:\Users\Administrator\Downloads\BASWORLDY-R15-DEV-ROOT-CANDIDATE-20261106.zip
 ## 为什么尚未上传远端 Dev
 
 Windows 检查结果：
-- dev.basworldy.com：DNS 未解析，HTTPS 检查超时。
-- basworldy.com：DNS 未解析，HTTPS 检查超时。
-- Windows SSH config 中没有 BASWORLDY 对应 alias。
+- dev.basworldy.com 与 basworldy.com：本机 DNS 查询未解析，HTTPS 检查超时。
+- Notion SSH 总索引没有 BASWORLDY 专用主机记录。
+- 唯一名称接近的 byl-dev-hostinger 记录，与 ybyworld-prod 共用同一服务器端点；Notion 明确提示实际 Dev/Production 隔离关系尚未核实。只读 ssh -G 已从 Windows 运行时确认两个 alias 的 HostName/Port/User 完全相同；没有 SSH 登录或写入。
+- 该共享端点不能被直接当作 BASWORLDY 独立 Dev。
 
-这两个域名此前只是候选名称，不能当作已确认的部署目标；也不能复用其他项目的 Hostinger 连接或目录。为避免覆盖错误网站，远端 Dev 上传尚未执行。
+因此我没有把 BASWORLDY 包上传到这个共享端点，也没有复用其他项目的 Hostinger 目录。避免误覆盖 YBYWorld Production 是当前必要的安全门禁。
 
-**继续 P0-D 所需的唯一输入：BASWORLDY 实际 Dev URL，以及对应主机 SSH/SFTP 地址和目标部署目录（或已配置的 SSH alias）。** 拿到后只部署 Dev，完成远端 193 路由、资源、PC/手机回归，再申请 Production 审批。
+**继续 P0-D 所需的唯一确认：是否明确授权把这个与 YBYWorld Prod 共用端点的 BYL Dev 主机作为 BASWORLDY Dev，并指定独立的子域名与目标目录？如果不是，请提供 BASWORLDY 专用 Dev URL/SSH/SFTP 主机和部署目录。** 收到后只部署 Dev，完成远端 193 路由、资源、PC/手机回归，再申请 Production 审批。
 
 ## Windows 审计证据
 
