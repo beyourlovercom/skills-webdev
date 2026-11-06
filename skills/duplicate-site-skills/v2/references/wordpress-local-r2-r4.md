@@ -55,4 +55,4 @@ Routes, source rights, private screenshots and extracted site data stay on Windo
 - Re-verified 5 selected Local routes (1440px/375px): browser 10/10 and stage Canary 10/10 after the local-only About content fallback. Missing page content / H1 now blocks browser PASS.
 - Current reference homepage screenshot RGB visual similarity to Local is 0.796068 PC and 0.709832 mobile; it is below the 0.97 source gate, so cannot be marked Owner visual PASS. SiteGround reference browser screenshot could not be verified.
 - Actual final package verdict: **BLOCKED_FINAL_BATCH** due incomplete full inventory, missing Owner final acceptance, and source visual gap; no final compressed asset promotion or live-site asset write has occurred.
-- Complete anonymized [R4 review](../../../docs/reviews/duplicate-site-v2-wordpress-r4-20261106.md) should be read before discussing closure. WordPress-specific Local repair remains private and is not shipped in Skills.
+- Complete anonymized [R4 review](../../../../docs/reviews/duplicate-site-v2-wordpress-r4-20261106.md) should be read before discussing closure. WordPress-specific Local repair remains private and is not shipped in Skills.
