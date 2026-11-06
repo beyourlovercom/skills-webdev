@@ -249,11 +249,14 @@ class Server(BaseHTTPRequestHandler):
             for root in (STAGE,R14,MIRROR,NEW):
                 f=root/path.lstrip("/")
                 if f.is_file() and root.resolve() in f.resolve().parents:
-                    return self.respond(f.read_bytes(),mimetypes.guess_type(f.name)[0] or "application/octet-stream")
+                    data=f.read_bytes()
+                    mime=("image/webp" if data[:4]==b"RIFF" and data[8:12]==b"WEBP"
+                          else (mimetypes.guess_type(f.name)[0] or "application/octet-stream"))
+                    return self.respond(data,mime)
         return self.respond(shell("Not yet local",'<h1>本地页面尚未生成</h1><p>'+escape(path)+'</p><p><a href="/site/queue/">回到待生成队列</a></p>'),code=404)
 if __name__=="__main__":
     pages,pending,_,_=current()
-    assert len(pages)>=111 and len(pending)>=700
+    assert len(pages)>=111 and len(source_paths)==834 and len(set(pages)|set(pending))>=834
     print("FULL_SITE_STARTED",json.dumps({"url":ORIGIN,"local_html":len(pages),
      "source_snapshot_urls":834,"pending":len(pending),"owner_approved_99":len(approved)},ensure_ascii=True),flush=True)
     ThreadingHTTPServer(("127.0.0.1",PORT),Server).serve_forever(poll_interval=.5)
