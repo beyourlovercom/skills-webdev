@@ -13,6 +13,16 @@ description: Owner-review candidate: local website mirror and visual-fidelity wo
 - V1 D0–D8 still owns source rights, controlled Local→Dev→WWW release, SEO and leads.
 - Existing draft PR #15 owns the 48-hour sample → Owner Visual PASS → same-type batch → next-module gates. Do not reimplement or silently merge it.
 
+## Mandatory final-only CSS/JS packaging — all Local sites
+
+**Owner-frozen rule (2026-11-06): do not repeatedly compress/merge CSS or JS while building each page.** Keep editable source modules and complete the in-scope website, template data, content, links, PC/mobile interactions and Owner representative visual approvals first. Scratch builds for QA are allowed but never count as final packaging.
+
+Only after the **entire approved non-Blog route inventory** is reconciled and the final site is accepted, run **one coordinated site-level CSS/JS build**, freeze source SHA, minify, hash outputs, generate a manifest and receipt, and perform a rollbackable browser Canary. Avoid blindly concatenating independent modules: preserve dependencies and page-specific lazy loading. Bug fixes after the final build require rebuilding all affected assets in a new release, not editing compressed files.
+
+If completion, original reference fidelity (target 0.97 unless an explicit Owner exception), page semantic/content QA, resource checks, or final Owner approval is missing, stop with **BLOCKED_FINAL_BATCH**; never infer Owner PASS from HTTP 200 or a 10/10 smoke test. Do not swap final assets into a running Local site, Dev, WWW or Production without a separate deployment approval.
+
+See [final-only CSS/JS lifecycle](references/final-asset-lifecycle.md) and the read-only WordPress implementation [wp-final-package-gate.py](scripts/wp-final-package-gate.py). This gate is platform-agnostic as a policy, even when the implementation uses another bundler.
+
 ## Optional WordPress Local R2–R4 adapter (Draft PR #17)
 
 For an existing **authorized, isolated WordPress Local** copy, after the basic V2 representative inspection, use the optional tools below rather than creating another per-URL renderer:
