@@ -63,6 +63,7 @@ def main():
       case["http_status"]=response.status if response else None
       page.wait_for_timeout(950)
       case["h1_count"]=page.locator("h1").count()
+      case["main_text_chars"]=len(page.locator("main").first.inner_text().strip()) if page.locator("main").count() else 0
       case["rendered_title"]=page.title()[:130]
       case["body_scroll_width"]=page.evaluate("document.documentElement.scrollWidth")
       case["overflow_px"]=max(0,case["body_scroll_width"]-width)
@@ -95,7 +96,7 @@ def main():
      case["non_get_blocked"]=len(blocked_methods)
      report["external_requests_blocked"]+=len(blocked_ext)
      report["non_get_blocked"]+=len(blocked_methods)
-     case["result"]="PASS" if case.get("http_status")==200 and case.get("screenshot_bytes",0)>3000 and not runtime_errors and not bad_local and not case.get("error") and not case["interaction"].startswith(("FAIL","OPEN")) and case["non_get_blocked"]==0 and case["overflow_px"]<10 else "OPEN"
+     case["result"]="PASS" if case.get("http_status")==200 and case.get("screenshot_bytes",0)>3000 and not runtime_errors and not bad_local and not case.get("error") and not case["interaction"].startswith(("FAIL","OPEN")) and case["non_get_blocked"]==0 and case["h1_count"]>=1 and case["main_text_chars"]>=75 and case["overflow_px"]<10 else "OPEN"
      report["views"].append(case)
      print(json.dumps({"route":path,"view":label,"status":case["result"],"http":case.get("http_status"),"interaction":case["interaction"],"pageerrors":len(runtime_errors),"local_failures":len(bad_local),"overflow":case.get("overflow_px"),"screenshot_bytes":case.get("screenshot_bytes")}),flush=True)
      context.close()
