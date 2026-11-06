@@ -2,6 +2,10 @@
 
 **Release status: RC1 / Draft PR.** This is the integration layer across existing Skills. It does not claim every module is V2-native, that the registry is installed in ChatGPT, or that connected accounts/devices are authorized.
 
+## Integration tracking
+
+- [Live PR integration matrix for #15–#18](integration-matrix.md) — exact heads, file overlap, branch dependency, CI evidence and remaining release blockers.
+
 ## Goals
 1. One registry and version policy for every Skill.
 2. One task-routing contract: classify → load → inspect project rules → execute approved delta → verify → hand off.
