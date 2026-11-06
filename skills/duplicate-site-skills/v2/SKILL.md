@@ -13,6 +13,16 @@ description: Owner-review candidate: local website mirror and visual-fidelity wo
 - V1 D0–D8 still owns source rights, controlled Local→Dev→WWW release, SEO and leads.
 - Existing draft PR #15 owns the 48-hour sample → Owner Visual PASS → same-type batch → next-module gates. Do not reimplement or silently merge it.
 
+## R4-A / R4-D complete-route inventory and source-drift rules
+
+1. R4-D route denominator means **unique browser-resolvable URLs**, not WordPress database page-row count. Dedupe historical duplicate slugs by read-only canonical URL / browser body evidence; preserve shadow/legacy records for Owner disposition. For commerce replicas in first-page-only mode, the denominator includes in-scope non-Blog pages, first listing/category pages, and only the explicitly approved representative product detail routes. Record empty public categories separately.
+2. **HTTP 200 is a transport check, not content or visual PASS.** Before moving a template class to batch, use browser DOM to verify main content, visible H1, safe essential interactions, PC/mobile rendering and asset dependencies. Do not treat raw HTML-parser H1 counts as authoritative: template/noscript content can cause false-positive multiple H1. If a page has valid stored content but renders blank, fix the Local runtime minimally and repeat fail-only UAT. No SiteGround writes without separate authorization.
+3. Treat dynamic campaigns, carousel states and source-vs-local timestamps as evidence: distinguish **published replica-versus-Local restoration parity** from **current original reference-versus-Local visual fidelity**. A high restoration score cannot substitute for original source >=0.97; changing promotional banners or claiming discounts must not be automatic without merchant/Owner approval.
+4. Dynamic cart, checkout and account pages require their own **safe functional states**; GET empty cart or a visible login form does not prove non-empty checkout/payment/login work. Never submit real orders or payments as a side effect of a visual gate. A default Sample Page and empty categories need explicit Owner inclusion/exclusion decisions, not silent deletion.
+5. The genuine PR #15 Owner source/representative approval and template SHA gate remains mandatory. Keep final CSS/JS bundling **blocked** until the complete accepted route inventory, semantic checks, source fidelity/approved exceptions, and all-site PC/mobile UAT close. The full one-batch final packaging happens only afterward.
+
+Sanitized WordPress Local findings: [R4-A/D scope and visual audit](../../../../docs/reviews/duplicate-site-v2-wordpress-r4a-r4d-scope-audit-20261106.md). Private route data/screenshots remain on the authorized Windows computer.
+
 ## Mandatory final-only CSS/JS packaging — all Local sites
 
 **Owner-frozen rule (2026-11-06): do not repeatedly compress/merge CSS or JS while building each page.** Keep editable source modules and complete the in-scope website, template data, content, links, PC/mobile interactions and Owner representative visual approvals first. Scratch builds for QA are allowed but never count as final packaging.
