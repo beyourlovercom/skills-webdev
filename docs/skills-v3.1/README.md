@@ -1,6 +1,6 @@
-# Andy Skills V3.1 — 整站复制工程集成候选
+# Andy Skills V3.1 — 已发布的可复用整站复制工具
 
-**版本：3.1.0-rc.1 | 状态：Draft / 尚未发布 main | 更新时间：2026-11-09**
+**版本：3.1.0 | 状态：GitHub main 正式工具版本 | 更新时间：2026-11-09**
 
 ## R1–R4 复用职责
 
@@ -9,7 +9,7 @@
 - **R3 / PR #17**：WordPress Local 适配，全部目标页面验收后仅执行一次最终 CSS/JS 封装；现有 wp-final-package-gate 和浏览器 Canary 不能跳过。
 - **R4 / PR #18**：统一任务证据、GitHub SHA、BYL DC 的 READY/Chrome 安全约束、Local→Dev→WWW 独立授权；V3.1 增加整站 Local Gate。
 
-此分支以 PR #17 为基线，集成了 PR #15 和 PR #18 的 17 个现有文件；PR #16 已包含在 PR #17 祖先。原四个 PR 仍是 Draft，不代表 main 已升级。
+正式版本通过合并 PR #19 将 PR #15–#18 的公共工具内容统一纳入 main；原支线的历史 Draft/特定网站 UAT 状态独立处理。**Skills main 发布不代表某个目标网站完成全部页面与交易/表单/封装验收。**
 
 ## 新增 V3.1 一次生成整站 Manifest（无需每站手工编写）
 
@@ -77,4 +77,4 @@ Local Site 提供可浏览页面与 Sitemap；是否达到 **两条真实入链�
 
 ## 完成边界
 
-没有声称下一网站已完成真实 SiteOne/PWC 复制，也没有替代真正的 Windows Local Canary。RapidDirect 冻结 99 页视觉 PASS 不代表其 834 个已知 URL 全部完成。V3.1 必须经过 PR #15–#18 回归、真实 Local Canary、Owner 版本审批，才能从 3.1.0-rc.1 Draft 升级为正式 V3.1。严禁将纯单测、HTTP 200 或脚本退出 0 解释为真实整站上线。
+没有声称下一网站已完成真实 SiteOne/PWC 复制，也没有替代真正的 Windows Local Canary。RapidDirect 冻结 99 页视觉 PASS 不代表其 834 个已知 URL 全部完成。V3.1 工具代码的 CI、真实 Windows Local 工具 Canary 和 Owner 版本发布审批均已完成；但每个目标网站的完整视觉/交互/最终封装仍需独立通过后才能上线。严禁将纯单测、HTTP 200 或脚本退出 0 解释为真实整站上线。

@@ -3,14 +3,24 @@ name: duplicate-site-skills
 description: Use for rights-cleared, auditable recreation or migration of an existing website into an independently owned target using GitHub and authorized Windows Local/Dev/WWW environments. Covers source inventories, local asset mapping, browser fidelity, WordPress MU adapters, forms, SEO, publication gates and rollback. Never assumes permission to copy third-party content or to publish a mirror.
 ---
 
-# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V1.2)
+# duplicate-site-skills — 可审计的网站复刻/迁移 Skill (V3.1)
+
+## V3.1 统一执行入口（覆盖早期版本的工具接线）
+
+V3.1 的正式版本与运行契约以 [系统发布说明](../../docs/skills-v3.1/release-notes.md) 和 [V3.1 使用说明](../../docs/skills-v3.1/README.md) 为准。R1 代表页模板工厂、R2 SiteOne/PWC 选择性恢复、R3 WordPress/最终一次 CSS+JS 封装、R4 GitHub/Local 证据管理统一复用原工具；不得研发重复的基础构建器。
+
+1. **授权 URL 分母与 HTML 种子：** 用 `scripts/skills-v31-seed.mjs` 从已批准的完整源清单自动生成 Local Manifest，发现原 HTML 并计算 SHA。它绝不自动设置模板 Owner PASS、视觉 PASS 或网站发布 PASS。
+2. **真实 Local 预览：** 用 `scripts/skills-v31-local-site.mjs` 搭建 localhost-only、只读的完整导航与 Sitemap；未生成页仅列入待处理队列，不发布假链接。
+3. **失败项验收：** 用 `scripts/skills-v31-gate.mjs` 检查 PC+手机、内容/安全/交互、资源 SHA、两处真实站内入链和冻结 URL 分母；技术门禁仍 OPEN/FAIL 时不可宣称全站完成。
+4. **模板与单页审批边界：** 每种不同的代表模板仍须取得可追溯的 Owner 视觉 PASS；同模板后续真实页面在双端来源比对均达到项目阈值（默认不低于 0.97）、无素材/交互/内容异常且证据齐全时，**可由技术门禁自动确认页面 PASS**，不重复要求 Owner 逐页审批。缺失真实来源截图、假造评分或不同模板不能自动 PASS。
+5. **两个独立发布层级：** Skills 3.1.0 在 GitHub main 可正式发布，但不代表任何具体站点的 Local 最终 CSS/JS、Dev/WWW 已通过。最终封装只能在全站真实门禁通过后运行 PR #17 的专用包工具；网站正式发布另须明确授权。
 
 ## 🔒 最高优先级：第一轮绝不翻页，视觉先行（Visual-first）
 **本条覆盖本 Skill 旧版 D1–D8 中任何“先完成全站清单、全量产品采集”的解释。**
 
 第一阶段只读取主页、**每个所选列表/分类/博客模板自己的第一页**、一条来自该第一页的真实代表性商品详情以及必要的标准 Pages。任何分页/搜索/筛选/评论/品牌/无限滚动，仅允许 page=1 / offset=0；**禁止访问或自动抓取第 2 页以上、next cursor 和后续详情集合**。对**第一轮所选页面**，应先取得并本地保存实际使用的全部原素材（原 Logo、字体、CSS、背景、Banner、第一屏到 Footer 的所有懒加载/响应式图片、首列表每个真实卡片图、样本商品完整图库与缩略图），不用合成占位资源。
 
-只在 Windows Local 完成所选页面的原站 100% 视觉还原目标，用原站与 Local 的真实浏览器全页截图、PC/移动布局和资源清单逐页核对，发现差异先修复。**视觉是否 PASS 只由 Owner 亲自审查并明确回复 `pass` 决定**；HTTP 200、功能单测、素材下载成功、或用户普通“继续”都不能替代。只有保存 Owner 对**该模板模块**的明确审批引用、日期、审核页面范围和视觉基线，才允许本模块批量归档；未批准的其他模板继续保持单样本门禁。分页深度和详情数量仍严格按项目 Owner 最新 scope 执行。Dev/WWW 和 GitHub main 仍需独立审批。更详细的门禁见 [06-first-page-visual-gate.md](references/06-first-page-visual-gate.md)。
+只在 Windows Local 完成所选页面的原站 100% 视觉还原目标，用原站与 Local 的真实浏览器全页截图、PC/移动布局和资源清单逐页核对，发现差异先修复。**每种代表模板的首次视觉冻结须由 Owner 明确审查并回复 `pass`；后续同模板的不同内容页允许按 V3.1 真实双端评分 ≥0.97 和完整功能/资源门禁自动 PASS**。HTTP 200、单测、素材成功或普通“继续”均不能单独替代审批或真实双端证据。只有保存 Owner 对**该模板模块**的明确审批引用、日期、审核页面范围和视觉基线，才允许本模块批量归档；未批准的其他模板继续保持单样本门禁。分页深度和详情数量仍严格按项目 Owner 最新 scope 执行。Dev/WWW 和 GitHub main 仍需独立审批。更详细的门禁见 [06-first-page-visual-gate.md](references/06-first-page-visual-gate.md)。
 
 ## V1.2｜48 小时模块工厂（最高优先级，覆盖旧版全站一次性门禁）
 **目标：** 有合法来源与实际访问条件时，争取在 **48 个活跃执行小时**内完成约定范围的 Windows Local 原站备份。使用 `FULL_NONBLOG`（真正覆盖全站所有非 Blog 内容，需所有商品详情）或 `FIRST_PAGE_CATALOG`（所有明确指定列表入口只存第一页、商品仅指定样本；属于范围内完整备份，不得自称全站全部产品）。单项目以其最新 Owner 范围为准；不能因为本 Skill 支持全站模式就扩大已批准范围。**Blog 全部排除**时应排除文章、博客目录、标签、评论、相关 RSS 和仅属于博客的图片。

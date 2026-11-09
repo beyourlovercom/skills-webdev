@@ -90,6 +90,6 @@ test('all three V3.1 CLIs expose the same version without touching a workspace',
  for(const name of ['skills-v31-seed.mjs','skills-v31-gate.mjs','skills-v31-local-site.mjs']){
   const result=spawnSync(process.execPath,[path.join(dir,name),'--version'],{encoding:'utf8'});
   assert.equal(result.status,0,result.stderr);
-  assert.equal(result.stdout.trim(),'3.1.0-rc.1');
+  assert.equal(result.stdout.trim(),'3.1.0');
  }
 });

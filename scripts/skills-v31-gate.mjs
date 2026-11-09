@@ -9,7 +9,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 
-export const VERSION='3.1.0-rc.1';
+export const VERSION='3.1.0';
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const REQUIRED=['visual','interaction','assets','content','security'];
 const PASS='PASS';

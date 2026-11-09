@@ -34,6 +34,12 @@ description: S2-A — 在已授权 Windows Local 进行网站最小差异研发�
 
 **不执行：** 不重启 READY 设备、不修改 WWW、不开生产支付/邮件/仓库 Hook、不推送生产订单、不直接合并需要审批的 PR。
 
+## V3.1 Windows Local 整站复制专用执行路径
+
+已有授权复制任务优先复用 main 中 `duplicate-site-skills` 的 **V3.1**；Owner 通过代表模板视觉后才按同类 URL 自动扩展。使用仓库级 `scripts/skills-v31-seed.mjs` 建档冻结 URL/HTML SHA；`scripts/skills-v31-local-site.mjs` 提供一个完整的 Local 站点首页/目录/Sitemap；`scripts/skills-v31-gate.mjs` 仅重试 FAIL/OPEN/BLOCKED，不能因为 HTML 数量齐全而宣布站点 PASS。实际 PC+手机和站内两条真实入口必须有浏览器证据。
+
+静态镜像与可编辑 WordPress 是不同产物，不能强行用模板替代源代码原件。CSS/JS 只有在项目全站页面已真实验收后统一执行最终封装；Dev、WWW 与任何实际数据写入均另行通过授权门禁。参见 [V3.1 正式运行契约](../../docs/skills-v3.1/README.md)。
+
 ## GPT 网页版启动指令
 ```text
 从 GitHub 主仓 registry/skills.json 找到 site-builder-local 的实际 source_ref；

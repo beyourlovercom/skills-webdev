@@ -1,6 +1,6 @@
 # Andy Skills V3.1 — R1–R4 验收 Roadmap
 
-版本：3.1.0-rc.1（Draft，未合并 main）
+版本：3.1.0（Skills 工具正式发布于 GitHub main；网站级 UAT 独立）
 
 | Gate | 已集成的真实代码 | 本轮新增 | 发布前仍需验证 |
 |---|---|---|---|
@@ -8,6 +8,15 @@
 | R2 离线整站 | PR #16：SiteOne/PWC、media、direct-mirror、导航/sitemap Canary | V3.1 源 URL 总量/哈希、资源及本地真实双入链门禁 | 真实整站 URL/素材/浏览器批量 Canary |
 | R3 WordPress & CSS/JS | PR #17：WP 模板数据映射、最终构建/打包门禁、Browser Canary | 统一全站 READY_FOR_PR17_FINAL_BUILD_CANARY 前置条件 | 正式站点级资源依赖、最终 CSS/JS build、可回滚 Readback |
 | R4 中控证据 | PR #18：Execution Contract、Evidence Schema、Registry 版本策略 | V3.1 CLI、fail-only 清单、候选版本 3.1.0-rc.1、统一文档 | CI 全绿、真实 Windows Local、Owner 批准后才 main 发布 |
+
+## 2026-11-09 通用 Skills 正式发布门禁
+
+- **R1–R4 代码集成：PASS** — PR #19 merged into main，GitHub merge SHA `3cd16131a5bcbb871b69d4a78d7bb989b977d290`。
+- **CI：PASS** — 在 PR #19 精确 HEAD 上 Public Registry、S1、GSC、S2 共四个 GitHub Actions PASS；发布版本号最终提交必须重新运行 CI。
+- **Windows 真实测试：PASS（工具级）** — 新增 CLI 31/31 测试通过，834/834 URL 与 Local HTML 真实建档（14 模板组、0 文件缺失），其中自动化 Owner PASS 为 0（正确保留门禁）。
+- **Chrome Local Canary：PASS_WITH_SITE_EXCEPTIONS** — 3 页双端 6/6 HTTP200、两个入链来源 6/6 真点击，资源 HTTP 404 0、无横向溢出；遗留 GTranslate 懒加载与插件 JS 页面错误明确 OPEN。
+- **目标网站完整交付：OPEN** — 每站的全部页面视觉、内容、交互、支付/询盘、WordPress 可编辑程度及最终 CSS/JS 包必须由项目继续验收；与共享 Skills 3.1.0 上线互不混淆。
+- **发布范围：GitHub/main + v3.1.0 tag**；无任何站点 Dev、WWW、生产数据或远程 Chrome 破坏性操作。
 
 ## 版本与门禁
 
@@ -34,4 +43,4 @@
 - R4：V3.1 CLI Windows 25/25 Node 单测 PASS；候选 GitHub CI 已四组全绿；Powershell BOM 问题有真实回归。单站原始 HTML、截图、访问数据均保存在 Windows 私有目录，GitHub 仅存聚合审计。
 - Evidence：见 [Windows Local Canary 2026-11-09](windows-local-canary-20261109.md)。
 
-**阶段判定**：V3.1 代码集成与工具级回归 PASS，真实 Local Canary 为 SMOKE_PASS_WITH_OPEN_EXCEPTIONS；不是整站 FULL_PASS 或可正式封装。PR #19 继续 Draft，main 不变。
+**历史阶段记录**：该条仅反映当时的候选状态。随后 PR #19 已正式合并 main，Skills V3.1.0 正式发布；但 Local Canary 的网站级异常仍保持 OPEN，不意味着整站 FULL_PASS 或可最终封装。
