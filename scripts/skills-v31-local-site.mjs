@@ -13,7 +13,7 @@ const CSP="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; st
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8',
 '.json':'application/json; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg',
 '.webp':'image/webp','.gif':'image/gif','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2',
-'.ico':'image/x-icon','.mp4':'video/mp4','.webm':'video/webm','.pdf':'application/pdf'};
+'.ico':'image/x-icon','.ttf':'font/ttf','.otf':'font/otf','.eot':'application/vnd.ms-fontobject','.mp4':'video/mp4','.webm':'video/webm','.pdf':'application/pdf'};
 function safePath(root,rel){
   if(typeof rel!=='string'||!rel||path.isAbsolute(rel)||rel.includes('\\')||
      rel.split('/').some(x=>!x||x==='.'||x==='..'))throw Error('UNSAFE_PATH');
