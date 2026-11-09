@@ -23,6 +23,18 @@
 
 只允许写入 Local 私有项目根目录下的 uat/；禁止路径穿越与指向外部的 symlink。
 
+## 通用整站 Local 预览（替代站点专属服务器）
+
+新增 scripts/skills-v31-local-site.mjs，将原 RapidDirect 站点专属预览方法泛化为所有已授权项目共用的只读本地入口：
+
+    node scripts/skills-v31-local-site.mjs --manifest=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --root=C:/ai/site-mirror/site-x --port=8787
+
+仅绑定 127.0.0.1；实时读取 Manifest 中真实存在、HTML SHA 匹配的路由，提供 /site/、/site/sitemap/、/site/queue/、/site/inventory.json、/sitemap.xml、/robots.txt。未生成或 SHA 不匹配的路由不进入 XML Sitemap。可在 Manifest 的 asset_roots 指定镜像资源目录（默认 mirror），但无法公开任意私有 uat/ 文件。
+
+以本地响应为主，不触碰源站；GET/HEAD 之外全部拒绝，配置 noindex、form-action none、connect-src self、脚本拦截表单及外站点击。仍须使用 Playwright 网络拦截作为第二层防护；这不是生产登录、支付、询盘或 WooCommerce 的真实后端，也不保证原站所有 JavaScript 行为可用。
+
+Local Site 提供可浏览页面与 Sitemap；是否达到 **两条真实入链、双端视觉评分和完整交互**，由另一个 skills-v31-gate.mjs 和浏览器证据判定，不会仅凭 HTTP 200 宣告 PASS。
+
 ## Manifest 3.1 最低契约
 
 - schema_version 为字符串 3.1，project_id、environment 为 local，site_mode 为 MIRROR 或 WORDPRESS。
