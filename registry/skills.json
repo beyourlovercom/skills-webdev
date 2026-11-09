@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "beyourlovercom/skills-webdev",
   "default_branch": "main",
-  "snapshot_date": "2026-11-06",
+  "snapshot_date": "2026-11-09",
   "status_definitions": {
     "IN_MAIN": "已进入 GitHub main；不代表已经连接账户或自动执行。",
     "DRAFT_PR": "文件存在于公开开发分支，尚未合并 main；合并需 Owner 单独审批。",
@@ -275,14 +275,14 @@
   ],
   "system_release": {
     "name": "Andy Skills",
-    "version": "2.0.0-rc.1",
+    "version": "3.1.0-rc.1",
     "status": "DRAFT_PR",
-    "release_branch": "feat/andy-skills-v2-systemization-20261106",
-    "release_note_path": "docs/skills-v2/README.md",
+    "release_branch": "feat/andy-skills-v3.1-r1-r4-20261109",
+    "release_note_path": "docs/skills-v3.1/README.md",
     "execution_contract_path": "docs/skills-v2/execution-contract.md",
     "evidence_schema_path": "docs/skills-v2/evidence-schema.md",
-    "roadmap_path": "docs/skills-v2/roadmap.md",
-    "note": "Integration candidate only. Not released to main; existing Skills retain their independent status."
+    "roadmap_path": "docs/skills-v3.1/roadmap.md",
+    "note": "Integrated Draft candidate for PR15+PR16+PR17+PR18; CLI/read-only CI gate available. No main, Windows real-site or WWW release is implied."
   },
   "version_policy": {
     "scheme": "SemVer",
@@ -290,5 +290,23 @@
     "draft_default": "0.9.0-rc.1",
     "planned_default": null,
     "rule": "Version and publication status are independent. Draft versions are candidates, not released versions. Verify exact PR/ref before resolving."
+  },
+  "v31_integration": {
+    "status": "DRAFT_INTEGRATED",
+    "primary_skill": "duplicate-site-skills",
+    "inherited_main_version": "1.0.0",
+    "candidate_version": "3.1.0-rc.1",
+    "source_prs": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "base_pr": 17,
+    "execution_entrypoint": "scripts/skills-v31-gate.mjs",
+    "tests": "tests/skills-v31-gate.test.mjs",
+    "site_level_uat": "OPEN",
+    "main_merge": "NOT_AUTHORIZED",
+    "prod_release": "NOT_AUTHORIZED"
   }
 }
