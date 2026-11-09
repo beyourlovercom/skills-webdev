@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {pathToFileURL} from 'node:url';
-import {routePath} from './skills-v31-gate.mjs';
+import {routePath,VERSION} from './skills-v31-gate.mjs';
 const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
 const safe=(root,p)=>{
  if(typeof p!=='string'||!p||path.isAbsolute(p)||p.includes('\\')||
@@ -77,6 +77,7 @@ export function seed(inventory,options){
   templates:Object.keys(templates).length,preview_only:true,owner_visual_pass:0}};
 }
 function main(args){
+ if(args.length===1&&args[0]==='--version'){console.log(VERSION);return;}
  const flags=Object.fromEntries(args.filter(a=>a.startsWith('--')&&a.includes('=')).map(a=>{
   const n=a.indexOf('=');return [a.slice(2,n),a.slice(n+1)];
  }));
