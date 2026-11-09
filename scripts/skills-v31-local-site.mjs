@@ -71,7 +71,11 @@ export function buildServer(manifest,rootInput){
  if(routes.size!==manifest.authorized_scope.expected_route_count||sourceHash!==manifest.authorized_scope.route_list_sha256)
    throw Error('INVENTORY_DENOMINATOR_MISMATCH');
  const assetRoots=manifest.asset_roots||['mirror'];
- for(const a of assetRoots)if(a==='uat'||a.startsWith('uat/')||a.startsWith('.'))throw Error('PRIVATE_ASSET_ROOT');
+ for(const a of assetRoots){
+   if(a==='uat'||a.startsWith('.')||a.includes('private')||
+      (a.startsWith('uat/')&&!/(?:^|\/)(?:offline-staged|full-site-content|public-assets)$/.test(a)))
+      throw Error('PRIVATE_ASSET_ROOT');
+ }
  assetRoots.forEach(a=>safePath(root,a+'/index-placeholder'));
  const hosts=manifest.authorized_scope.source_hosts||[];
  const valid=new Map();
@@ -129,11 +133,17 @@ export function buildServer(manifest,rootInput){
        return send(res,200,contents,'text/html; charset=utf-8',method);
      }
      if(route)return send(res,404,shell('页面待生成','<h1>尚未生成</h1><p>'+htmlEscape(p)+'</p>'),'text/html; charset=utf-8',method);
+     const allowedStatic=/^\/(?:wp-content|wp-includes|assets|_next|images|fonts|cdn-cgi)\//.test(p)||
+       p==='/favicon.ico';
+     const staticType=mime[path.extname(p).toLowerCase()];
+     if(!allowedStatic||!staticType||staticType.startsWith('text/html')||
+        staticType.startsWith('application/json'))
+       return send(res,404,'Unknown Local route','text/plain; charset=utf-8',method);
      for(const a of assetRoots){
        const rel=a+'/'+p.replace(/^\/+/,'');
        const file=safePath(root,rel);
        if(fs.existsSync(file)&&fs.statSync(file).isFile())
-         return send(res,200,fs.readFileSync(file),mime[path.extname(file).toLowerCase()]||'application/octet-stream',method);
+         return send(res,200,fs.readFileSync(file),staticType,method);
      }
      return send(res,404,'Unknown Local route','text/plain; charset=utf-8',method);
    }catch(e){return send(res,400,'Bad local request','text/plain; charset=utf-8',req.method);}
