@@ -25,3 +25,13 @@
 4. 测量下一站首次复制的实际模板数、总页数、唯一资源量，形成可追踪的吞吐量，而不是保证任意网站 48h。
 
 **这不是已关闭的整站项目。** 没有跑真实现场和 Owner 版本发布审批时，R1–R4 都只能是代码集成候选，不得宣告最终关闭。
+
+## 2026-11-09 Windows Local Canary 真实验收补记
+
+- R1：PR #15 既有代码及门禁复用；R15 三份已批准页面源 HTML SHA 3/3 原件匹配。模板泛化复用的 Owner SHA 审批**没有**被自动转化，继续 BLOCKED；不得再次要求已批准页面的重复视觉验收。
+- R2：本地可复用服务器真实读取 R15 镜像；浏览器 3 页 × PC/手机 6/6 HTTP 200、无横向溢出；Local Hub 与 Sitemap 各通往三页，真实点击 6/6 PASS；副作用请求 0。WordPress 文件资源 HTTP 404 在受控本地映射与 TTF MIME 修复后归零。9 个 GTranslate 懒图片/视口及非零 JS runtime errors 保持 OPEN，不伪造 PASS。
+- R3：已复用 PR #17 的最终 CSS/JS 门禁；因全站交互/来源双端比对及最后 Owner 审批尚未完成，BLOCKED_FINAL_BATCH；不运行最终包、不上线。
+- R4：V3.1 CLI Windows 25/25 Node 单测 PASS；候选 GitHub CI 已四组全绿；Powershell BOM 问题有真实回归。单站原始 HTML、截图、访问数据均保存在 Windows 私有目录，GitHub 仅存聚合审计。
+- Evidence：见 [Windows Local Canary 2026-11-09](windows-local-canary-20261109.md)。
+
+**阶段判定**：V3.1 代码集成与工具级回归 PASS，真实 Local Canary 为 SMOKE_PASS_WITH_OPEN_EXCEPTIONS；不是整站 FULL_PASS 或可正式封装。PR #19 继续 Draft，main 不变。
