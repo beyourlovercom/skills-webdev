@@ -15,7 +15,7 @@ const REQUIRED=['visual','interaction','assets','content','security'];
 const PASS='PASS';
 export function routePath(raw){
   if(typeof raw!=='string'||!raw.startsWith('/')||raw.startsWith('//')||raw.includes('\\')||
-     raw.includes('?')||raw.includes('#')||/%2f|%5c|%2e/i.test(raw)||
+     raw.includes('?')||raw.includes('#')||raw.includes('//')||/%2f|%5c|%2e/i.test(raw)||
      raw.split('/').some(x=>x==='..'||x==='.'))throw Error('UNSAFE_ROUTE');
   let p=raw.replace(/\/index\.html$/,'/');
   if(!/\.[^/]+$/.test(p)&&!p.endsWith('/'))p+='/';
@@ -26,9 +26,13 @@ function safeFile(root,rel){
      rel.split('/').some(x=>x===''||x==='.'||x==='..'))throw Error('UNSAFE_FILE_PATH');
   const dest=path.resolve(root,rel);
   if(!dest.startsWith(root+path.sep))throw Error('OUTSIDE_LOCAL_ROOT');
-  if(fs.existsSync(dest)){
-    const actual=fs.realpathSync(dest);
-    if(!actual.startsWith(root+path.sep))throw Error('SYMLINK_ESCAPE');
+  let current=dest;
+  while(current!==root){
+    if(fs.existsSync(current)){
+      const actual=fs.realpathSync(current);
+      if(actual!==root&&!actual.startsWith(root+path.sep))throw Error('SYMLINK_ESCAPE');
+    }
+    current=path.dirname(current);
   }
   return dest;
 }
@@ -63,6 +67,11 @@ export function audit(manifest,rootInput){
     if(typeof item.template!=='string'||!manifest.templates[item.template])throw Error('UNKNOWN_TEMPLATE '+p);
     routes.set(p,item);
   }
+  const source_paths=[...routes.keys()].sort();
+  const source_route_hash=sha(JSON.stringify(source_paths));
+  if(manifest.authorized_scope.expected_route_count!==routes.size||
+     manifest.authorized_scope.route_list_sha256!==source_route_hash)
+    throw Error('INVENTORY_DENOMINATOR_MISMATCH');
   const scope_hash=sha(JSON.stringify({snapshot:manifest.authorized_scope.source_snapshot_sha256,
     paths:[...routes].map(([p,r])=>[p,r.template]).sort((a,b)=>a[0].localeCompare(b[0]))}));
   const templates={};
@@ -135,11 +144,16 @@ export function audit(manifest,rootInput){
   for(const r of records.values())counters[r.status]++;
   const pages=[...records.values()].sort((a,b)=>a.path.localeCompare(b.path));
   const queue=pages.filter(r=>r.status!==PASS).map(r=>({path:r.path,status:r.status,reasons:r.reasons}));
+  const template_batches=Object.entries(templates).map(([name,v])=>({
+    template:name,owner_gate:v.status,route_count:pages.filter(p=>p.template===name).length,
+    outstanding:pages.filter(p=>p.template===name&&p.status!==PASS).map(p=>p.path),
+    next_step:v.status===PASS?'RUN_EXISTING_PR15_FACTORY_GATE':'REVIEW_REPRESENTATIVE_TEMPLATE'
+  }));
   const final_build_gate=queue.length===0?'READY_FOR_PR17_FINAL_BUILD_CANARY':'BLOCKED_FINAL_BATCH';
   return {version:VERSION,project_id:manifest.project_id,environment:'local',
     scope_hash,visual_threshold:threshold,site_mode:manifest.site_mode,templates,
     counters,coverage:{total:pages.length,passed:counters.PASS},
-    pr15_batch_gate:'SEPARATE_EXISTING_FACTORY_REQUIRED',
+    source_route_hash,template_batches,pr15_batch_gate:'SEPARATE_EXISTING_FACTORY_REQUIRED',
     final_build_gate,production_release:'NOT_AUTHORIZED',queue,warnings,pages};
 }
 export function main(argv){
