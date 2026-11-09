@@ -39,7 +39,7 @@ function shell(title,body){
 function guardScript(routeList,hosts){
  const json=x=>JSON.stringify(x).replace(/</g,'\\u003c');
  const body='(function(){const known=new Set('+json(routeList)+');const hosts=new Set('+json(hosts)+');'+
- 'function norm(p){if(p.endsWith("/index.html"))p=p.slice(0,-10);if(!p.endsWith("/")&&!/\\.[^/]+$/.test(p))p+="/";return p;}'+
+ 'function norm(p){if(p.endsWith("/index.html"))p=p.slice(0,-10);if(!p.endsWith("/")&&!/\\.(?:html?|xml|json|txt|css|m?js|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|eot|pdf|mp4|webm)$/i.test(p))p+="/";return p;}'+
  'function warn(){alert("仅供本地只读审核：写入、外站及未生成页面已禁用");}'+
  'document.addEventListener("submit",function(e){e.preventDefault();e.stopImmediatePropagation();warn();},true);'+
  'document.addEventListener("click",function(e){const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;const raw=a.getAttribute("href");'+
