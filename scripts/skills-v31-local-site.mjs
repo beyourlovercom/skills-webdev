@@ -144,7 +144,7 @@ export function main(argv){
  const args=Object.fromEntries(argv.filter(x=>x.startsWith('--')&&x.includes('='))
    .map(x=>{const i=x.indexOf('=');return [x.slice(2,i),x.slice(i+1)];}));
  if(!args.manifest||!args.root)throw Error('MANIFEST_AND_ROOT_REQUIRED');
- const m=JSON.parse(fs.readFileSync(args.manifest,'utf8'));
+ const m=JSON.parse(fs.readFileSync(args.manifest,'utf8').replace(/^\uFEFF/,''));
  const port=args.port===undefined?8787:Number(args.port);
  if(!Number.isInteger(port)||port<1024||port>65535)throw Error('INVALID_LOCAL_PORT');
  const x=buildServer(m,args.root);
