@@ -139,6 +139,8 @@ test('route normalization preserves real extensions',()=>{
   assert.equal(routePath('/a/index.html'),'/a/');
   assert.equal(routePath('/foo'),'/foo/');
   assert.equal(routePath('/image.png'),'/image.png');
+  assert.equal(routePath('/news/online-platform-version-3.0'),'/news/online-platform-version-3.0/');
+  assert.equal(routePath('/product/mf414a.rev2'),'/product/mf414a.rev2/');
 });
 
 test('Windows PowerShell 5.1 UTF-8 BOM manifest parses in real CLI',t=>{
