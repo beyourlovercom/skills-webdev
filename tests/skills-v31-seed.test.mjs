@@ -66,6 +66,16 @@ test('CLI requires approval, writes only private UAT and never overwrites',t=>{
  assert.equal(r.status,2);
  assert.match(r.stderr,/NO_OVERWRITE_EXISTING_MANIFEST/);
 });
+test('dotted version slug resolves an index.html route rather than a fake extension',t=>{
+ const {root,options}=setup(t);
+ const inventory={routes:[{path:'/news/platform-version-3.0',template_group:'news'}]};
+ const rel=path.join(root,'mirror','news','platform-version-3.0');
+ fs.mkdirSync(rel,{recursive:true});fs.writeFileSync(path.join(rel,'index.html'),'<h1>News</h1>');
+ const {manifest,summary}=seed(inventory,options);
+ assert.equal(summary.files_found,1);
+ assert.equal(manifest.routes[0].path,'/news/platform-version-3.0/');
+ assert.match(manifest.routes[0].local_file,/version-3\.0\/index\.html$/);
+});
 test('CLI protects against writes outside private UAT',t=>{
  const {root,p}=setup(t);
  const r=spawnSync(process.execPath,[bin,'--root='+root,'--inventory='+p,
