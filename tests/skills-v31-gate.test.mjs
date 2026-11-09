@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
 import {audit,routePath,VERSION} from '../scripts/skills-v31-gate.mjs';
 
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -143,8 +144,8 @@ test('route normalization preserves real extensions',()=>{
 test('Windows PowerShell 5.1 UTF-8 BOM manifest parses in real CLI',t=>{
   const {root,m}=fixture(t);
   const mf=path.join(root,'v31-bom-manifest.json');
-  fs.writeFileSync(mf,'\\uFEFF'.replace('\\uFEFF','\uFEFF')+JSON.stringify(m));
-  const result=spawnSync(process.execPath,[path.resolve('scripts/skills-v31-gate.mjs'),
+  fs.writeFileSync(mf,'\uFEFF'+JSON.stringify(m));
+  const result=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/skills-v31-gate.mjs',import.meta.url)),
     '--manifest='+mf,'--root='+root],{encoding:'utf8'});
   assert.equal(result.status,0,result.stderr);
   assert.match(result.stdout,/READY_FOR_PR17_FINAL_BUILD_CANARY/);
