@@ -2,14 +2,16 @@
 
 > **这是公开可读的技能目录，也是 GPT 网页版使用 GitHub + 自建 DC 的统一入口。** 每一个 Skill 是一套操作规则，不等于已经安装的软件、已经连接 Google 账号，或者已经获得生产变更授权。
 
-## V3.1 整站复制集成候选（2026-11-09）
+## Andy Skills V3.1 正式发布（2026-11-09）
 
-目前 V3.1.0-rc.1 **仅在 Draft 集成分支**，不是 main 正式版本。R1 模板工厂（PR #15）+ R2 SiteOne/PWC 镜像（PR #16）+ R3 WordPress 与 CSS/JS 末次封装（PR #17）+ R4 证据与调度（PR #18）已在候选分支整合，新增整站 Local Gate 与 fail-only 队列。必须通过实际 Windows Local Canary 才能冻结正式 V3.1。
+**版本：3.1.0 · GitHub main**。这是获批的网站复制/本地研发 Skills **工具版本**，不是某个网站已经上线。使用前仍必须核对项目仓库的 AGENTS.md、授权范围、原媒体证据、模板人工审批及环境门禁。
 
-- [V3.1 使用与验收契约](docs/skills-v3.1/README.md)
-- [V3.1 R1–R4 Roadmap](docs/skills-v3.1/roadmap.md)
-- [V3.1 统一验收脚本](scripts/skills-v31-gate.mjs)
-- [V3.1 候选分支](https://github.com/beyourlovercom/skills-webdev/tree/feat/andy-skills-v3.1-r1-r4-20261109)
+本次统一了 R1 [PR #15](https://github.com/beyourlovercom/skills-webdev/pull/15) 模板冻结/批量工厂、R2 [PR #16](https://github.com/beyourlovercom/skills-webdev/pull/16) SiteOne/PWC 镜像、R3 [PR #17](https://github.com/beyourlovercom/skills-webdev/pull/17) WordPress 与最终 CSS/JS 打包，以及 R4 [PR #18](https://github.com/beyourlovercom/skills-webdev/pull/18) 证据与版本治理，通过 [PR #19](https://github.com/beyourlovercom/skills-webdev/pull/19) 集成进主分支。
+
+- [V3.1 运行说明](docs/skills-v3.1/README.md) · [正式发布说明](docs/skills-v3.1/release-notes.md) · [R1–R4 Roadmap](docs/skills-v3.1/roadmap.md)
+- 新站标准流程：合法范围与 URL 清单 → `skills-v31-seed.mjs` 自动建档 → 代表模板 Owner PASS → 原有批次工厂与镜像工具 → `skills-v31-local-site.mjs` Local 可浏览版 → `skills-v31-gate.mjs` 失败项验收 → **全站通过后** PR #17 最终 CSS/JS 封装。
+- 脚本可使用 `--version` 核对版本；真实 Windows 验证覆盖 834 条来源 URL 的 HTML 文件发现、14 类模板、3 页双端浏览器及两个独立导航入口。**这些数据不等于 834 页完成视觉/交互验收。**
+- Dev/WWW 仍需要独立 Owner 审批，Skills 版本升级本身不执行任何网站部署、实际支付或真实表单发送。
 
 ## 1. 这套仓库能做什么？
 
@@ -21,7 +23,7 @@
 
 ## 2. 目前有哪些 Skills？
 
-> 状态快照：**2026-11-01**。`IN_MAIN` = 已在主分支；`DRAFT_PR` = 已有代码但仍在待审 PR；`PLANNED` = 规划中。PR 状态可能变化，执行前应重新核对 GitHub。
+> 状态快照：**2026-11-09**。`IN_MAIN` = 已在主分支；`DRAFT_PR` = 已有代码但仍在待审 PR；`PLANNED` = 规划中。PR 状态可能变化，执行前应重新核对 GitHub。
 
 | 阶段 | Skill（点名称查看原文件） | 可以做什么 | 现在的状态 |
 |---|---|---|---|
