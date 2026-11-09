@@ -161,7 +161,7 @@ export function main(argv){
     .map(x=>{const i=x.indexOf('=');return [x.slice(2,i),x.slice(i+1)];}));
   if(argv.includes('--help')){console.log('node scripts/skills-v31-gate.mjs --manifest=/private/site.json --root=/private/local [--out=/private/local/uat/v31-report.json --execute]');return 0;}
   if(!args.manifest||!args.root)throw Error('MANIFEST_AND_LOCAL_ROOT_REQUIRED');
-  const result=audit(JSON.parse(fs.readFileSync(args.manifest,'utf8')),args.root);
+  const result=audit(JSON.parse(fs.readFileSync(args.manifest,'utf8').replace(/^\uFEFF/,'')),args.root);
   if(args.out){
     if(!argv.includes('--execute'))throw Error('OUTPUT_WRITE_REQUIRES_EXECUTE');
     const root=fs.realpathSync(path.resolve(args.root));
