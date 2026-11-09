@@ -2,6 +2,15 @@
 
 > **这是公开可读的技能目录，也是 GPT 网页版使用 GitHub + 自建 DC 的统一入口。** 每一个 Skill 是一套操作规则，不等于已经安装的软件、已经连接 Google 账号，或者已经获得生产变更授权。
 
+## V3.1 整站复制集成候选（2026-11-09）
+
+目前 V3.1.0-rc.1 **仅在 Draft 集成分支**，不是 main 正式版本。R1 模板工厂（PR #15）+ R2 SiteOne/PWC 镜像（PR #16）+ R3 WordPress 与 CSS/JS 末次封装（PR #17）+ R4 证据与调度（PR #18）已在候选分支整合，新增整站 Local Gate 与 fail-only 队列。必须通过实际 Windows Local Canary 才能冻结正式 V3.1。
+
+- [V3.1 使用与验收契约](docs/skills-v3.1/README.md)
+- [V3.1 R1–R4 Roadmap](docs/skills-v3.1/roadmap.md)
+- [V3.1 统一验收脚本](scripts/skills-v31-gate.mjs)
+- [V3.1 候选分支](https://github.com/beyourlovercom/skills-webdev/tree/feat/andy-skills-v3.1-r1-r4-20261109)
+
 ## 1. 这套仓库能做什么？
 
 把网站的研究、数据分析、Windows Local 研发、Dev 验收、WWW 发布、SEO 和文章工作拆为可以复用的 Skills。**GPT 负责读取规则、选择已授权的工具和核验证据；GitHub 保存版本；自建 DC 只执行其权限允许的本地操作。**
