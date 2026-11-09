@@ -157,6 +157,7 @@ export function audit(manifest,rootInput){
     final_build_gate,production_release:'NOT_AUTHORIZED',queue,warnings,pages};
 }
 export function main(argv){
+  if(argv.length===1&&argv[0]==='--version'){console.log(VERSION);return 0;}
   const args=Object.fromEntries(argv.filter(x=>x.startsWith('--')&&x.includes('='))
     .map(x=>{const i=x.indexOf('=');return [x.slice(2,i),x.slice(i+1)];}));
   if(argv.includes('--help')){console.log('node scripts/skills-v31-gate.mjs --manifest=/private/site.json --root=/private/local [--out=/private/local/uat/v31-report.json --execute]');return 0;}
