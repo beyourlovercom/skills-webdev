@@ -85,3 +85,18 @@ test('generic server rejects production scope',t=>{
  manifest.environment='production';
  assert.throws(()=>buildServer(manifest,root),/LOCAL_AUTHORIZED_SCOPE_REQUIRED/);
 });
+
+test('approved staged WordPress assets are served but private and JSON files stay blocked',async t=>{
+  const {server,root,manifest,write}=site(t);
+  write('uat/r15-fast-lane/offline-staged/wp-includes/js/jquery/jquery.min.js','window.jQuery = true;');
+  write('uat/r15-fast-lane/offline-staged/wp-content/local-dump.json','{\"password\":\"private\"}');
+  const stage={...manifest,asset_roots:['mirror','uat/r15-fast-lane/offline-staged']};
+  const good=buildServer(stage,root);t.after(()=>new Promise(resolve=>good.server.close(resolve)));
+  const origin=await listen(good.server);
+  let res=await fetch(origin+'/wp-includes/js/jquery/jquery.min.js');
+  assert.equal(res.status,200);assert.match(await res.text(),/window.jQuery/);
+  res=await fetch(origin+'/wp-content/local-dump.json');
+  assert.equal(res.status,404);
+  res=await fetch(origin+'/uat/r15-fast-lane/offline-staged/wp-content/local-dump.json');
+  assert.equal(res.status,404);
+});
