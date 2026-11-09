@@ -18,7 +18,7 @@ export function routePath(raw){
      raw.includes('?')||raw.includes('#')||raw.includes('//')||/%2f|%5c|%2e/i.test(raw)||
      raw.split('/').some(x=>x==='..'||x==='.'))throw Error('UNSAFE_ROUTE');
   let p=raw.replace(/\/index\.html$/,'/');
-  if(!/\.[^/]+$/.test(p)&&!p.endsWith('/'))p+='/';
+  if(!/\.(?:html?|xml|json|txt|css|m?js|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|eot|pdf|mp4|webm)$/i.test(p)&&!p.endsWith('/'))p+='/';
   return p;
 }
 function safeFile(root,rel){
