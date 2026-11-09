@@ -33,7 +33,8 @@ function fixture(t){
       links:routes.map(r=>r.path)};
   });
   const m={schema_version:'3.1',project_id:'site-fixture',environment:'local',
-    site_mode:'MIRROR',authorized_scope:{source_approved:true,routes_frozen:true,source_snapshot_sha256:hash('inventory')},
+    site_mode:'MIRROR',authorized_scope:{source_approved:true,routes_frozen:true,source_snapshot_sha256:hash('inventory'),expected_route_count:routes.length,
+      route_list_sha256:hash(JSON.stringify(routes.map(r=>r.path).sort()))},
     visual_threshold:0.97,templates:{base:{sha256:templateHash,
       owner_approval:{status:'PASS',template_sha256:templateHash,evidence_ref:'uat/owner-approval.json'}}},
     routes,navigation_sources};
@@ -113,6 +114,24 @@ test('remote or unauthorized execution scopes are rejected',t=>{
   assert.throws(()=>audit(m,root),/LOCAL_ONLY/);
   m.environment='local';m.authorized_scope.source_approved=false;
   assert.throws(()=>audit(m,root),/SCOPE_NOT_APPROVED/);
+});
+test('a narrowed route inventory cannot masquerade as a whole-site PASS',t=>{
+  const {root,m}=fixture(t);
+  m.routes.pop();
+  assert.throws(()=>audit(m,root),/INVENTORY_DENOMINATOR_MISMATCH/);
+});
+test('pre-approved URL hash mismatch blocks batch even with matching count',t=>{
+  const {root,m}=fixture(t);m.authorized_scope.route_list_sha256=hash('other-routes');
+  assert.throws(()=>audit(m,root),/INVENTORY_DENOMINATOR_MISMATCH/);
+});
+test('symlinked ancestor directory cannot escape private local workspace',t=>{
+  const {root,m}=fixture(t);
+  const outside=fs.mkdtempSync(path.join(os.tmpdir(),'skills-v31-external-'));
+  t.after(()=>fs.rmSync(outside,{recursive:true,force:true}));
+  fs.writeFileSync(path.join(outside,'file.html'),'outside');
+  fs.symlinkSync(outside,path.join(root,'external'));
+  m.routes[0].local_file='external/file.html';
+  assert.throws(()=>audit(m,root),/SYMLINK_ESCAPE/);
 });
 test('route normalization preserves real extensions',()=>{
   assert.equal(routePath('/a/index.html'),'/a/');
