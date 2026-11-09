@@ -5,7 +5,7 @@ import path from 'node:path';
 import http from 'node:http';
 import crypto from 'node:crypto';
 import {pathToFileURL} from 'node:url';
-import {routePath} from './skills-v31-gate.mjs';
+import {routePath,VERSION} from './skills-v31-gate.mjs';
 
 const htmlEscape=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -151,6 +151,7 @@ export function buildServer(manifest,rootInput){
  return {server,snapshot};
 }
 export function main(argv){
+ if(argv.length===1&&argv[0]==='--version'){console.log(VERSION);return null;}
  const args=Object.fromEntries(argv.filter(x=>x.startsWith('--')&&x.includes('='))
    .map(x=>{const i=x.indexOf('=');return [x.slice(2,i),x.slice(i+1)];}));
  if(!args.manifest||!args.root)throw Error('MANIFEST_AND_ROOT_REQUIRED');
