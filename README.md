@@ -2,6 +2,15 @@
 
 > **这是公开可读的技能目录，也是 GPT 网页版使用 GitHub + 自建 DC 的统一入口。** 每一个 Skill 是一套操作规则，不等于已经安装的软件、已经连接 Google 账号，或者已经获得生产变更授权。
 
+## V3.1 整站复制集成候选（2026-11-09）
+
+目前 V3.1.0-rc.1 **仅在 Draft 集成分支**，不是 main 正式版本。R1 模板工厂（PR #15）+ R2 SiteOne/PWC 镜像（PR #16）+ R3 WordPress 与 CSS/JS 末次封装（PR #17）+ R4 证据与调度（PR #18）已在候选分支整合，新增整站 Local Gate 与 fail-only 队列。必须通过实际 Windows Local Canary 才能冻结正式 V3.1。
+
+- [V3.1 使用与验收契约](docs/skills-v3.1/README.md)
+- [V3.1 R1–R4 Roadmap](docs/skills-v3.1/roadmap.md)
+- [V3.1 统一验收脚本](scripts/skills-v31-gate.mjs)
+- [V3.1 候选分支](https://github.com/beyourlovercom/skills-webdev/tree/feat/andy-skills-v3.1-r1-r4-20261109)
+
 ## 1. 这套仓库能做什么？
 
 把网站的研究、数据分析、Windows Local 研发、Dev 验收、WWW 发布、SEO 和文章工作拆为可以复用的 Skills。**GPT 负责读取规则、选择已授权的工具和核验证据；GitHub 保存版本；自建 DC 只执行其权限允许的本地操作。**
@@ -161,3 +170,15 @@ S2-A `site-builder-local`、S2-B `site-dev-uat`、S2-C `site-www-release` 已从
 - 特殊网站若 Dev 就是最终站，必须由站点 `AGENTS.md` 明确特殊发布路径，不能用一般三阶段流程自动跳过 WWW 门禁。
 
 真实网站 Local/Dev/WWW 验收与三项 Skill 源码开发为**两件不同的事**。Skill 测试成功不代表已经为任何站点实际部署。
+
+
+## Andy Skills V2.0 Systemization (RC1 — Draft)
+
+The repository is being consolidated under a shared version, routing, evidence, device-execution, and release contract. This is an integration candidate, not a released V2.0 package.
+
+- [V2.0 architecture and release boundary](docs/skills-v2/README.md)
+- [Execution and device contract](docs/skills-v2/execution-contract.md)
+- [Shared evidence schema](docs/skills-v2/evidence-schema.md)
+- [V2.0 roadmap](docs/skills-v2/roadmap.md)
+
+Registry now records the system candidate version and independent Skill versions. `IN_MAIN` Skills are `1.0.0`; existing Draft Skills are `0.9.0-rc.1` candidates. A Draft version is not a released version. The snapshot date is 2026-11-06; verify PRs and refs before execution.

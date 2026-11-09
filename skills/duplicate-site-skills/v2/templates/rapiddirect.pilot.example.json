@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "project_id": "rapiddirect-v2-pilot",
+  "rights": {
+    "owner_attested": true,
+    "evidence_ref": "owner-chat-attestation-2026-11-03",
+    "scope": "Local-only study and authorized source assets; no accounts/customer data"
+  },
+  "source": {
+    "origin": "https://www.rapiddirect.com/",
+    "samples": [
+      {
+        "id": "home",
+        "path": "/",
+        "module": "shell"
+      },
+      {
+        "id": "services",
+        "path": "/services/",
+        "module": "category"
+      },
+      {
+        "id": "cnc",
+        "path": "/services/cnc-machining/",
+        "module": "service"
+      }
+    ]
+  },
+  "execution": {
+    "scope": "PILOT_SAMPLES",
+    "max_requests_per_second": 2,
+    "workers": 2,
+    "allow_production_write": false,
+    "enable_bulk": false
+  },
+  "approvals": {
+    "owner_visual_pass": false,
+    "main_merge": false,
+    "dev_deploy": false,
+    "www_deploy": false
+  }
+}
