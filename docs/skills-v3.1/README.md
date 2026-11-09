@@ -11,6 +11,16 @@
 
 此分支以 PR #17 为基线，集成了 PR #15 和 PR #18 的 17 个现有文件；PR #16 已包含在 PR #17 祖先。原四个 PR 仍是 Draft，不代表 main 已升级。
 
+## 新增 V3.1 一次生成整站 Manifest（无需每站手工编写）
+
+`scripts/skills-v31-seed.mjs` 读取已冻结的 source inventory JSON，其中 routes 每条至少含 `path` 与 `template_group`；从授权 Windows Local 的既有 mirror 或 staged HTML 中自动找到文件、计算 SHA256，生成完整 URL 分母与可重试的缺失项。示例：
+
+    node scripts/skills-v31-seed.mjs --root=C:/ai/site-mirror/site-x --inventory=C:/ai/site-mirror/site-x/uat/source-routes.json --out=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --project=site-x-local --authorization-ref=owner-scope-proof-20261109 --scope-approved "--roots=mirror;uat/full-site-content;uat/final-reviewed/offline-staged"
+
+**命令只生成私有 UAT Manifest**，不抓取网站，不覆盖现有文件。真实的授权依据必须存在；`--scope-approved` 表示已确认来源复制范围，而**不是**对每个模板、网站视觉或正式发布的审批。全部模板 Owner、PC/手机视觉和交互证据初始保持 `OPEN`，后续由实际验收补齐。
+
+每条 route 依赖被规范化后的真实 URL，支持像 /news/platform-version-3.0/ 这类带点号的目录路由，不把数字版本错认作扩展名。检测到相同 route、异常路径、越界链接或重复输出即失败关闭。
+
 ## V3.1 统一 Local Audit Gate
 
 可运行文件：scripts/skills-v31-gate.mjs，仅用 Node.js 内置模块。示例：
