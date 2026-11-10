@@ -308,5 +308,26 @@
     "site_level_uat": "OPEN_PER_SITE",
     "main_merge": "OWNER_APPROVED_20261109",
     "prod_release": "NOT_AUTHORIZED"
+  },
+  "windows_local_workspace_policy": {
+    "version": "v3.1-main-policy-20261110",
+    "scope": "NEW_AUTHORIZED_V31_SITE_PROJECTS_ONLY",
+    "default_root_template": "D:\\ai\\sites\\<domain>\\",
+    "domain_format": "lowercase FQDN, no filesystem separators or traversal",
+    "required_directories": [
+      "source",
+      "mirror",
+      "local",
+      "uat",
+      "release"
+    ],
+    "project_manifest": "site-project.json",
+    "existing_sites": "PRESERVE_IN_PLACE_NO_MOVE_NO_REINSTALL_NO_DB_CHANGE",
+    "preexisting_lelo_blog": "C:\\ai\\lelo-blog-local",
+    "first_new_site": "D:\\ai\\sites\\lelo.com",
+    "source_capture_gate": "R0_SCOPE_AND_PERMISSIONS_REQUIRED",
+    "local_wordpress_installation": "SEPARATE_OPT_IN_NOT_AUTO_CREATED",
+    "site_release": "INDEPENDENT_OWNER_APPROVAL_REQUIRED",
+    "policy_document": "docs/skills-v3.1/windows-local-workspace-policy.md"
   }
 }
