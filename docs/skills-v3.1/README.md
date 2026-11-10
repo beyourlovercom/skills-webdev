@@ -2,6 +2,12 @@
 
 **版本：3.1.0 | 状态：GitHub main 正式工具版本 | 更新时间：2026-11-09**
 
+## 新增网站的固定 Windows Local 根目录（2026-11-10 Owner 冻结）
+
+V3.1 对**今后新增的授权网站**统一使用 `D:\ai\sites\<domain>\`，LELO 首站实际工作区为 `D:\ai\sites\lelo.com\。目录结构固定为 `source / mirror / local / uat / release`，现有 `C:\ai\lelo-blog-local`、旧 Local WordPress、旧 RapidDirect 镜像一律不移动、不重装、不覆盖。`local` 不意味着自动安装 WordPress，站点权限、内容抓取和 Dev/WWW 发布仍需各自验收。
+
+本政策保存在 [Windows Local 新站目录规范](windows-local-workspace-policy.md)，并可从 `registry/skills.json` 的 `windows_local_workspace_policy` 读取；已有项目若使用其他目录，保持原地运行。
+
 ## R1–R4 复用职责
 
 - **R1 / PR #15**：代表页真实 Owner PASS → 冻结 SHA → 原有批量队列。不得重新实现队列、不得自行推断审批。
@@ -15,7 +21,7 @@
 
 `scripts/skills-v31-seed.mjs` 读取已冻结的 source inventory JSON，其中 routes 每条至少含 `path` 与 `template_group`；从授权 Windows Local 的既有 mirror 或 staged HTML 中自动找到文件、计算 SHA256，生成完整 URL 分母与可重试的缺失项。示例：
 
-    node scripts/skills-v31-seed.mjs --root=C:/ai/site-mirror/site-x --inventory=C:/ai/site-mirror/site-x/uat/source-routes.json --out=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --project=site-x-local --authorization-ref=owner-scope-proof-20261109 --scope-approved "--roots=mirror;uat/full-site-content;uat/final-reviewed/offline-staged"
+    node scripts/skills-v31-seed.mjs --root=D:/ai/sites/site-x --inventory=D:/ai/sites/site-x/uat/source-routes.json --out=D:/ai/sites/site-x/uat/v31-site-manifest.json --project=site-x-local --authorization-ref=owner-scope-proof-20261109 --scope-approved "--roots=mirror;uat/full-site-content;uat/final-reviewed/offline-staged"
 
 **命令只生成私有 UAT Manifest**，不抓取网站，不覆盖现有文件。真实的授权依据必须存在；`--scope-approved` 表示已确认来源复制范围，而**不是**对每个模板、网站视觉或正式发布的审批。全部模板 Owner、PC/手机视觉和交互证据初始保持 `OPEN`，后续由实际验收补齐。
 
@@ -25,11 +31,11 @@
 
 可运行文件：scripts/skills-v31-gate.mjs，仅用 Node.js 内置模块。示例：
 
-    node scripts/skills-v31-gate.mjs --manifest=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --root=C:/ai/site-mirror/site-x
+    node scripts/skills-v31-gate.mjs --manifest=D:/ai/sites/site-x/uat/v31-site-manifest.json --root=D:/ai/sites/site-x
 
 默认只读，输出结构化摘要与失败页队列。不自动抓取、不补写网页、不提交表单、不调用外部源、不部署。保存完整报告需显式：
 
-    node scripts/skills-v31-gate.mjs --manifest=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --root=C:/ai/site-mirror/site-x --out=C:/ai/site-mirror/site-x/uat/v31-report.json --execute
+    node scripts/skills-v31-gate.mjs --manifest=D:/ai/sites/site-x/uat/v31-site-manifest.json --root=D:/ai/sites/site-x --out=D:/ai/sites/site-x/uat/v31-report.json --execute
 
 只允许写入 Local 私有项目根目录下的 uat/；禁止路径穿越与指向外部的 symlink。
 
@@ -37,7 +43,7 @@
 
 新增 scripts/skills-v31-local-site.mjs，将原 RapidDirect 站点专属预览方法泛化为所有已授权项目共用的只读本地入口：
 
-    node scripts/skills-v31-local-site.mjs --manifest=C:/ai/site-mirror/site-x/uat/v31-site-manifest.json --root=C:/ai/site-mirror/site-x --port=8787
+    node scripts/skills-v31-local-site.mjs --manifest=D:/ai/sites/site-x/uat/v31-site-manifest.json --root=D:/ai/sites/site-x --port=8787
 
 仅绑定 127.0.0.1；实时读取 Manifest 中真实存在、HTML SHA 匹配的路由，提供 /site/、/site/sitemap/、/site/queue/、/site/inventory.json、/sitemap.xml、/robots.txt。未生成或 SHA 不匹配的路由不进入 XML Sitemap。可在 Manifest 的 asset_roots 指定镜像资源目录（默认 mirror），但无法公开任意私有 uat/ 文件。
 
