@@ -5,6 +5,12 @@ description: S2-A — 在已授权 Windows Local 进行网站最小差异研发�
 
 # S2-A · Windows Local 研发 Skill V1.2.1
 
+## V3.1 新站 Windows Local 固定目录（Owner 已批准）
+
+从 2026-11-10 起，**所有新增、已获授权的 V3.1 网站本地化项目**统一使用 `D:\\ai\\sites\\<domain>\\`（例如 `D:\\ai\\sites\\lelo.com\\`）。在此项目根目录下依次保存 `source/`、`mirror/`、`local/`、`uat/`、`release/`，并以项目根作为 V3.1 CLI 的 `--root`。原已有网站及 Local WordPress 注册记录全部原地保留，严禁自动移动/重装旧站、复用旧站数据库或覆盖已有目录。现有 `C:\\ai\\lelo-blog-local` 是独立 LELO Blog 项目，新 LELO 整站不得与其混用。
+
+首次 R0 仅建立隔离目录；待站点的授权范围、源 URL 清单和国家语言版本冻结后，再开展采集/镜像。详细规则见 [V3.1 Windows Local Workspace Policy](../../docs/skills-v3.1/windows-local-workspace-policy.md)。目录准备完成不代表来源站点或生产发布审批完成。
+
 ## 🔒 高保真复制专线：视觉审批优先
 当任务涉及原站复刻/本地备份/模板复制时，第一轮**只**取首页、各模板列表的第 1 页、来源于第 1 页的代表性商品详情和基础 Pages；所有带分页的地方不允许访问第 2 页以上、cursor、下一屏或批量采集。先保存这些页面真实使用的全部 Logo、Banner、字体、CSS、原图及完整样本图库，在 Windows Local 达到尽可能 100% 的视觉保真，并由 Owner 审核。**没有明确 Owner 视觉 `pass`，不进行全站产品清点、后续分页或批量图库下载**。普通“继续”、测试 PASS、HTML 200 均不能解锁。以 [Visual-first gate](../duplicate-site-skills/references/06-first-page-visual-gate.md) 为标准；独立发布权限不受视觉签字代替。
 
