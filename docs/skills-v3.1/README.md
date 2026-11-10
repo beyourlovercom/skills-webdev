@@ -4,7 +4,7 @@
 
 ## 新增网站的固定 Windows Local 根目录（2026-11-10 Owner 冻结）
 
-V3.1 对**今后新增的授权网站**统一使用 `D:\ai\sites\<domain>\`，LELO 首站实际工作区为 `D:\ai\sites\lelo.com\。目录结构固定为 `source / mirror / local / uat / release`，现有 `C:\ai\lelo-blog-local`、旧 Local WordPress、旧 RapidDirect 镜像一律不移动、不重装、不覆盖。`local` 不意味着自动安装 WordPress，站点权限、内容抓取和 Dev/WWW 发布仍需各自验收。
+V3.1 对**今后新增的授权网站**统一使用 `D:\ai\sites\<domain>\`，LELO 首站实际工作区为 `D:\ai\sites\lelo.com\`。目录结构固定为 `source / mirror / local / uat / release`，现有 `C:\ai\lelo-blog-local`、旧 Local WordPress、旧 RapidDirect 镜像一律不移动、不重装、不覆盖。`local` 不意味着自动安装 WordPress，站点权限、内容抓取和 Dev/WWW 发布仍需各自验收。
 
 本政策保存在 [Windows Local 新站目录规范](windows-local-workspace-policy.md)，并可从 `registry/skills.json` 的 `windows_local_workspace_policy` 读取；已有项目若使用其他目录，保持原地运行。
 
