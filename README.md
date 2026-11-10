@@ -8,6 +8,7 @@
 
 本次统一了 R1 [PR #15](https://github.com/beyourlovercom/skills-webdev/pull/15) 模板冻结/批量工厂、R2 [PR #16](https://github.com/beyourlovercom/skills-webdev/pull/16) SiteOne/PWC 镜像、R3 [PR #17](https://github.com/beyourlovercom/skills-webdev/pull/17) WordPress 与最终 CSS/JS 打包，以及 R4 [PR #18](https://github.com/beyourlovercom/skills-webdev/pull/18) 证据与版本治理，通过 [PR #19](https://github.com/beyourlovercom/skills-webdev/pull/19) 集成进主分支。
 
+- [Windows Local 新站统一目录：D:\ai\sites\<domain>\](docs/skills-v3.1/windows-local-workspace-policy.md) — 2026-11-10 Owner 冻结，新建站适用，旧站不迁移。
 - [V3.1 运行说明](docs/skills-v3.1/README.md) · [正式发布说明](docs/skills-v3.1/release-notes.md) · [R1–R4 Roadmap](docs/skills-v3.1/roadmap.md)
 - 新站标准流程：合法范围与 URL 清单 → `skills-v31-seed.mjs` 自动建档 → 代表模板 Owner PASS → 原有批次工厂与镜像工具 → `skills-v31-local-site.mjs` Local 可浏览版 → `skills-v31-gate.mjs` 失败项验收 → **全站通过后** PR #17 最终 CSS/JS 封装。
 - 脚本可使用 `--version` 核对版本；真实 Windows 验证覆盖 834 条来源 URL 的 HTML 文件发现、14 类模板、3 页双端浏览器及两个独立导航入口。**这些数据不等于 834 页完成视觉/交互验收。**
