@@ -7,7 +7,7 @@ description: S2-A — 在已授权 Windows Local 进行网站最小差异研发�
 
 ## V3.1 新站 Windows Local 固定目录（Owner 已批准）
 
-从 2026-11-10 起，**所有新增、已获授权的 V3.1 网站本地化项目**统一使用 `D:\\ai\\sites\\<domain>\\`（例如 `D:\\ai\\sites\\lelo.com\\`）。在此项目根目录下依次保存 `source/`、`mirror/`、`local/`、`uat/`、`release/`，并以项目根作为 V3.1 CLI 的 `--root`。原已有网站及 Local WordPress 注册记录全部原地保留，严禁自动移动/重装旧站、复用旧站数据库或覆盖已有目录。现有 `C:\\ai\\lelo-blog-local` 是独立 LELO Blog 项目，新 LELO 整站不得与其混用。
+从 2026-11-10 起，**所有新增、已获授权的 V3.1 网站本地化项目**统一使用 `D:\ai\sites\<domain>\`（例如 `D:\ai\sites\lelo.com\`）。在此项目根目录下依次保存 `source/`、`mirror/`、`local/`、`uat/`、`release/`，并以项目根作为 V3.1 CLI 的 `--root`。原已有网站及 Local WordPress 注册记录全部原地保留，严禁自动移动/重装旧站、复用旧站数据库或覆盖已有目录。现有 `C:\ai\lelo-blog-local` 是独立 LELO Blog 项目，新 LELO 整站不得与其混用。
 
 首次 R0 仅建立隔离目录；待站点的授权范围、源 URL 清单和国家语言版本冻结后，再开展采集/镜像。详细规则见 [V3.1 Windows Local Workspace Policy](../../docs/skills-v3.1/windows-local-workspace-policy.md)。目录准备完成不代表来源站点或生产发布审批完成。
 
