@@ -45,7 +45,7 @@ function guardScript(routeList,hosts){
  'document.addEventListener("click",function(e){const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;const raw=a.getAttribute("href");'+
  'if(!raw||raw.startsWith("#"))return;let u;try{u=new URL(raw,location.href);}catch(e){return;}'+
  'const same=u.origin===location.origin;const source=hosts.has(u.hostname);const p=norm(u.pathname);'+
- 'if((same||source)&&known.has(p)){a.href=p+u.search+u.hash;return;}'+
+ 'if((same||source)&&known.has(p)){a.href=p+u.search+u.hash;e.stopImmediatePropagation();return;}'+
  'e.preventDefault();e.stopImmediatePropagation();warn();},true);'+
  '})();';
  return '<script data-v31-local-guard>'+body+'</script>';
@@ -53,9 +53,12 @@ function guardScript(routeList,hosts){
 function inject(source,script){
  let s=source.toString('utf8');
  const nav='<nav aria-label="V3.1 Local" style="position:fixed;right:10px;bottom:10px;z-index:2147483000;padding:9px;background:#26214f;color:#fff"><a href="/site/" style="color:#fff">Local 导航</a> · <a href="/site/sitemap/" style="color:#fff">Sitemap</a></nav>';
- const piece='<meta name="robots" content="noindex,nofollow">'+script+nav;
- if(/<\/body\s*>/i.test(s))return s.replace(/<\/body\s*>/i,piece+'</body>');
- return s+piece;
+ const piece='<meta name="robots" content="noindex,nofollow">'+script;
+ // Install the preview guard before legacy page click listeners (e.g. R11 one-route guard).
+ if(/<head[^>]*>/i.test(s))s=s.replace(/<head[^>]*>/i,m=>m+piece);
+ else s=piece+s;
+ if(/<\/body\s*>/i.test(s))return s.replace(/<\/body\s*>/i,nav+'</body>');
+ return s+nav;
 }
 export function buildServer(manifest,rootInput){
  if(manifest.schema_version!=='3.1'||manifest.environment!=='local'||!manifest.authorized_scope?.source_approved||
@@ -129,7 +132,7 @@ export function buildServer(manifest,rootInput){
      const route=routes.get(routePath(p));
      if(route&&set.has(routePath(p))){
        const file=safePath(root,route.local_file);
-       const contents=inject(fs.readFileSync(file),guardScript([...set],hosts));
+       const contents=inject(fs.readFileSync(file),guardScript([...set,'/site/','/site/sitemap/','/site/queue/'],hosts));
        return send(res,200,contents,'text/html; charset=utf-8',method);
      }
      if(route)return send(res,404,shell('页面待生成','<h1>尚未生成</h1><p>'+htmlEscape(p)+'</p>'),'text/html; charset=utf-8',method);
