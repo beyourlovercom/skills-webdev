@@ -1,6 +1,6 @@
 # Andy Skills V2.0 — Systemization Layer
 
-**Release status: RC1 / Draft PR.** This is the integration layer across existing Skills. It does not claim every module is V2-native, that the registry is installed in ChatGPT, or that connected accounts/devices are authorized.
+**Historical status (2026-11-13): RC1 superseded by the V3.1 integration merged in [PR #19](https://github.com/beyourlovercom/skills-webdev/pull/19).** The original governance PR #18 is closed as superseded, not merged a second time. Public Skill contracts are already in `main`; this does not claim every module or target website is accepted, or that connected accounts/devices are authorized. The frozen 99-page offline R16 archive is recorded [with declared exceptions](../reviews/duplicate-site-v2-r16-99-local-closeout-20261113.md).
 
 ## Integration tracking
 
@@ -42,8 +42,8 @@
 - PATCH: corrections that do not change the contract.
 - Registry status is separate from version: IN_MAIN, DRAFT_PR, PLANNED.
 - A version on a Draft branch is a candidate, not a released version.
-- V2.0.0 is not released until its integration PR is reviewed, checks pass, and Owner approves merge.
+- V2.0.0 was not separately tagged; its public systemization work was carried into the V3.1 main integration via PR #19. An RC1 document is not a standalone release tag.
 - Do not infer native ChatGPT installation from a GitHub file or registry entry.
 
 ## Release boundary
-This PR is documentation/contracts/registry integration only. It does not merge PR #15/#16/#17, change any site, publish WWW, connect accounts, alter ads, or authorize production writes.
+This historical RC1 scope is documentation/contracts/registry integration only. It does not merge PR #15/#16/#17, change any site, publish WWW, connect accounts, alter ads, or authorize production writes.
