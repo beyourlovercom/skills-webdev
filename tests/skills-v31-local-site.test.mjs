@@ -104,3 +104,18 @@ test('approved staged WordPress assets are served but private and JSON files sta
   res=await fetch(origin+'/uat/r15-fast-lane/offline-staged/wp-content/local-dump.json');
   assert.equal(res.status,404);
 });
+
+test('preview navigation wins over legacy R11 single-route guard without changing HTML on disk',async t=>{
+ const {server,routes,write}=site(t);
+ const frozen='<html><head><script data-r11-local-only>document.addEventListener("click",e=>e.preventDefault(),true)</script></head><body><a href="/site/sitemap/">Sitemap</a></body></html>';
+ routes[0].artifact_sha256=write('mirror/index.html',frozen);
+ const origin=await listen(server);
+ const res=await fetch(origin+'/');
+ const html=await res.text();
+ assert.equal(res.status,200);
+ assert.ok(html.indexOf('data-v31-local-guard')>=0);
+ assert.ok(html.indexOf('data-v31-local-guard')<html.indexOf('data-r11-local-only'));
+ assert.match(html,/known\.has\(p\)\)\{a\.href=p\+u\.search\+u\.hash;e\.stopImmediatePropagation\(\)/);
+ assert.match(html,/\/site\/sitemap\//);
+ assert.equal((await fetch(origin+'/site/sitemap/')).status,200);
+});
