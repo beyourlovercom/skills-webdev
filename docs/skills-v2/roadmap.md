@@ -1,6 +1,6 @@
 # Andy Skills V2.0 Roadmap
 
-**Current state: RC1 integration Draft.** All PRs #15–#18 remain Draft; no merge to main or production release has been performed.
+**Historical state (2026-11-13): V2 RC1 systemization is superseded by the merged V3.1 [PR #19](https://github.com/beyourlovercom/skills-webdev/pull/19).** Original PR #18 is closed as superseded rather than merged over newer main. PR #15–#17 retain their separate Draft/site-level gates. No standalone V2.0 tag or target-website Production release is implied. See [R16 frozen 99-route offline archive closeout](../reviews/duplicate-site-v2-r16-99-local-closeout-20261113.md) for the strictly limited `CLOSED_WITH_DECLARED_EXCEPTIONS` scope.
 
 | ID | Workstream | Deliverable | Exit condition | Status |
 |---|---|---|---|---|
@@ -10,14 +10,14 @@
 | S7-D | Device execution contract | BYL DC, READY device, readback, no bypass | safety/stop conditions documented | Implemented in RC1 |
 | S7-E | Release/rollback contract | Local → Dev → Owner approval → WWW | no implied production authorization | Implemented in RC1 |
 | S7-F | Regression/integration | registry tests, skill tests, PR #15/#16/#17 compatibility review | exact-head CI + branch/dependency review + Owner site acceptance | PR #15–#18 exact-head CI all PASS (2/2, 2/2, 2/2, 4/4); #17 synchronized to #16; integration matrix refreshed; site/runtime acceptance OPEN |
-| S7-G | Publish V2.0 | merge integration PR and tag/release | explicit Owner merge approval | Pending; no merge authorized |
+| S7-G | Resolve V2.0 integration | avoid re-merging superseded RC1 over current main | V3.1 PR #19 merged; historical PR #18 closed; no standalone V2.0 tag | Closed as superseded, not separately released |
 
 ## Reconciled implementation PRs
 
 - **#15** remains a separate Draft PR for the generic V1.2 module factory. Its CI is green; actual module/source approval and evidence gates remain separate.
 - **#16** remains the Duplicate Site V2 core Draft PR. Its exact-head CI is green. R15 visual signoff is 99/99 for the frozen allowlist; R16 offline functional/security/release acceptance remains open.
 - **#17** is now synchronized to the current #16 head (27 ahead / 0 behind, 17 changed files). Its exact-head CI is green. The final site-level CSS/JS batch remains blocked pending route/source and final package acceptance.
-- **#18** remains the cross-Skill governance Draft PR. Its exact-head four-workflow CI is green. RC1 candidate metadata is not a release or a claim that all Skills independently shipped.
+- **#18** is the historical cross-Skill governance PR closed as superseded; its public contracts are already incorporated into V3.1 main through PR #19. RC1 candidate metadata was not a standalone release.
 
 ## Reuse / consolidation policy
 
@@ -28,7 +28,7 @@
 - Update Registry only after verifying actual branch/PR status and file path.
 - V2.0 is an integration release, not a claim that all S0–S6 Draft modules or all 834 source routes have shipped.
 
-## Remaining work estimate
+## Separate outstanding site work (not a blocker to closing historical RC1)
 
 - #16 R16-A through R16-D offline functional/security/archive closeout: **2.5–5.5 engineering hours**, based on the current signed 99-route scope; actual defects may extend this.
 - Wider 834-route site integration (S2 robustness, S3 non-blog, S4 blog, S5 integration) is a separate staged effort currently estimated at **50–110 engineering hours**. This is not a prerequisite to claim the frozen 99-route R15 visual signoff, and it must not be represented as complete until actual pages/resources and review evidence exist.
