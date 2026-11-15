@@ -1,0 +1,183 @@
+{
+  "schema_version": "byl-es-v2-editor-review-v1",
+  "scope": "DEV_READONLY",
+  "review_date": "2026-11-15",
+  "reviewer": "assistant_second_pass_nonblind",
+  "not_independent_human_blind": true,
+  "effect": "annotation_only",
+  "qa95_release_override": false,
+  "note": "Source/Spanish content personally compared from 007windows private snapshots. Labels are editorial assessments, not an independent external human panel; no site writes.",
+  "labels": [
+    {
+      "post_id": 38427,
+      "block": 9,
+      "issue": "product_name_devils_flower",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "Devil Flower name appears as Flor del Diablo",
+      "recommendation": "Verify official product title; retain exact commercial name if a model name."
+    },
+    {
+      "post_id": 38427,
+      "block": 21,
+      "issue": "html_product_card_truncation",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "Source and target snippets are similar with content ellipsis",
+      "recommendation": "No automatic change; dynamic card must be checked separately if source requires."
+    },
+    {
+      "post_id": 38427,
+      "block": 31,
+      "issue": "model_name_and_inline_join",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "Ugly Tongue appears as Lengua fea plus missing space after closing link",
+      "recommendation": "Preserve official Ugly Tongue and insert a real space after link before por su diseño."
+    },
+    {
+      "post_id": 38427,
+      "block": 33,
+      "issue": "unit_conversion",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "Source 6.29-inch and target 16 cm are compatible",
+      "recommendation": "Do not reinsert 6.29; rounding is reasonable."
+    },
+    {
+      "post_id": 38427,
+      "block": 67,
+      "issue": "brand_skullman_and_inline_join",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "BeYourLover Skull Man became Sé tu amante Hombre calavera with missing link boundary space",
+      "recommendation": "Restore BeYourLover Skull Man and proper spacing after linked product name."
+    },
+    {
+      "post_id": 38427,
+      "block": 68,
+      "issue": "brand_heading",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "SKULL MAN heading became HOMBRE CALAVERA",
+      "recommendation": "Preserve product heading SKULL MAN if official commercial style."
+    },
+    {
+      "post_id": 38427,
+      "block": 87,
+      "issue": "brand_omission",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "Conclusion omits source BeYourLover brand in a rewritten commercial invitation",
+      "recommendation": "Review whether an explicit brand mention is needed to retain intent; no automatic insert."
+    },
+    {
+      "post_id": 38547,
+      "block": 10,
+      "issue": "testimonial_attribution",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "SodaPopCurtis1983 attribution preserved",
+      "recommendation": "Do not translate, drop or duplicate user handle."
+    },
+    {
+      "post_id": 38547,
+      "block": 58,
+      "issue": "time_detail_omitted",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "Original specifies 10–15 minutes; Spanish omits the figures",
+      "recommendation": "Preserve the numerical planning tip only if editorially supportable; otherwise document synchronized EN/ES change."
+    },
+    {
+      "post_id": 38587,
+      "block": 64,
+      "issue": "silicone_lubricant_term",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "Original names water-based and silicone toys; target generalizes toward manufacturer-specific compatibility",
+      "recommendation": "Do not force a water-based universal promise; review factual specificity with manufacturer claims."
+    },
+    {
+      "post_id": 38587,
+      "block": 71,
+      "issue": "unverified_expiration_range",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "Original says 1–3 years, target responsibly advises using package expiry",
+      "recommendation": "Do not blindly restore unsupported 1–3-year claim; align EN after sourcing, or document justified localization."
+    },
+    {
+      "post_id": 38587,
+      "block": 79,
+      "issue": "localized_internal_url",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "English internal /blog/how-to-get-horny/ changed to approved /es/blog/deseo-sexual-como-estimularlo-sin-presion/",
+      "recommendation": "Mark as an intentional translated crosslink; flag unrelated localdev URLs separately."
+    },
+    {
+      "post_id": 38607,
+      "block": 18,
+      "issue": "brand_angela_heading",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "BEYOURLOVER ANGELA translated as Sé tu amante, Angela",
+      "recommendation": "Keep official BEYOURLOVER ANGELA product heading."
+    },
+    {
+      "post_id": 38607,
+      "block": 40,
+      "issue": "brand_wavey_and_register",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "BeYourLover Wavey appears as Sé tu amante Ondulante; register alternates hablad/dirija",
+      "recommendation": "Preserve BeYourLover Wavey and normalize pronouns to es-ES site register without changing safety meaning."
+    },
+    {
+      "post_id": 38628,
+      "block": 12,
+      "issue": "technical_rotation_360",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "English 360-degree specification absent from Spanish while other features remain",
+      "recommendation": "Verify actual technical product data before reinstating 360-degree claim; reconcile original and target."
+    },
+    {
+      "post_id": 38628,
+      "block": 61,
+      "issue": "jessica_attribution",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "Jessica S. testimonial attribution is preserved alongside translated quote",
+      "recommendation": "Ignore full-text dictionary miss for the protected proper-noun fragment."
+    },
+    {
+      "post_id": 38628,
+      "block": 63,
+      "issue": "brand_heart_heading",
+      "verdict": "CONFIRMED_EDIT",
+      "priority": "P1",
+      "trigger": "BEYOURLOVER HEART appears as SÉ TU AMANTE CORAZÓN",
+      "recommendation": "Retain official BEYOURLOVER HEART model/product heading."
+    },
+    {
+      "post_id": 38628,
+      "block": 89,
+      "issue": "subjective_no_tugging_qualifier",
+      "verdict": "EDITORIAL_VERIFY",
+      "priority": "P1",
+      "trigger": "English first-person user claim 'never felt tugging' replaced by generalized cable safety language",
+      "recommendation": "Preserve attribution and subjective meaning when possible, while retaining safety framing; never invent quote."
+    },
+    {
+      "post_id": 38628,
+      "block": 121,
+      "issue": "stephanie_attribution",
+      "verdict": "NON_ISSUE",
+      "priority": "P2",
+      "trigger": "Stephanie I. remains verbatim alongside translated quote",
+      "recommendation": "Do not flag as untranslated English prose."
+    }
+  ]
+}

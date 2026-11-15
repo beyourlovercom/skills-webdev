@@ -139,6 +139,12 @@ def check(payload):
         if isinstance(b, dict) and isinstance(b.get("en"), str):
             packet_wholes.add(normalized(b["en"]))
 
+    # Only approve known, exact R9-verified English -> Spanish internal paths.
+    # The upstream read-only snapshot exporter must source and verify each pair.
+    approved_links=set()
+    for pair in payload.get("approved_link_localizations",[]):
+        if isinstance(pair,dict) and isinstance(pair.get("en"),str) and isinstance(pair.get("es"),str):
+            approved_links.add((url_normalized(pair["en"]),url_normalized(pair["es"])))
     findings = []
     if len(en_blocks) != len(es_blocks):
         findings.append(finding(
@@ -150,9 +156,15 @@ def check(payload):
             if en["tag"] != es["tag"]:
                 findings.append(finding("TAG_MISMATCH", "P0_REVIEW", i,
                                          "Block tag changed", source=en["tag"], target=es["tag"]))
-            if [url_normalized(h) for h in en["href"]] != [url_normalized(h) for h in es["href"]]:
+            src_hrefs=[url_normalized(h) for h in en["href"]]
+            dst_hrefs=[url_normalized(h) for h in es["href"]]
+            verified=(
+                len(src_hrefs)==len(dst_hrefs)
+                and all(a==b or (a,b) in approved_links for a,b in zip(src_hrefs,dst_hrefs))
+            )
+            if not verified:
                 findings.append(finding("LINK_CHANGED", "P0_REVIEW", i,
-                                         "Href list changed; requires human verification",
+                                         "Href list changed without approved localized mapping",
                                          source=en["href"], target=es["href"]))
             if len(normalized(en["whole"])) >= 18 and normalized(en["whole"]) == normalized(es["whole"]):
                 if en["whole"] not in glossary:
@@ -184,6 +196,12 @@ def check(payload):
                     matched_original=alt[0]["original"][:240]))
                 continue
             if len(normalized(word)) < 12:
+                continue
+            # Protected quote attributions are not untranslated prose if they
+            # are preserved verbatim beside an already localized quotation.
+            if (es is not None and j<len(es["chunks"])
+                    and re.fullmatch(r"\s*[-–—]\s*[A-Z][A-Za-z ]{2,45}[.]?\s*",word)
+                    and normalized(word)==normalized(es["chunks"][j])):
                 continue
             # A dictionary key may be absent because a different rendered key
             # was already translated. Do not claim English is visible unless

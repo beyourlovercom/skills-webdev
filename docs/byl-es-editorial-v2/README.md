@@ -57,3 +57,7 @@ LanguageTool 6.6 with portable Zulu JRE 17.0.21 is installed only in the isolate
 ## R2/R3/R4 verification evidence
 
 See docs/byl-es-editorial-v2/r2-r4-verification-20261115.md for real Java/LanguageTool API probe, terminology and factual fidelity probes, the two frozen three-article heldout groups, seeded local faults, false positive analysis and explicit limitations. It is not approval to change live Dev posts or merge to GitHub main.
+
+## R5 structured editorial review and technical timing (2026-11-15)
+
+The real Dev English/Spanish evidence anchors are recorded in docs/byl-es-editorial-v2/editorial-adjudication-20261115.json: 19 reviewed, 7 confirmed P1 candidates, 6 requiring editorial verification, 6 nonissues. Seven precise HTML-preserving rendered-copy edits passed private offline dry-run but have NOT been deployed or approved as a WordPress patch. Exact Link localization and proper-quote attribution false positives were reduced without disabling unapproved link-change detection. Local scan timing was measured on six Dev articles; old QA95 human editorial time and full workflow comparison remain UNMEASURED. See docs/byl-es-editorial-v2/r5-editorial-and-timing-20261115.md. Draft PR remains unmerged and DEV/WWW content unchanged.

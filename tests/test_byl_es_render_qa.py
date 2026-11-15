@@ -85,6 +85,37 @@ class TestRenderAwareQA(unittest.TestCase):
         ))
         self.assertEqual(result["findings_by_kind"].get("LINK_CHANGED"), 1)
 
+    def test_approved_localized_internal_link_is_valid(self):
+        source = snapshot(
+            '<p>Read <a href="/blog/how-to-get-horny/">the guide</a> for more information.</p>',
+            '<p>Lee <a href="/es/blog/deseo-sexual-como-estimularlo-sin-presion/">la guía</a> para más información.</p>',
+            approved_link_localizations=[{
+                "en":"/blog/how-to-get-horny/",
+                "es":"/es/blog/deseo-sexual-como-estimularlo-sin-presion/",
+            }])
+        result=module.check(source)
+        self.assertIsNone(result["findings_by_kind"].get("LINK_CHANGED"))
+
+    def test_unapproved_link_change_still_detected(self):
+        source = snapshot(
+            '<p>Read <a href="/blog/how-to-get-horny/">the guide</a> for more information.</p>',
+            '<p>Lee <a href="/malicious-destination/">la guía</a> para más información.</p>',
+            approved_link_localizations=[{
+                "en":"/blog/how-to-get-horny/",
+                "es":"/es/blog/deseo-sexual-como-estimularlo-sin-presion/",
+            }])
+        result=module.check(source)
+        self.assertEqual(result["findings_by_kind"].get("LINK_CHANGED"),1)
+
+    def test_unchanged_proper_attribution_is_not_english_body(self):
+        source=snapshot(
+            "<blockquote><em>Interesting English source quotation text for testing.</em> — Stephanie I.</blockquote>",
+            "<blockquote><em>Una cita traducida correctamente al español.</em> — Stephanie I.</blockquote>",
+            dictionary=[])
+        result=module.check(source)
+        self.assertNotIn("DOM_SPLIT",result["findings_by_kind"])
+        self.assertNotIn("MISSING_DOM_TRANSLATION",result["findings_by_kind"])
+
     def test_shortcode_is_not_a_translatepress_segment(self):
         result = module.check(snapshot(
             "<p>[product_card id=\"26657\"]</p><p>Another article to consider.</p>",

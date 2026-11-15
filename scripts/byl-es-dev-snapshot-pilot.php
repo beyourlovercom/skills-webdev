@@ -70,7 +70,20 @@ foreach(array_keys($keys) as $key){
         $rows[]=['original'=>$row['original'],'translated'=>$row['translated'],'status'=>(int)$row['status']];
     }
 }
+$approved_localizations=[];
+if($pid===38587){
+    $linked=get_post(38305);
+    if($linked && $linked->post_status==='publish'
+       && $linked->post_name==='how-to-get-horny'
+       && byl_trp_post_review(38305,'es_ES')){
+        $approved_localizations[]=[
+            'en'=>'/blog/how-to-get-horny/',
+            'es'=>'/es/blog/deseo-sexual-como-estimularlo-sin-presion/'
+        ];
+    }
+}
 $payload=[
+    'approved_link_localizations'=>$approved_localizations,
     'post_id'=>$pid,'source_hash'=>$sha,
     'en_html'=>$source['html'],'es_html'=>$target['html'],
     'dictionary'=>$rows,'packet'=>['blocks'=>$packet['blocks']],

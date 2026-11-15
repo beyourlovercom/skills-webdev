@@ -1,0 +1,114 @@
+{
+  "schema_version": "byl-es-v2-p1-rendered-copy-proposals-v1",
+  "created": "2026-11-15",
+  "mode": "OFFLINE_PROPOSALS_ONLY",
+  "site_scope": "DEV_ONLY",
+  "live_writes_authorized": false,
+  "qa95_override": false,
+  "notes": "Rendered HTML proposals, NOT deployable WordPress source patch. Must map to exact TRP dictionary/WordPress source, check source SHA and preview before any future approved edit. Protected P0 meaning and existing URLs remain untouched.",
+  "proposals": [
+    {
+      "post_id": 38427,
+      "block": 31,
+      "source_sha256": "72960ce69cb67e8c31398aaae180edfc823fd223073b71a880bd3c79b9838b0f",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "<a href=\"https://localdev.beyourlover.com/ugly-tongue/\">Lengua fea</a>por",
+          "replace": "<a href=\"https://localdev.beyourlover.com/ugly-tongue/\">Ugly Tongue</a> por"
+        }
+      ]
+    },
+    {
+      "post_id": 38427,
+      "block": 67,
+      "source_sha256": "72960ce69cb67e8c31398aaae180edfc823fd223073b71a880bd3c79b9838b0f",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "<a href=\"/skullman/\">Sé tu amante Hombre calavera</a>siempre",
+          "replace": "<a href=\"/skullman/\">BeYourLover Skull Man</a> siempre"
+        }
+      ]
+    },
+    {
+      "post_id": 38427,
+      "block": 68,
+      "source_sha256": "72960ce69cb67e8c31398aaae180edfc823fd223073b71a880bd3c79b9838b0f",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "HOMBRE CALAVERA",
+          "replace": "SKULL MAN"
+        }
+      ]
+    },
+    {
+      "post_id": 38547,
+      "block": 58,
+      "source_sha256": "b592c05799a6bb8abd4db84bdf1a0cf3ecb3865c678d9bc737cd4f39c631f53e",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "No tengas prisa. Si no dispones del tiempo suficiente para hacerlo con calma, elige otro momento.",
+          "replace": "No tengas prisa. Si no dispones de 10–15 minutos para hacerlo con calma, elige otro momento."
+        }
+      ]
+    },
+    {
+      "post_id": 38607,
+      "block": 18,
+      "source_sha256": "7d31da426e38c8bd84a2e3a07bdc0a15a099464889dda7661caaabd714560217",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "Sé tu amante, Angela",
+          "replace": "BEYOURLOVER ANGELA"
+        }
+      ]
+    },
+    {
+      "post_id": 38607,
+      "block": 40,
+      "source_sha256": "7d31da426e38c8bd84a2e3a07bdc0a15a099464889dda7661caaabd714560217",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "<a href=\"/beyourlover-wavey/\">Sé tu amante Ondulante</a> Puede",
+          "replace": "<a href=\"/beyourlover-wavey/\">BeYourLover Wavey</a> puede"
+        },
+        {
+          "find": "No dirija el juguete",
+          "replace": "No dirijas el juguete"
+        },
+        {
+          "find": "ni lo presione contra",
+          "replace": "ni lo presiones contra"
+        },
+        {
+          "find": "Deténgase si siente",
+          "replace": "Detente si sientes"
+        }
+      ]
+    },
+    {
+      "post_id": 38628,
+      "block": 63,
+      "source_sha256": "d587809182756b510ecebd86594914d3d611c85edda2d1c02bd778ce240ec3d1",
+      "priority": "P1",
+      "review_status": "SECOND_PASS_EDITORIAL_DRAFT",
+      "replacements": [
+        {
+          "find": "SÉ TU AMANTE CORAZÓN",
+          "replace": "BEYOURLOVER HEART"
+        }
+      ]
+    }
+  ]
+}
