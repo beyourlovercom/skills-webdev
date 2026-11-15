@@ -13,7 +13,13 @@ if(get_option('siteurl')!=='https://dev.beyourlover.com' ||
 $pid=(int)(getenv('BYL_ES_V2_POST_ID')?:38305);
 $pilot=[
 38305=>['en'=>'how-to-get-horny','es'=>'deseo-sexual-como-estimularlo-sin-presion'],
-38348=>['en'=>'bdsm-sexting','es'=>'sexting-bdsm-consentimiento-privacidad']
+38348=>['en'=>'bdsm-sexting','es'=>'sexting-bdsm-consentimiento-privacidad'],
+38395=>['en'=>'footjob','es'=>'guia-contacto-intimo-pies-seguridad'],
+38427=>['en'=>'how-to-use-a-dildo-for-men','es'=>'guia-dildos-hombres-uso-seguro'],
+38547=>['en'=>'pubic-haircuts-for-men','es'=>'estilos-vello-pubico-masculino-guia-segura'],
+38587=>['en'=>'how-to-choose-the-best-lube','es'=>'lubricantes-intimos-compatibilidad-seguridad'],
+38607=>['en'=>'types-of-orgasms','es'=>'tipos-orgasmo-sensaciones-seguridad'],
+38628=>['en'=>'best-oral-sex-toys','es'=>'siete-juguetes-sexo-oral-guia']
 ];
 if(!isset($pilot[$pid]))die("STOP_NOT_PILOT\n");
 $p=get_post($pid);

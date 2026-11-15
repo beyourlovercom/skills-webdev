@@ -1,4 +1,4 @@
-# BYL Spanish Editorial Skills V2.0 — R0/R1 Local Proof (2026-11-15)
+# BYL Spanish Editorial Skills V2.0 — R0–R4 Local Proof (2026-11-15)
 
 ## Status
 - Isolated Git worktree: C:\ai\byl-es-editorial-v2
@@ -6,9 +6,9 @@
 - The existing Spanish QA95 Dev-only article publishing pipeline remains authoritative and running independently.
 - R0 open-source audit: completed (architecture and licensing; not dependency installation).
 - R1 rendered-HTML match diagnostic: local proof implemented and real Dev read-only pilot completed.
-- R2 LanguageTool: local-only adapter implemented, NOT connected/installed on 007windows; linguistic results NOT VERIFIED.
-- R3 source-fidelity independent reviewer and full SEO evaluation: NOT IMPLEMENTED.
-- R4 three-article held-out comparative UAT: NOT COMPLETE.
+- R2 LanguageTool: real isolated LT 6.6 + Zulu Java 17.0.21 on 007windows loopback 127.0.0.1:8010; real Spanish grammar suggestions verified, not auto-applied.
+- R3 source-fact and es-ES termbank advisory checks implemented; independent human/editorial sign-off and SEO efficacy evaluation still open.
+- R4 read-only retrospective completed on six previously released Dev articles across two frozen-code groups; 25/25 applicable seeded errors detected, but independent human blind and timing comparison remain open.
 - No Git main merge, no TranslatePress plugin replacement, no WordPress runtime deployment, WWW writes 0, paid Google translation 0.
 
 ## Why R1 exists
@@ -39,7 +39,7 @@ The exporter script in scripts/byl-es-dev-snapshot-pilot.php accepts only listed
     python -m py_compile scripts/byl-es-render-qa.py scripts/byl-es-languagetool-local.py
     python scripts/byl-es-render-qa.py DevSnapshot.json --output local-report.json
 
-LanguageTool is **not** installed: no Java/Docker on the Windows pilot host. This adapter is deliberately restricted to loopback HTTP. Public LanguageTool API usage in automated bulk mode is prohibited by upstream.
+LanguageTool 6.6 with portable Zulu JRE 17.0.21 is installed only in the isolated, non-Git Windows runtime. The service is bound to 127.0.0.1:8010; public LanguageTool API and paid Google translation were not used. No global Java PATH or application service was installed.
 
 ## Upstream research / licensing (no code vendored)
 - Localize Anything — xueyang-dev/localize-anything; workflow inspiration: glossary and project memory, deterministic structural checks, independent review, four severity categories. GitHub connector did not return this repo during R0 even though previously indexed web documentation described its MIT license. No upstream source was cloned or incorporated.
@@ -53,3 +53,7 @@ LanguageTool is **not** installed: no Java/Docker on the Windows pilot host. Thi
 - R3: document Spanish termbank and item-level source-fact retention, SEO field intent; preserve product identifiers.
 - R4: old-vs-V2 comparison on three unseen articles (coverage, false positives, important fact loss, time, P0). Do not claim improvement before controlled results.
 - The Owner QA95 policy stays: >=95% weighted coverage, P0 CLEAR, P1/P2 non-blocking, Dev only, no WWW writes.
+
+## R2/R3/R4 verification evidence
+
+See docs/byl-es-editorial-v2/r2-r4-verification-20261115.md for real Java/LanguageTool API probe, terminology and factual fidelity probes, the two frozen three-article heldout groups, seeded local faults, false positive analysis and explicit limitations. It is not approval to change live Dev posts or merge to GitHub main.

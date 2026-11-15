@@ -56,6 +56,16 @@ class TestRenderAwareQA(unittest.TestCase):
         ]}, dictionary=[{"original": "If you stumble upon the practice of edging you can read more.",
                          "translated": "Puedes aprender más.", "status": 1}])
         result = module.check(source)
+        # Already translated into Spanish: no actionable English residue.
+        self.assertEqual(result["findings_by_kind"].get("DOM_SPLIT", 0), 0)
+
+    def test_untranslated_inline_split_is_still_reported(self):
+        en = "<p>If you stumble upon the practice of <em>edging</em> you can read more.</p>"
+        source = snapshot(en, en, packet={"blocks": [
+            {"en": "If you stumble upon the practice of edging you can read more."}
+        ]}, dictionary=[{"original": "If you stumble upon the practice of edging you can read more.",
+                         "translated": "Si conoces la práctica puedes leer más.", "status": 1}])
+        result = module.check(source)
         self.assertGreaterEqual(result["findings_by_kind"].get("DOM_SPLIT", 0), 1)
 
     def test_detect_visible_english_after_translation(self):

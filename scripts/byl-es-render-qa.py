@@ -185,6 +185,12 @@ def check(payload):
                 continue
             if len(normalized(word)) < 12:
                 continue
+            # A dictionary key may be absent because a different rendered key
+            # was already translated. Do not claim English is visible unless
+            # the matching Spanish text node is still effectively English.
+            if (es is not None and j < len(es["chunks"])
+                    and normalized(word) != normalized(es["chunks"][j])):
+                continue
             is_split = len(en["chunks"]) > 1 and normalized(en["whole"]) in packet_wholes
             findings.append(finding(
                 "DOM_SPLIT" if is_split else "MISSING_DOM_TRANSLATION",

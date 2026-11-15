@@ -54,3 +54,7 @@ This fails closed without a local LT server and rejects public/external URLs. Do
 ## Governance
 
 Draft Git Skill is not yet installed, registered as IN_MAIN, merged, or live in WordPress. Separate Owner approval required before Git main merge, installation, runtime writing or any site release. WWW remains absolutely forbidden in this Spanish QA branch.
+
+## Local R2–R4 implementation (read-only)
+
+Run scripts/byl-es-linguistic-qa.py against DEV_READ_ONLY_RENDER snapshots using the local LanguageTool 6.6 server on 127.0.0.1:8010; no public server calls or automatic article edits. Run scripts/byl-es-fidelity-qa.py with references/termbank-es-ES.v1.json; all findings require editor review. Use scripts/byl-es-r4-compare.py only on local snapshot copies with existing R9 reports; its results explicitly are targeted synthetic detection and not a human blind editorial study. See docs/byl-es-editorial-v2/r2-r4-verification-20261115.md. Existing QA95 R9 release and Notion status remain independent.
