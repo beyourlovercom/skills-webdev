@@ -11,3 +11,8 @@ node_modules/
 
 .private-ga4/
 **/.private-ga4/
+
+# BYL Spanish V2 local-only Python artifacts / private audit snapshots
+__pycache__/
+*.pyc
+.byl-es-private/

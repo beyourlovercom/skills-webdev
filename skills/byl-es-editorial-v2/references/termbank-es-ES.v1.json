@@ -1,0 +1,103 @@
+[
+  {
+    "source": "consent",
+    "es": [
+      "consentim",
+      "consentir",
+      "consient",
+      "acept",
+      "autoriz"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "lubricant",
+    "es": [
+      "lubricant",
+      "lubricac"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "flared base",
+    "es": [
+      "base ensanchada",
+      "base ancha",
+      "base acampanada"
+    ],
+    "importance": "P0_REVIEW"
+  },
+  {
+    "source": "condom",
+    "es": [
+      "preservativo",
+      "condón"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "privacy",
+    "es": [
+      "privacidad",
+      "confidencial",
+      "protección de datos"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "hygiene",
+    "es": [
+      "higiene",
+      "limpieza"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "pain",
+    "es": [
+      "dolor",
+      "molestia"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "water-based",
+    "es": [
+      "base acuosa",
+      "base de agua",
+      "agua",
+      "acuos"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "prostate",
+    "es": [
+      "próstata",
+      "prostátic"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "erectile dysfunction",
+    "es": [
+      "disfunción eréctil"
+    ],
+    "importance": "P0_REVIEW"
+  },
+  {
+    "source": "silicone",
+    "es": [
+      "silicona",
+      "silicone"
+    ],
+    "importance": "P1"
+  },
+  {
+    "source": "anal",
+    "es": [
+      "anal"
+    ],
+    "importance": "P1"
+  }
+]
